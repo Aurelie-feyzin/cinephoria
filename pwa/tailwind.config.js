@@ -29,6 +29,8 @@ module.exports = {
         },
         black: "#1d1e1c",
         white: "#ffffff",
+        primary: "#2E4D34", //#2E4D34 #A3B89C
+        secondary: "#C9A85C",
         transparent: "transparent",
       },
     },
