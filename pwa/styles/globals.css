@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/*{
+    --vert-foret: #2E4D34;
+    --vert-sauge: #A3B89C;
+    --brun-terre: #7A5A3C;
+    --or-doux: #C9A85C;
+    --blanc-casse: #F8F6F0;
+}*/
+
 @layer base {
     * {
         font-family: Poppins;
