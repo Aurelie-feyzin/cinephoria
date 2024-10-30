@@ -3,36 +3,52 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Enum\AgeRestriction;
+use App\State\NewMovieListProvider;
 use App\Trait\IdTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(mercure: true)]
 #[ORM\Entity]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new GetCollection(uriTemplate: '/movie/new_list', normalizationContext: ['groups' => ['movie:read']], provider: NewMovieListProvider::class),
+    ],
+    mercure: true
+),
+]
 class Movie
 {
     use IdTrait;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['movie:read'])]
     #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['movie:read'])]
     private ?string $posterPath = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    #[Groups(['movie:read'])]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['movie:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
@@ -48,12 +64,15 @@ class Movie
      * @var Collection<int, MovieGenre>
      */
     #[ORM\ManyToMany(targetEntity: MovieGenre::class, inversedBy: 'movies')]
+    #[Groups(['movie:read'])]
     private Collection $genres;
 
     #[ORM\Column(type: Types::STRING, nullable: false, enumType: AgeRestriction::class)]
+    #[Groups(['movie:read'])]
     private AgeRestriction $ageRestriction;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
+    #[Groups(['movie:read'])]
     private ?bool $warning = null;
 
     public function __construct()

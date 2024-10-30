@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Movie;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,6 +16,22 @@ class MovieRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Movie::class);
+    }
+
+    /**
+     * @return Movie[]
+     */
+    public function getNewMovies(DateTimeImmutable $today): array
+    {
+        try {
+            $dayOfWeek = (int) $today->format('w');
+
+            $lastWednesday = 3 === $dayOfWeek ? $today : $today->modify('last wednesday');
+
+            return $this->findBy(['releaseDate' => $lastWednesday]);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     //    /**
