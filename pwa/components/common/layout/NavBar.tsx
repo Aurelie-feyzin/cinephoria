@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import Image from "next/image";
-import logo from "../../public/images/logo_cinephoria.png";
+import logo from "../../../public/images/logo_cinephoria.png";
 import Link from "next/link";
-import NavBarLink from "./NavBarLink";
+import NavBarLink from "./../NavBarLink";
 
 const NavBar = () => {
   const [navbar, setNavbar] = useState(false);
