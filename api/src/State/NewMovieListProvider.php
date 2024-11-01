@@ -29,6 +29,7 @@ class NewMovieListProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $today = new DateTimeImmutable();
+
         return $this->movieRepository->getNewMovies($today);
     }
 }
