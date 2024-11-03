@@ -10,4 +10,6 @@ interface Movie {
     genres: MovieGenre[],
     ageRestriction?: string,
     warning?: string,
+    favorite: boolean,
+    rating: number,
 }
