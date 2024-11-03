@@ -1,6 +1,6 @@
 import React from "react";
 
-import PageContainer from "../components/common/PageContainer";
+import PageContainer from "../components/common/layout/PageContainer";
 import ComingSoon from "../components/common/ComingSoon";
 
 

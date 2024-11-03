@@ -1,4 +1,4 @@
-import PageContainer from "../components/common/PageContainer";
+import PageContainer from "../components/common/layout/PageContainer";
 import React from "react";
 import ComingSoon from "../components/common/ComingSoon";
 
