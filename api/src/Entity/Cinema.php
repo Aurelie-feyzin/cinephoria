@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Trait\IdTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +29,18 @@ class Cinema
      */
     #[ORM\OneToMany(mappedBy: 'cinema', targetEntity: OpeningHours::class, cascade: ['persist', 'remove'])]
     private Collection $openingHours;
+
+    /**
+     * @var Collection<int, MovieTheater>
+     */
+    #[ORM\OneToMany(mappedBy: 'cinema', targetEntity: MovieTheater::class, orphanRemoval: true)]
+    private Collection $movieTheaters;
+
+    public function __construct()
+    {
+        $this->openingHours = new ArrayCollection();
+        $this->movieTheaters = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -81,5 +94,13 @@ class Cinema
         $this->openingHours = $openingHours;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MovieTheater>
+     */
+    public function getMovieTheaters(): Collection
+    {
+        return $this->movieTheaters;
     }
 }

@@ -6,10 +6,12 @@ namespace App\DataFixtures;
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\Address;
 use App\Entity\Cinema;
+use App\Entity\MovieTheater;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 
-class CinemaFixtures extends AbstractTsvImport
+class CinemaFixtures extends AbstractTsvImport implements DependentFixtureInterface
 {
     private const FILENAME = 'cinemas.tsv';
 
@@ -44,6 +46,30 @@ class CinemaFixtures extends AbstractTsvImport
 
         $manager->persist($cinema);
 
+        $numbersOfRooms = $faker->numberBetween(3, 5);
+        for ($i = 0; $i < $numbersOfRooms; ++$i) {
+            $movieTheater = $this->createMovieTheather($cinema, $i + 1, $faker);
+            $manager->persist($movieTheater);
+        }
+
         return true;
+    }
+
+    private function createMovieTheather(Cinema $cinema, int $numberRoom, Generator $faker): MovieTheater
+    {
+        return (new MovieTheater())
+            ->setCinema($cinema)
+            ->setTheaterName((string) $numberRoom)
+            ->setProjectionQuality($this->getReference('Projection_quality_'.$faker->numberBetween(1, 5)))
+            ->setNumberOfSeats($faker->numberBetween(100, 200))
+            ->setReducedMobilitySeats($faker->numberBetween(2, 5))
+        ;
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            ProjectionQualityFixtures::class,
+        ];
     }
 }

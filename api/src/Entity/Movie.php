@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -20,12 +23,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection(),
+        new GetCollection(normalizationContext: ['groups' => ['movie:read']]),
         new GetCollection(uriTemplate: '/movie/new_list', normalizationContext: ['groups' => ['movie:read']], provider: NewMovieListProvider::class),
     ],
     mercure: true
 ),
 ]
+#[ApiFilter(DateFilter::class, properties: ['movieShows.date'])]
+#[ApiFilter(SearchFilter::class, properties: ['movieShows.movieTheater.cinema' => 'exact', 'genres' => 'exact'])]
 class Movie
 {
     use IdTrait;
@@ -51,9 +56,11 @@ class Movie
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
+    #[Groups(['movie:read'])]
     private bool $favorite = false;
 
     #[ORM\Column(type: Types::FLOAT, nullable: false)]
+    #[Groups(['movie:read'])]
     private ?float $rating = 0;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
@@ -74,9 +81,17 @@ class Movie
     #[Groups(['movie:read'])]
     private ?bool $warning = null;
 
+    /**
+     * @var Collection<int, MovieShow>
+     */
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MovieShow::class)]
+    #[Groups(['movie:read'])]
+    private Collection $movieShows;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->movieShows = new ArrayCollection();
     }
 
     public function getTitle(): ?string
@@ -221,5 +236,21 @@ class Movie
         $this->warning = $warning;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MovieShow>
+     */
+    public function getMovieShows(): Collection
+    {
+        return $this->movieShows;
+    }
+
+    /**
+     * @param Collection<int, MovieShow> $movieShows
+     */
+    public function setMovieShows(Collection $movieShows): void
+    {
+        $this->movieShows = $movieShows;
     }
 }
