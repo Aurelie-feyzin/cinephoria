@@ -5,8 +5,10 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Trait\IdTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity]
 #[ApiResource(mercure: true)]
@@ -14,6 +16,7 @@ class Cinema
 {
     use IdTrait;
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['movie:read'])]
     private string $name;
 
     #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]
@@ -28,6 +31,18 @@ class Cinema
      */
     #[ORM\OneToMany(mappedBy: 'cinema', targetEntity: OpeningHours::class, cascade: ['persist', 'remove'])]
     private Collection $openingHours;
+
+    /**
+     * @var Collection<int, MovieTheater>
+     */
+    #[ORM\OneToMany(mappedBy: 'cinema', targetEntity: MovieTheater::class, orphanRemoval: true)]
+    private Collection $movieTheaters;
+
+    public function __construct()
+    {
+        $this->openingHours = new ArrayCollection();
+        $this->movieTheaters = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -81,5 +96,13 @@ class Cinema
         $this->openingHours = $openingHours;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MovieTheater>
+     */
+    public function getMovieTheaters(): Collection
+    {
+        return $this->movieTheaters;
     }
 }

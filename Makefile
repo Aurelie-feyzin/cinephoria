@@ -29,12 +29,18 @@ logs:
 	@$(DOCKER_COMP) logs --tail=0 --follow
 
 ## —— Symfony ————————————————————————————————————————————————————————————————
-database-diff: ## Generate a migration
+bash:
+	$(PHP_CONT) bash
+
+db-diff: ## Generate a migration
 	$(SYMFONY_CONSOLE) doctrine:migrations:diff
 
-database-migrate: ## Migrate the database
+db-migrate: ## Migrate the database
 	@$(call GREEN, "Migrating database...")
 	$(SYMFONY_CONSOLE) doctrine:migrations:migrate --no-interaction
+
+graphql-schema:
+	$(SYMFONY_CONSOLE) api:graphql:export -o config/graphql/schema.graphql
 
 fixtures: ## Load the fixtures
 	@$(call GREEN, "Loading fixtures...")
@@ -54,6 +60,9 @@ phpstan: ## phpmd
 	${VENDOR}/phpstan analyse --no-progress --no-interaction --configuration=phpstan.neon
 
 ## —— PWA —————————————————————————————————————————————————————
+sh:
+	$(PWA_CONT) sh
+
 lint: ## Lints JS coding standarts
 	$(PNPM) lint
 

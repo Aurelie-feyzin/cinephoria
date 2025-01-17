@@ -24,9 +24,7 @@ class MovieRepository extends ServiceEntityRepository
     public function getNewMovies(DateTimeImmutable $today): array
     {
         try {
-            $dayOfWeek = (int) $today->format('w');
-
-            $lastWednesday = 3 === $dayOfWeek ? $today : $today->modify('last wednesday');
+            $lastWednesday = $today->modify('last wednesday');
 
             return $this->findBy(['releaseDate' => $lastWednesday]);
         } catch (\Exception $e) {
