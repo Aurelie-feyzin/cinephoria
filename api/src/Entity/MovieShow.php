@@ -35,6 +35,7 @@ class MovieShow
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotNull]
     #[Groups(['movie:read'])]
+    #[ApiFilter(DateFilter::class)]
     private ?DateTimeImmutable $date = null;
 
     #[ORM\Column(length: 5)]

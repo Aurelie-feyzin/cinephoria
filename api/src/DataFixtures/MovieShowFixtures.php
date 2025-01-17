@@ -48,7 +48,7 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
                         ->setDate($day)
                         ->setStartTime($startTime->format('H:i'))
                         ->setEndTime($endTime->format('H:i'))
-                        ->setPriceInCents($theater->getProjectionQuality()->getSuggestedPrice())
+                        ->setPriceInCents($theater->getProjectionQuality()->getSuggestedPrice() / 100)
                     ;
                     $dayStartTime = $endTime;
                     $movie = $this->getRandomMovie($allMovies, $faker, $day);

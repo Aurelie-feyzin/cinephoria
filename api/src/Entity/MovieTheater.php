@@ -21,6 +21,7 @@ class MovieTheater
     #[ORM\ManyToOne(targetEntity: Cinema::class, inversedBy: 'movieTheaters')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
+    #[Groups(['movie:read'])]
     private ?Cinema $cinema = null;
 
     #[ORM\Column(type: Types::SMALLINT)]

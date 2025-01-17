@@ -27,15 +27,15 @@ class ProjectionQualityFixtures extends AbstractTsvImport
      */
     public function insertItem(EntityManagerInterface $manager, Generator $faker, array $element): bool
     {
-        $rojectionPrice = (new ProjectionQuality())
+        $projectionPrice = (new ProjectionQuality())
             ->setName($element[1])
             ->setFormat($element[2])
             ->setAudioSystem($element[3])
-            ->setSuggestedPrice((int) $element[1])
+            ->setSuggestedPrice((int) $element[4])
         ;
 
-        $this->addReference('Projection_quality_'.$element[0], $rojectionPrice);
-        $manager->persist($rojectionPrice);
+        $this->addReference('Projection_quality_'.$element[0], $projectionPrice);
+        $manager->persist($projectionPrice);
 
         return true;
     }
