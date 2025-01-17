@@ -5,3 +5,9 @@ interface Cinema {
     phoneNumber: string;
     openingHours: OpeningHours[];
 }
+
+interface MinimalCinema {
+    '@id': string;
+    '@type': string,
+    name: string;
+}

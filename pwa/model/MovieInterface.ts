@@ -12,4 +12,5 @@ interface Movie {
     warning?: string,
     favorite: boolean,
     rating: number,
+    movieShows: MovieShow[],
 }
