@@ -1,12 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 
 import PageContainer from "../components/common/layout/PageContainer";
-import ComingSoon from "../components/common/ComingSoon";
+import RegistrationForm from "../components/security/RegistrationForm";
+import AlertInfo from "../components/common/alert/AlertInfo";
+import AlertError from "../components/common/alert/AlertError";
 
 
-const Movies = () => (
-  <PageContainer title='se connecter'>
-    <ComingSoon/>
-  </PageContainer>
-);
+const Movies = () => {
+    const [registationOk, setRegistrationOk] = useState(false);
+    const [registationKo, setRegistrationKo] = useState(false);
+    return(
+        <PageContainer title='se connecter'>
+            <div className="items-center justify-center min-h-screen">
+                <div className="max-w-md mb-4 mx-auto rounded-lg">
+                <AlertInfo visible={registationOk}
+                        titleMessage='Compte crée avec succés'
+                        message="Votre compte a bien été crée, vous allez recevoir un émail de confirmation d'inscription."
+                        />
+                    <AlertError visible={registationKo}
+                            titleMessage='Erreur pendant la création du compte'
+                            message="Une erreur c'est produite pendant la création du compte."
+                    />
+                    </div>
+                <RegistrationForm setRegistrationOk={setRegistrationOk} setRegistrationKo={setRegistrationKo}/>
+            </div>
+        </PageContainer>
+    );
+}
 export default Movies;

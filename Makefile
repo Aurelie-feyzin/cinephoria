@@ -53,12 +53,14 @@ cache-clear: ## Clear the cache
 fix-cs: ## php-cs-fixer
 	${VENDOR}/php-cs-fixer fix --ansi --allow-risky=yes --using-cache=no --show-progress=dots --config=.php-cs-fixer.dist.php -v
 
-phpmd: ## phpmd
+phpmd:
 	${VENDOR}/phpmd src text phpmd-ruleset.xml --suffixes=php
 
-phpstan: ## phpmd
-	${VENDOR}/phpstan analyse --no-progress --no-interaction --configuration=phpstan.neon
+phpstan:
+	${VENDOR}/phpstan analyse --no-progress --no-interaction --configuration=phpstan.neon --memory-limit=-1
 
+security-checker:
+	$(COMPOSER) audit
 ## —— PWA —————————————————————————————————————————————————————
 sh:
 	$(PWA_CONT) sh
@@ -66,6 +68,7 @@ sh:
 lint: ## Lints JS coding standarts
 	$(PNPM) lint
 
+## —— Quality ans security —————————————————————————————————————————————————————
 code-quality: ## Run the tests
 	@$(call GREEN, "PHP code quality")
 	$(MAKE) fix-cs
@@ -73,3 +76,7 @@ code-quality: ## Run the tests
 	$(MAKE) phpstan
 	@$(call GREEN, "PWA code quality")
 	$(MAKE) lint
+
+security:
+	@$(call GREEN, "PHP security")
+	$(MAKE) security-checker
