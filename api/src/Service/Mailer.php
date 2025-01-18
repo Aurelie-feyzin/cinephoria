@@ -19,7 +19,7 @@ class Mailer
     public function sendWelcomeEmail(User $user): void
     {
         $email = (new Email())
-            ->from('alienmailcarrier@example.com')
+            ->from('no-replya@cinephoria.fr')
             ->to($user->getEmail())
             ->subject('Inscription sur Cinephoria')
             ->text("Nous sommes heureux de vous accueillr dans la communauté de Cinéphoria {$user->getFirstName()}! ❤️");
