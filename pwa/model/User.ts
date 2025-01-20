@@ -14,3 +14,14 @@ type UserInput = {
     email: string;
     plainPassword: string;
 }
+
+type LoginInput = {
+    username: string;
+    password: string;
+}
+
+type Profile = {
+    firstName: string;
+    lastName: string;
+    email: string;
+}
