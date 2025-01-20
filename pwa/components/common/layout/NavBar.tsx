@@ -76,7 +76,7 @@ const NavBar = () => {
                             <NavBarLink href={'/contact'}>Nous contacter</NavBarLink>
                             <div className="hidden md:inline-block">
                                 <AlertError
-                                    visible={error}
+                                    visible={!!error}
                                     message="Erreur pendant la récupération du profil."
                                 />
                             </div>
@@ -105,7 +105,7 @@ const NavBar = () => {
                     </div>
                     <div className="md:hidden">
                         <AlertError
-                            visible={error}
+                            visible={!!error}
                             message="Erreur pendant la récupération du profil."
                         />
                     </div>

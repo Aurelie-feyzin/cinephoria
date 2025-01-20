@@ -1,12 +1,95 @@
 import PageContainer from "../components/common/layout/PageContainer";
-import React from "react";
-import ComingSoon from "../components/common/ComingSoon";
+import React, {useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import InputField from "../components/common/form/InputField";
+import {customMaxLength, REQUIRED} from "../components/form/utils";
+import TextAreaField from "../components/common/form/TextAreaField";
+import AlertError from "../components/common/alert/AlertError";
+import {useUser} from "../context/UserContext";
+import {newContact} from "../request/contact";
+import AlertInfo from "../components/common/alert/AlertInfo";
 
+const Contact = () => {
+    const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
+    const [messageoK, setMessageOk] = useState<boolean>(false);
+    const {user} = useUser(); // Utiliser le hook pour accéder au contexte
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm<ContactInput>({
+        defaultValues: {
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            email: user?.email,
+            title: undefined,
+            description: undefined,
+        }
+    });
 
-const Movies = () => (
-    <PageContainer title='contact'>
-        <h1>Nous contacter</h1>
-        <ComingSoon/>
-    </PageContainer>
-);
-export default Movies;
+    const onSubmit: SubmitHandler<ContactInput> = async (data) => {
+        try {
+            setMessageKo(undefined);
+            const response = await newContact(data);
+            if (!response.ok) {
+                const badReponse = await response.json();
+                setMessageKo(badReponse.message);
+                return;
+            }
+            setMessageOk(true);
+        } catch (error) {
+            setMessageKo("Erreur pendant l'envoi de l'émail");
+        }
+    };
+
+    return (<PageContainer title='contact' titlePage="Contactez-nous">
+            <div className="container mx-auto p-6">
+                <div className="mb-4">
+                    <AlertError visible={!!messageKo}
+                                titleMessage="Erreur pendant le traitement"
+                                message={messageKo}
+                    />
+                    <AlertInfo visible={messageoK}
+                               titleMessage="Merci pour votre message."
+                               message="Nous avons bien reçu votre message, une copie vous a été envoyé."
+                    />
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)}
+                      className="max-w-full mx-auto bg-black p-6 rounded-lg shadow-md">
+                    <InputField register={register("firstName", {...REQUIRED, ...customMaxLength(255)})}
+                                name='firstName'
+                                label='Prénom'
+                                error={errors.firstName?.message}
+                    />
+                    <InputField register={register("lastName", {...REQUIRED, ...customMaxLength(255)})}
+                                name='lastName'
+                                label='Nom'
+                                error={errors.lastName?.message}
+                    />
+                    <InputField register={register("email", {...REQUIRED, ...customMaxLength(180)})}
+                                type='email'
+                                name='email'
+                                label='Email'
+                                error={errors.email?.message}
+                    />
+                    <InputField register={register("title", {...REQUIRED, ...customMaxLength(180)})}
+                                name='title'
+                                label='Titre de la demande'
+                                error={errors.title?.message}
+                    />
+                    <TextAreaField
+                        register={register("description", {...REQUIRED, ...customMaxLength(180)})}
+                        name='description'
+                        label='Votre message'
+                        error={errors.description?.message}
+                    />
+                    <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-secondary">
+                        Enregistrer
+                    </button>
+                </form>
+            </div>
+        </PageContainer>
+    );
+}
+
+export default Contact;
