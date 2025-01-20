@@ -29,9 +29,10 @@ const validatePassword = (password: string) => {
     return true;
 };
 
-const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
+const RegistrationForm = ({setRegistrationOk, setRegistrationKo, setRegistrationForm}: {
     setRegistrationOk: any,
-    setRegistrationKo: any
+    setRegistrationKo: any,
+    setRegistrationForm: any,
 }) => {
     const {
         register,
@@ -54,6 +55,7 @@ const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
 
             setRegistrationOk(true);
             setRegistrationKo(false);
+            setRegistrationForm(false);
         } catch (error) {
             setRegistrationKo(true);
             setRegistrationOk(false);
@@ -104,6 +106,10 @@ const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
                     </li>
                 </ul>
             </div>
+            <p className="mb-4 text-center text-secondary">
+                Déjà un compte :&nbsp;
+                <a onClick={() => setRegistrationForm(false)}>connectez-vous</a>
+            </p>
             <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
                 Enregistrer
             </button>
