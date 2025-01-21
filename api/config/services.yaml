@@ -6,6 +6,7 @@
 parameters:
     locale: fr
     rootDirectory: '%kernel.project_dir%'
+    cinephoriaUrl: '%env(APP_HOST)%'
 
 services:
     # default configuration for services in *this* file

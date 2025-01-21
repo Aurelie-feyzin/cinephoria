@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Model\ContactDto;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -13,15 +14,17 @@ class Mailer
 {
     private MailerInterface $mailer;
 
-    public function __construct(MailerInterface $mailer)
+    private ParameterBagInterface $params;
+
+    public function __construct(MailerInterface $mailer, ParameterBagInterface $parameterBag)
     {
         $this->mailer = $mailer;
+        $this->params = $parameterBag;
     }
 
     public function sendWelcomeEmail(User $user): void
     {
         $email = (new Email())
-            ->from('no-replya@cinephoria.fr')
             ->to($user->getEmail())
             ->subject('Inscription sur Cinephoria')
             ->text("Nous sommes heureux de vous accueillr dans la communauté de Cinéphoria {$user->getFirstName()}! ❤️");
@@ -31,9 +34,8 @@ class Mailer
     public function sendCopyContactEmail(ContactDto $contact): void
     {
         $email = (new TemplatedEmail())
-            ->from('contact@cinephoria.fr')
             ->to($contact->email)
-            ->subject('Merci pour votre message')
+            ->subject('Nouveau contact à traiter')
             ->htmlTemplate('emails/contact_copy_message.html.twig')
             ->context([
                 'contact' => $contact,
@@ -44,13 +46,29 @@ class Mailer
     public function sendContactEmail(ContactDto $contact): void
     {
         $email = (new TemplatedEmail())
-            ->from('contact@cinephoria.fr')
             ->to('contact@cinephoria.fr')
             ->subject('Merci pour votre message')
             ->htmlTemplate('emails/contact_new_message.html.twig')
             ->context([
                 'contact' => $contact,
             ]);
+        $this->mailer->send($email);
+    }
+
+    public function sendForgotPassword(User $user, string $token): void
+    {
+        $baseUrl = $this->params->get('cinephoriaUrl');
+        // api/config/routes/coop_tilleuls_forgot_password.yaml
+        $prefixForgotPassword = '/forgot-password';
+        $email = (new TemplatedEmail())
+            ->to($user->getEmail())
+            ->subject('Merci pour votre message')
+            ->htmlTemplate('emails/reset_password.html.twig')
+            ->context([
+                'user' => $user,
+                'reset_password_url' => sprintf('%s%s/%s', $baseUrl, $prefixForgotPassword, $token),
+            ]);
+
         $this->mailer->send($email);
     }
 }
