@@ -2,6 +2,7 @@ import React from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 import {customMaxLength, REQUIRED} from "../form/utils";
 import InputField from "../common/form/InputField";
+import {createUser} from "../../api/user";
 
 const validatePassword = (password: string) => {
     const minLength = 8;
@@ -29,9 +30,10 @@ const validatePassword = (password: string) => {
     return true;
 };
 
-const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
+const RegistrationForm = ({setRegistrationOk, setRegistrationKo, setRegistrationForm}: {
     setRegistrationOk: any,
-    setRegistrationKo: any
+    setRegistrationKo: any,
+    setRegistrationForm: any,
 }) => {
     const {
         register,
@@ -41,19 +43,15 @@ const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
 
     const onSubmit: SubmitHandler<UserInput> = async (data) => {
         try {
-            const response = await fetch('https://localhost/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/ld+json',
-                },
-                body: JSON.stringify(data), // Envoi des données sous forme de JSON
-            });
+            const response = await createUser(data);
             if (!response.ok) {
-                throw new Error('Erreur lors de la création de votre compte');
+                setRegistrationOk(false);
+                setRegistrationKo(true);
+                return;
             }
-
             setRegistrationOk(true);
             setRegistrationKo(false);
+            setRegistrationForm(false);
         } catch (error) {
             setRegistrationKo(true);
             setRegistrationOk(false);
@@ -104,6 +102,10 @@ const RegistrationForm = ({setRegistrationOk, setRegistrationKo}: {
                     </li>
                 </ul>
             </div>
+            <p className="mb-4 text-center text-secondary">
+                Déjà un compte :&nbsp;
+                <a onClick={() => setRegistrationForm(false)}>connectez-vous</a>
+            </p>
             <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
                 Enregistrer
             </button>

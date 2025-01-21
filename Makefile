@@ -68,7 +68,7 @@ sh:
 lint: ## Lints JS coding standarts
 	$(PNPM) lint
 
-## —— Quality ans security —————————————————————————————————————————————————————
+## —— Quality and security —————————————————————————————————————————————————————
 code-quality: ## Run the tests
 	@$(call GREEN, "PHP code quality")
 	$(MAKE) fix-cs
