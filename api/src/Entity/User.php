@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(),
         new Post(provider: UserPasswordHasher::class),
     ],
+    routePrefix: '/api',
     mercure: true
 ),
 ]

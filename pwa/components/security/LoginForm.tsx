@@ -4,16 +4,7 @@ import InputField from "../common/form/InputField";
 import {customMaxLength, REQUIRED} from "../form/utils";
 import AlertError from "../common/alert/AlertError";
 import {useUser} from "../../context/UserContext";
-
-
-const fetchGetToken = async (data: LoginInput) =>
-    await fetch(`https://localhost/api/auth`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/ld+json',
-        },
-        body: JSON.stringify(data)
-    });
+import {fetchGetToken} from "../../api/auth";
 
 const LoginForm = ({setRegistrationForm}: { setRegistrationForm: any }) => {
     const {
