@@ -2,7 +2,7 @@ import React from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 import {customMaxLength, REQUIRED} from "../form/utils";
 import InputField from "../common/form/InputField";
-import {createUser} from "../../api/user";
+import {createUser} from "../../request/user";
 
 const validatePassword = (password: string) => {
     const minLength = 8;

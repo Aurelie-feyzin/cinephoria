@@ -1,0 +1,10 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block body %}
+    <p><strong>Bonjour {{ contact.firstName }} {{ contact.lastName }}</strong>,</p>
+    <p>Nous avons bien reçu votre demande de contact, nous apporterons une réponse le plus rapidement possible.</p>
+    <p>Titre de votre message {{ contact.title | raw }}</p>
+    <p>Votre message {{ contact.title | raw }}</p>
+
+    <p>Toute l'équipe de cinephoria vous remercie pour votre message.</p>
+{% endblock %}

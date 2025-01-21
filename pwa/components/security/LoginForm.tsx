@@ -4,7 +4,7 @@ import InputField from "../common/form/InputField";
 import {customMaxLength, REQUIRED} from "../form/utils";
 import AlertError from "../common/alert/AlertError";
 import {useUser} from "../../context/UserContext";
-import {fetchGetToken} from "../../api/auth";
+import {fetchGetToken} from "../../request/auth";
 
 const LoginForm = ({setRegistrationForm}: { setRegistrationForm: any }) => {
     const {
