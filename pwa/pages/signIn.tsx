@@ -1,34 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 import PageContainer from "../components/common/layout/PageContainer";
 import RegistrationForm from "../components/security/RegistrationForm";
-import AlertInfo from "../components/common/alert/AlertInfo";
-import AlertError from "../components/common/alert/AlertError";
 import LoginForm from "../components/security/LoginForm";
+import ForgotPasswordForm from "../components/security/ForgotPasswordForm";
 
-
+export const LOGIN_FORM = 'login';
+export const REGISTRATION_FORM = 'registration';
+export const FORGOT_FORM = 'forgot';
+export const RESET_FORM = 'reset';
 const Signin = () => {
-    const [registrationForm, setRegistrationForm] = useState(false);
-    const [registationOk, setRegistrationOk] = useState(false);
-    const [registationKo, setRegistrationKo] = useState(false);
+    const [formVisible, setFormVisible] = useState(LOGIN_FORM);
 
     return (
         <PageContainer title='se connecter'>
             <div className="items-center justify-center min-h-screen">
-                <div className="max-w-md mb-4 mx-auto rounded-lg">
-                    <AlertInfo visible={registationOk}
-                               titleMessage='Compte crée avec succés'
-                               message="Votre compte a bien été crée, vous allez recevoir un émail de confirmation d'inscription."
-                    />
-                    <AlertError visible={registationKo}
-                                titleMessage='Erreur pendant la création du compte'
-                                message="Une erreur c'est produite pendant la création du compte."
-                    />
-                </div>
-                {!registrationForm  && <LoginForm setRegistrationForm={setRegistrationForm} />}
-                {registrationForm  &&
-                    <RegistrationForm setRegistrationOk={setRegistrationOk} setRegistrationKo={setRegistrationKo}
-                                      setRegistrationForm={setRegistrationForm}/>}
+                {formVisible === LOGIN_FORM && <LoginForm setFormVisible={setFormVisible} />}
+                {formVisible === REGISTRATION_FORM && <RegistrationForm setFormVisible={setFormVisible} />}
+                {formVisible === FORGOT_FORM && <ForgotPasswordForm setFormVisible={setFormVisible} />}
 
             </div>
         </PageContainer>
