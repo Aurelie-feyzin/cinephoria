@@ -1,9 +1,7 @@
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import {
   DehydratedState,
   Hydrate,
-  QueryClient,
-  QueryClientProvider,
 } from "react-query";
 
 const Layout = ({
@@ -13,12 +11,10 @@ const Layout = ({
   children: ReactNode;
   dehydratedState: DehydratedState;
 }) => {
-  const [queryClient] = useState(() => new QueryClient());
+
 
   return (
-    <QueryClientProvider client={queryClient}>
       <Hydrate state={dehydratedState}>{children}</Hydrate>
-    </QueryClientProvider>
   );
 };
 

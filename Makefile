@@ -68,6 +68,9 @@ sh:
 lint: ## Lints JS coding standarts
 	$(PNPM) lint
 
+audit: ## Checks for known security issues with the installed packages.
+	$(PNPM) audit
+
 ## —— Quality and security —————————————————————————————————————————————————————
 code-quality: ## Run the tests
 	@$(call GREEN, "PHP code quality")
@@ -80,3 +83,5 @@ code-quality: ## Run the tests
 security:
 	@$(call GREEN, "PHP security")
 	$(MAKE) security-checker
+	@$(call GREEN, "JS security")
+	$(MAKE) audit
