@@ -49,6 +49,11 @@ security:
         - { path: ^/, roles: PUBLIC_ACCESS }
        # - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
+    role_hierarchy:
+        ROLE_EMPLOYEE: ROLE_USER
+        ROLE_ADMIN: ROLE_EMPLOYEE
+       # ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+
 when@test:
     security:
         password_hashers:
