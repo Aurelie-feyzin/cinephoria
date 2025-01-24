@@ -5,8 +5,11 @@ import {customMaxLength, REQUIRED} from "../form/utils";
 import AlertError from "../common/alert/AlertError";
 import {useUser} from "../../context/UserContext";
 import {fetchGetToken} from "../../request/auth";
+import {fetchForgotPassword} from "../../request/forgot-password";
+import LinkForgotPasswordForm from "./LinkForgotPasswordForm";
+import LinkRegisterForm from "./LinkRegisterForm";
 
-const LoginForm = ({setRegistrationForm}: { setRegistrationForm: any }) => {
+const LoginForm = ({setFormVisible }: { setFormVisible: any }) => {
     const {
         register,
         handleSubmit,
@@ -61,10 +64,8 @@ const LoginForm = ({setRegistrationForm}: { setRegistrationForm: any }) => {
                             label='Mot de passe'
                             error={errors.password?.message}
                 />
-                <p className="mb-4 text-center text-secondary">
-                    Pas encore de compte :&nbsp;
-                    <a onClick={() => setRegistrationForm(true)}>inscrivez-vous</a>
-                </p>
+                <LinkRegisterForm setFormVisible={setFormVisible} />
+                <LinkForgotPasswordForm setFormVisible={setFormVisible} />
                 <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
                     Se connecter
                 </button>

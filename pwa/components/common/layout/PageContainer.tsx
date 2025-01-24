@@ -24,7 +24,7 @@ const PageContainer: React.FC<PageContainerProps> = ({title, titlePage, children
                 <div className="text-center text-white p-4 text-3xl">
                     <h1>{titlePage}</h1>
                 </div>
-               <div className="md:container md:mx-auto mx-auto">
+                <div className="md:container md:mx-auto mx-auto pb-4">
                     {children}
                 </div>
                 <Footer cinemas={cinemas ? cinemas : []}/>

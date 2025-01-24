@@ -15,13 +15,21 @@ type UserInput = {
     plainPassword: string;
 }
 
+type Profile = {
+    firstName: string;
+    lastName: string;
+    email: string;
+}
+
 type LoginInput = {
     username: string;
     password: string;
 }
 
-type Profile = {
-    firstName: string;
-    lastName: string;
+type ResetPasswordInput = {
+    password: string;
+}
+
+type ForgotPasswordInput = {
     email: string;
 }
