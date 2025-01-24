@@ -71,7 +71,7 @@ const NavBar = () => {
                         <div
                             className="flex flex-col md:items-center justify-center space-y-0 space-x-0 md:flex md:flex-row md:space-x-6">
                             <NavBarLink href={'/'}>Accueil</NavBarLink>
-                            <NavBarLink href={'/booking'}>Réserver</NavBarLink>
+                            <NavBarLink href={'/reservation'}>Réserver</NavBarLink>
                             <NavBarLink href={'/movies'}>Les films</NavBarLink>
                             <NavBarLink href={'/contact'}>Nous contacter</NavBarLink>
                             <div className="hidden md:inline-block">

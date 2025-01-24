@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\State\ByCinemaMovieListProvider;
 use App\Trait\IdTrait;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -23,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(normalizationContext: ['groups' => ['movieShow:read']]),
         new GetCollection(order: ['date' => 'desc', 'movieTheater.cinema' => 'asc', 'movieTheater.theaterName' => 'asc', 'startTime' => 'asc'], normalizationContext: ['groups' => ['movieShow:read']]),
+        new GetCollection(uriTemplate: '/cinemas/{id}/movie_shows', normalizationContext: ['groups' => ['movieShow:full']], provider: ByCinemaMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
@@ -41,30 +43,30 @@ class MovieShow
     #[ORM\ManyToOne(targetEntity: MovieTheater::class, inversedBy: 'movieShows')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    #[Groups(['movie:read', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
     private ?MovieTheater $movieTheater = null;
 
     #[ORM\ManyToOne(targetEntity: Movie::class, inversedBy: 'movieShows')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    #[Groups(['movieShow:read'])]
+    #[Groups(['movieShow:read', 'movieShow:full'])]
     private ?Movie $movie = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotNull]
-    #[Groups(['movie:read', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
     #[ApiFilter(DateFilter::class)]
     private ?DateTimeImmutable $date = null;
 
     #[ORM\Column(length: 5)]
     #[Assert\NotNull]
     #[Assert\Time(withSeconds: false)]
-    #[Groups(['movie:read', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
     private ?string $startTime = null;
 
     #[ORM\Column(length: 5)]
     #[Assert\Time(withSeconds: false)]
-    #[Groups(['movie:read', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
     private ?string $endTime = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -156,7 +158,7 @@ class MovieShow
         return $this;
     }
 
-    #[Groups(['movie:read', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
     public function getPriceInEuros(): float
     {
         return ($this->priceInCents ?: $this->movieTheater->getProjectionQuality()->getSuggestedPrice()) / 100;

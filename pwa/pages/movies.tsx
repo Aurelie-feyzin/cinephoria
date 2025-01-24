@@ -8,8 +8,8 @@ import {useForm} from "react-hook-form";
 import {useCinemas} from "../context/CinemaContext";
 import {orderBy, uniqBy} from "lodash";
 import {fetchMovieInCinema} from "../request/movie";
-import PageLoading from "../components/common/PageLoading";
-import PageError from "../components/common/PageError";
+import SelectCinema from "../components/common/form/SelectCinema";
+import SelectDay from "../components/common/form/SelectDay";
 
 
 const Movies = () => {
@@ -33,24 +33,13 @@ const Movies = () => {
         }
     });
 
-    const daysOfWeek = [
-        {label: 'Tous les jours', value: ''},
-        {label: 'Lundi', value: 1},
-        {label: 'Mardi', value: 2},
-        {label: 'Mercredi', value: 3},
-        {label: 'Jeudi', value: 4},
-        {label: 'Vendredi', value: 5},
-        {label: 'Samedi', value: 6},
-        {label: 'Dimanche', value: 0},
-    ];
-
     useEffect(() => {
         const fetchFilteredMovies = () => {
             let filtered = movies;
 
             if (selectedCinema) {
                 filtered = filtered.filter((movie) => movie.movieShows.filter((show) =>
-                    show.movieTheater.cinema.name === selectedCinema
+                    show.movieTheater.cinema['@id'] === selectedCinema
                     && dayjs(show.date).format('YYYY-MM-DD') >= today
                     && dayjs(show.date).format('YYYY-MM-DD') <= lastDay
                 ).length > 0);
@@ -61,14 +50,14 @@ const Movies = () => {
             }
 
             if (selectedDay) {
-                filtered.map((movie) =>
-                    movie.movieShows.find((show) =>
-                        dayjs(show.date).day() == selectedDay
-                    ));
+                filtered.map((movie) => movie.movieShows.find((show) => {
+                    return dayjs(show.date).day() == selectedDay
+                }));
                 filtered = filtered.filter((movie) => movie.movieShows.find((show) =>
                     new Date(show.date).getDay() == selectedDay
                     && dayjs(show.date).format('YYYY-MM-DD') >= today
                     && dayjs(show.date).format('YYYY-MM-DD') <= lastDay
+                    && (!selectedCinema || show.movieTheater.cinema['@id'] === selectedCinema)
                 ));
             }
 
@@ -82,23 +71,8 @@ const Movies = () => {
         <div className="container mx-auto p-6">
             <form className="flex flex-col md:flex-row md:space-x-4 mb-6">
                 <div className="w-full md:w-1/3">
-                    <label htmlFor="cinema-filter" className="block text-secondary font-semibold mb-2">
-                        Cinéma
-                    </label>
-                    <select
-                        id="cinema-filter"
-                        {...register('cinema')}
-                        className="w-full p-2 border rounded-md"
-                    >
-                        <option value="">Tous les cinémas</option>
-                        {cinemas.map((cinema) => (
-                            <option key={cinema.id} value={cinema.name}>
-                                {cinema.name}
-                            </option>
-                        ))}
-                    </select>
+                    <SelectCinema forceSelect={false} register={register}/>
                 </div>
-
                 <div className="w-full md:w-1/3">
                     <label htmlFor="genre-filter" className="block text-secondary font-semibold mb-2">
                         Genre
@@ -116,27 +90,11 @@ const Movies = () => {
                         ))}
                     </select>
                 </div>
-
                 <div className="w-full md:w-1/3">
-                    <label htmlFor="day-filter" className="block text-secondary font-semibold mb-2">
-                        Jour
-                    </label>
-                    <select
-                        id="day-filter"
-                        {...register('day')}
-                        className="w-full p-2 border rounded-md"
-                    >
-                        {daysOfWeek.map((day) => (
-                            <option key={day.value} value={day.value}>
-                                {day.label}
-                            </option>
-                        ))}
-                    </select>
+                    <SelectDay register={register}/>
                 </div>
             </form>
             <div className="grid grid-cols-1">
-                {isLoading && <PageLoading message="Chargement des films en cours"/>}
-                {error && <PageError message={error?.message}/>}
                 {filteredMovies.length > 0 ? (
                     filteredMovies.map((movie) => (
                         <div key={movie.id} onClick={() => setSelectedMovie(movie)}>
@@ -162,10 +120,11 @@ const Movies = () => {
                         {orderBy(selectedMovie.movieShows, ['movieTheater.cinema.name', 'date'])
                             .filter((show: MovieShow) => dayjs(show.date).format('YYYY-MM-DD') >= today && dayjs(show.date).format('YYYY-MM-DD') <= lastDay)
                             .filter((show: MovieShow) => {
-                                if (selectedCinema && show.movieTheater.cinema.name !== selectedCinema) {
+                                if (selectedCinema && show.movieTheater.cinema['@id'] !== selectedCinema) {
                                     return false;
                                 }
-                                return !(selectedDay && new Date(show.date).getDay() != selectedDay);
+                               return !(selectedDay && new Date(show.date).getDay() != selectedDay);
+
                             })
                             .map((show: MovieShow) => (
                                 <li key={show['@id']} className="mt-2">

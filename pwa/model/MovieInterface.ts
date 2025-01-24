@@ -23,6 +23,20 @@ interface MinimalMovie {
     description?: string,
 }
 
+interface Minimal2Movie {
+    '@id': string,
+    '@type': string,
+    ageRestriction?: string,
+    description?: string,
+    duration?: number,
+    favorite: boolean,
+    genres: MovieGenre[],
+    posterPath?: string,
+    rating: number,
+    title: string,
+    warning?: string,
+}
+
 interface MovieDescription {
     '@id': string,
     id: string,
