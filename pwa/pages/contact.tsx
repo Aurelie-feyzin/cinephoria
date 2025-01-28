@@ -84,9 +84,7 @@ const Contact = () => {
                         label='Votre message'
                         error={errors.description?.message}
                     />
-                    <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-secondary">
-                        Enregistrer
-                    </button>
+                    <ButtonSubmit />
                 </form>
             </div>
         </PageContainer>

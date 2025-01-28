@@ -1,7 +1,6 @@
-
 interface Movie {
     '@id': string,
-     id: string,
+    id: string,
     '@type': string,
     title: string,
     posterPath?: string,
@@ -33,7 +32,7 @@ interface MovieDescription {
 
 interface MovieDescriptionInput {
     '@id': string,
-     id: string,
+    id: string,
     '@type': string,
     title: string,
     posterPath?: string,
@@ -41,8 +40,8 @@ interface MovieDescriptionInput {
     description?: string,
     genres: string[],
     ageRestriction?: string,
-    warning?: boolean,
-    favorite: boolean,
+    warning?: string,
+    favorite: string,
     releaseDate: string,
     rating: number,
 }
