@@ -12,7 +12,6 @@ const Layout = ({
   dehydratedState: DehydratedState;
 }) => {
 
-
   return (
       <Hydrate state={dehydratedState}>{children}</Hydrate>
   );

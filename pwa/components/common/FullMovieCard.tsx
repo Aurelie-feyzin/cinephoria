@@ -79,7 +79,7 @@ const FullMovieCard:React.FC<Props>  = ({
 
                 <div className="flex flex-col lg:flex-row justify-between items-center mt-4">
                     <div>
-                        <span>{movie.ageRestriction}+</span>
+                        <span>{movie.ageRestriction.value}+</span>
                         {movie.warning && <span className="text-orange-500 ml-2">⚠️ {movie.warning}</span>}
                     </div>
                     <div>{movie.genres.map((genre) => genre.name).join(', ')}</div>

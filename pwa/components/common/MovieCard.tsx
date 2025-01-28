@@ -35,7 +35,7 @@ const MovieCard:React.FC<Props>  = ({
                     <ClockIcon /> &nbsp;{movie.duration} min
                 </p>
                 <p className="text-sm text-white mb-3 space-x-1">
-                    <span className="hidden sm:inline-flex">Âge:</span> {movie.ageRestriction || 'N/A'}
+                    <span className="hidden sm:inline-flex">Âge:</span> {movie.ageRestriction?.value || 'N/A'}
                     {movie.warning && (
                         <span className="text-sm text-white mt-3">
                             &nbsp;avec avertissement
