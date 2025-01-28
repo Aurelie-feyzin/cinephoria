@@ -37,3 +37,9 @@ api_platform:
 
         # Custom mapping
         App\Exception\ProductNotFoundException: 404 # Here is the handler for our custom exception
+
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+            - '%kernel.project_dir%/src/Enum'
+           # - '%kernel.project_dir%/src/DTO'

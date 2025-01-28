@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Enum\AgeRestriction;
 use App\State\NewMovieListProvider;
 use App\Trait\IdTrait;
@@ -22,9 +24,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(normalizationContext: ['groups' => ['movie:read']]),
+        new Get(normalizationContext: ['groups' => ['movie:description']]),
+        new GetCollection(order: ['releaseDate' => 'desc', 'title' => 'asc'], normalizationContext: ['groups' => ['movie:description']]),
         new GetCollection(uriTemplate: '/movie/new_list', normalizationContext: ['groups' => ['movie:read']], provider: NewMovieListProvider::class),
+        new GetCollection(uriTemplate: '/movie/in_cinema', normalizationContext: ['groups' => ['movie:read']]),
+        new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
     mercure: true
 ),
@@ -36,50 +41,51 @@ class Movie
     use IdTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private ?string $posterPath = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private bool $favorite = false;
 
     #[ORM\Column(type: Types::FLOAT, nullable: false)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private ?float $rating = 0;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Groups(['movie:description'])]
     private ?\DateTimeImmutable $releaseDate = null;
 
     /**
      * @var Collection<int, MovieGenre>
      */
     #[ORM\ManyToMany(targetEntity: MovieGenre::class, inversedBy: 'movies')]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private Collection $genres;
 
     #[ORM\Column(type: Types::STRING, nullable: false, enumType: AgeRestriction::class)]
-    #[Groups(['movie:read'])]
-    private AgeRestriction $ageRestriction;
+    #[Groups(['movie:read', 'movie:description'])]
+    private ?AgeRestriction $ageRestriction = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
-    #[Groups(['movie:read'])]
-    private ?bool $warning = null;
+    #[Groups(['movie:read', 'movie:description'])]
+    private ?bool $warning = false;
 
     /**
      * @var Collection<int, MovieShow>
@@ -214,7 +220,7 @@ class Movie
         return $this;
     }
 
-    public function getAgeRestriction(): AgeRestriction
+    public function getAgeRestriction(): ?AgeRestriction
     {
         return $this->ageRestriction;
     }
@@ -246,11 +252,19 @@ class Movie
         return $this->movieShows;
     }
 
-    /**
-     * @param Collection<int, MovieShow> $movieShows
-     */
-    public function setMovieShows(Collection $movieShows): void
+    public function addMovieShow(MovieShow $movieShow): static
     {
-        $this->movieShows = $movieShows;
+        if (!$this->movieShows->contains($movieShow)) {
+            $this->movieShows->add($movieShow);
+        }
+
+        return $this;
+    }
+
+    public function removeMovieShow(MovieShow $movieShow): static
+    {
+        $this->movieShows->removeElement($movieShow);
+
+        return $this;
     }
 }

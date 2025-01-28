@@ -17,7 +17,7 @@ class MovieGenre
     use IdTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movie:description'])]
     private ?string $name = null;
 
     #[ORM\Column]

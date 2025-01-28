@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
-import {customMaxLength, REQUIRED, validatePassword} from "../form/utils";
 import InputField from "../common/form/InputField";
 import {createUser} from "../../request/user";
 import LinkLoginForm from "./LinkLoginForm";
 import AlertInfo from "../common/alert/AlertInfo";
 import AlertError from "../common/alert/AlertError";
 import LinkForgotPasswordForm from "./LinkForgotPasswordForm";
-import InfoValidatePassword from "../form/InfoValidatePassword";
+import {customMaxLength, REQUIRED, validatePassword} from "../common/form/validator_tools";
+import InfoValidatePassword from "../common/form/InfoValidatePassword";
 
 const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
     const {

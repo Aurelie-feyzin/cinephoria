@@ -2,12 +2,13 @@ import PageContainer from "../components/common/layout/PageContainer";
 import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../components/common/form/InputField";
-import {customMaxLength, REQUIRED} from "../components/form/utils";
 import TextAreaField from "../components/common/form/TextAreaField";
 import AlertError from "../components/common/alert/AlertError";
 import {useUser} from "../context/UserContext";
 import {newContact} from "../request/contact";
 import AlertInfo from "../components/common/alert/AlertInfo";
+import ButtonSubmit from "../components/common/button/ButtonSubmit";
+import {customMaxLength, REQUIRED} from "../components/common/form/validator_tools";
 
 const Contact = () => {
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
@@ -83,9 +84,7 @@ const Contact = () => {
                         label='Votre message'
                         error={errors.description?.message}
                     />
-                    <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-secondary">
-                        Enregistrer
-                    </button>
+                    <ButtonSubmit />
                 </form>
             </div>
         </PageContainer>

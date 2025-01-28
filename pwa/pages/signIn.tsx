@@ -8,7 +8,6 @@ import ForgotPasswordForm from "../components/security/ForgotPasswordForm";
 export const LOGIN_FORM = 'login';
 export const REGISTRATION_FORM = 'registration';
 export const FORGOT_FORM = 'forgot';
-export const RESET_FORM = 'reset';
 const Signin = () => {
     const [formVisible, setFormVisible] = useState(LOGIN_FORM);
 

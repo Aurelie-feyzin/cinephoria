@@ -12,8 +12,6 @@ type PageContainerProps = {
 
 
 const PageContainer: React.FC<PageContainerProps> = ({title, titlePage, children}) => {
-    const cinemas = useCinemas();
-
     return (
         <div className="w-full overflow-x-hidden">
             <Head>
@@ -27,7 +25,7 @@ const PageContainer: React.FC<PageContainerProps> = ({title, titlePage, children
                 <div className="md:container md:mx-auto mx-auto pb-4">
                     {children}
                 </div>
-                <Footer cinemas={cinemas ? cinemas : []}/>
+                <Footer />
             </div>
         </div>
     );

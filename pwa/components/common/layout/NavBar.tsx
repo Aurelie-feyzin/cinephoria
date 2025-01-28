@@ -9,7 +9,7 @@ import LogoutIcon from "../Icon/LogoutIcon";
 
 const NavBar = () => {
     const [navbar, setNavbar] = useState(false);
-    const {user, error, logout} = useUser(); // Utiliser le hook pour accéder au contexte
+    const {user, error, logout} = useUser();
 
     return (
         <nav className="bg-black p-4">
@@ -118,6 +118,12 @@ const NavBar = () => {
                         </Link>
                     ) : (
                         <div className="flex items-center">
+                            {user?.role &&
+                                <Link href="/intranet"
+                                      className="px-4 py-2 rounded-md shadow text-white bg-primary hover:bg-secondary">
+                                    Intranet
+                                </Link>
+                            }
                             <p className="px-4 py-2 rounded-md shadow text-white hover:bg-secondary">
                                 {user?.firstName}
                             </p>

@@ -24,7 +24,7 @@ class UserHashPasswordStateProcessor implements ProcessorInterface
         $this->mailer = $mailer;
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         if ($data instanceof User && $data->getPlainPassword()) {
             $data->setPassword($this->userPasswordHasher->hashPassword($data, $data->getPlainPassword()));
@@ -32,6 +32,10 @@ class UserHashPasswordStateProcessor implements ProcessorInterface
 
         $this->innerProcessor->process($data, $operation, $uriVariables, $context);
 
-        $this->mailer->sendWelcomeEmail($data);
+        if ($data instanceof User) {
+            $this->mailer->sendWelcomeEmail($data);
+        }
+
+        return $data;
     }
 }

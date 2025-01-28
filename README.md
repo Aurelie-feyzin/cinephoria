@@ -14,3 +14,5 @@
 ```
 docker compose exec php bash
 ```
+
+https://tailwindcss-generator.com/icon

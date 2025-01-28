@@ -1,6 +1,6 @@
 export const REQUIRED = {required: 'Ce champ est obligatoire'}
-export const customMaxLength = (maxValue = 255)=> (
-    { maxLength: { value: maxValue, message: `Maximum ${maxValue} caractères.` } });
+export const customMaxLength = (maxValue = 255) => (
+    {maxLength: {value: maxValue, message: `Maximum ${maxValue} caractères.`}});
 
 export const validatePassword = (password: string) => {
     const minLength = 8;
