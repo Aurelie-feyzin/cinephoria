@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace App\DataFixtures;
 
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,7 +13,8 @@ class UserFixtures extends AbstractTsvImport
 {
     private const FILENAME = 'user.tsv';
 
-    public function __construct(string $rootDirectory, private readonly UserPasswordHasherInterface $userPasswordHasher) {
+    public function __construct(string $rootDirectory, private readonly UserPasswordHasherInterface $userPasswordHasher)
+    {
         parent::__construct($rootDirectory);
     }
 
@@ -27,9 +28,6 @@ class UserFixtures extends AbstractTsvImport
         return false;
     }
 
-    /**
-     * @param array $element
-     */
     public function insertItem(EntityManagerInterface $manager, Generator $faker, array $element): bool
     {
         $user = (new User())

@@ -13,7 +13,10 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class ApiProfileController extends AbstractController
 {
-    public function __construct(private readonly Security $security) {}
+    public function __construct(private readonly Security $security)
+    {
+    }
+
     #[Route('/api/profile', name: 'api_profile', methods: ['GET'])]
     public function index(#[CurrentUser] ?User $user): JsonResponse
     {
