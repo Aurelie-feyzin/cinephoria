@@ -27,6 +27,7 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        ini_set('memory_limit', '-1'); // TODO refactor by batch
         $faker = Factory::create('fr-FR');
         $allTheather = $manager->getRepository(MovieTheater::class)->findAll();
         /** @var Movie[] $allMovies */
@@ -39,9 +40,9 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
                 $day = $firstWednseday->modify('+'.$i.' day');
                 $startTime = $day->modify('+ 0 day 14:30');
                 $movie = $this->getRandomMovie($allMovies, $faker, $day);
-                $totalDuration = $movie->getDuration() + 20;
+                $totalDuration = $movie->getDuration() + 5;
                 $endTime = $startTime->modify('+'.$totalDuration.' minutes');
-                while ($endTime->format('H:i') <= '22:00') {
+                while ($startTime->format('H:i') < '22:00') {
                     $newMovieShow = (new MovieShow())
                         ->setMovieTheater($theater)
                         ->setMovie($movie)
@@ -50,10 +51,12 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
                         ->setEndTime($endTime->format('H:i'))
                         ->setPriceInCents($theater->getProjectionQuality()->getSuggestedPrice() / 100)
                     ;
-                    $dayStartTime = $endTime;
+                    $manager->persist($theater);
+                    $manager->persist($newMovieShow);
+                    $startTime = $endTime->modify('+ 10 minutes');
                     $movie = $this->getRandomMovie($allMovies, $faker, $day);
-                    $totalDuration = $movie->getDuration() + 20;
-                    $endTime = $dayStartTime->modify('+'.$totalDuration.' minutes');
+                    $totalDuration = $movie->getDuration() + 5;
+                    $endTime = $startTime->modify('+'.$totalDuration.' minutes');
 
                     $manager->persist($newMovieShow);
                 }
@@ -65,9 +68,8 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
     private function getFirstDate(): DateTimeImmutable
     {
         $today = new DateTimeImmutable();
-        $wednesday = $today->modify('last wednesday');
 
-        return $wednesday->modify('-7 days');
+        return $today->modify('last wednesday')->modify('-7 days');
     }
 
     /**
