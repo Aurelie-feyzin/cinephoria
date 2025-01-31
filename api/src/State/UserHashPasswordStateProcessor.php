@@ -10,14 +10,14 @@ use App\Service\Mailer;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-/** @implements ProcessorInterface<User, void> */
+/** @implements ProcessorInterface<User, mixed> */
 #[AsDecorator('api_platform.doctrine.orm.state.persist_processor')]
 class UserHashPasswordStateProcessor implements ProcessorInterface
 {
     private Mailer $mailer;
 
     /**
-     * @param ProcessorInterface<User, void> $innerProcessor
+     * @param ProcessorInterface<User, mixed> $innerProcessor
      */
     public function __construct(private readonly ProcessorInterface $innerProcessor, private readonly UserPasswordHasherInterface $userPasswordHasher, Mailer $mailer)
     {

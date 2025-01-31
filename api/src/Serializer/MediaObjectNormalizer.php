@@ -19,7 +19,10 @@ class MediaObjectNormalizer implements NormalizerInterface
     ) {
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    /**
+     * {@inheritdoc}
+     */
+    public function normalize($object, ?string $format = null, array $context = []): mixed
     {
         $context[self::ALREADY_CALLED] = true;
 
@@ -28,6 +31,9 @@ class MediaObjectNormalizer implements NormalizerInterface
         return $this->normalizer->normalize($object, $format, $context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
@@ -37,6 +43,9 @@ class MediaObjectNormalizer implements NormalizerInterface
         return $data instanceof MediaObject;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSupportedTypes(?string $format): array
     {
         return [
