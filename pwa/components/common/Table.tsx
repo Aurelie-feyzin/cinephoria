@@ -13,7 +13,7 @@ type TableProps<T> = {
 };
 
 const Table = <T extends { [key: string]: any }>({columns, data, index}: TableProps<T>) => (
-    <table className="table-auto bg-white border border-gray-300 shadow-md">
+    <table className="table-auto mx-auto bg-white border border-gray-300 shadow-md">
         <thead>
         <tr className="bg-gray-100">
             {columns.map((column) => (
