@@ -69,6 +69,9 @@ final class ForgotPasswordEventSubscriber implements EventSubscriberInterface
         $this->userRepository->upgradePassword($user, $this->userPasswordHasher->hashPassword($user, $event->getPassword()));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function onUserNotFound(UserNotFoundEvent $event): void
     {
         // $context = $event->getContext();

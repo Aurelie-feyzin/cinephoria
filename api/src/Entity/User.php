@@ -34,6 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use IdTrait;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NoSuspiciousCharacters]
     private ?string $email = null;
 
     /**
@@ -70,6 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'Your password must contain at least one special character.'
     )]
     #[Assert\NotBlank]
+    #[Assert\NoSuspiciousCharacters]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255)]

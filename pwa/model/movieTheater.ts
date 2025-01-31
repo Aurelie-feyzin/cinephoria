@@ -9,3 +9,11 @@ type MovieTheater = {
     priceInEuros: number;
     projectionQuality: ProjectionQuality;
 }
+
+interface MovieTheaterApiResponse {
+    'hydra:member': MovieTheater[];
+    'hydra:view'?: {
+        'hydra:next'?: string;
+        'hydra:last'?: string;
+    };
+}

@@ -41,8 +41,9 @@ class Movie
     use IdTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movieShow:read'])]
     #[Assert\NotBlank]
+    #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -53,7 +54,7 @@ class Movie
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movieShow:read'])]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

@@ -15,7 +15,7 @@ const MoviePage = () => {
     const router = useRouter()
     const { id } = router.query
 
-    const { data: movie, error, isLoading } = useQuery(
+    const { data: movie, error, isLoading } = useQuery<MovieDescription, Error>(
         ['movie', id],
         () => fetchMovieById(id as string),
         {

@@ -39,15 +39,24 @@ enum AgeRestriction: string
         return $this->value;
     }
 
+    /**
+     * @return AgeRestriction[]
+     */
     public static function getCases(): array
     {
         return self::cases();
     }
 
-    public static function getCase(Operation $operation, array $uriVariables)
+    /**
+     * @param string[] $uriVariables
+     *
+     * @return AgeRestriction
+     *                        {@inheritdoc}
+     */
+    public static function getCase(Operation $operation, array $uriVariables): AgeRestriction
     {
         $name = $uriVariables['id'] ?? null;
 
-        return constant(self::class."::$name");
+        return self::tryFrom($name) ?? constant(self::class."::$name");
     }
 }

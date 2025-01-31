@@ -6,7 +6,7 @@ import InputField from "../../common/form/InputField";
 import {customMaxLength, REQUIRED} from "../../common/form/validator_tools";
 import TextAreaField from "../../common/form/TextAreaField";
 import SelectField from "../../common/form/SelectField";
-import {formatToSelectOption} from "../../common/form/utils";
+import {formatToSelectOption, Option} from "../../common/form/utils";
 import RadioButtons, {OptionBooleans} from "../../common/form/RadioButtons";
 import ButtonSubmit from "../../common/button/ButtonSubmit";
 import React, {SetStateAction} from "react";
@@ -38,14 +38,6 @@ const MovieForm = ({movieData, mutation, setMessageKo}:
             warning: String(!!movieData.warning),
             favorite: String(movieData.favorite),
         } : {},
-        values: {
-            ...movieData,
-            releaseDate: movieData?.releaseDate ? dayjs(movieData.releaseDate).format('YYYY-MM-DD') : undefined,
-            genres: movieData?.genres.map((genre: MovieGenre) => genre['@id']),
-            ageRestriction: movieData?.ageRestriction ? movieData.ageRestriction['@id'] : undefined,
-            warning: String(!!movieData?.warning),
-            favorite: String(movieData?.favorite),
-        } as MovieDescriptionInput
     },);
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
@@ -58,6 +50,31 @@ const MovieForm = ({movieData, mutation, setMessageKo}:
         } catch (error) {
             setMessageKo("Erreur, film non modifié");
         }
+    }
+
+    const getDates = () => {
+        const now = dayjs();
+        const wednesday = now.day(3);
+        const optionDates: Option[] = [];
+        let nbAddDate = 4;
+        if (wednesday.format('YYYY-MM-DD') >= now.format('YYYY-MM-DD')) {
+            nbAddDate = 3;
+            optionDates.push({
+                id: wednesday.format('YYYY-MM-DD'),
+                value: wednesday.format('YYYY-MM-DD'),
+                label: wednesday.format('DD/MM/YYYY'),
+            });
+        }
+        for (let i = 1; i < (nbAddDate+1); i++) {
+            const newDate = wednesday.add(i*7, 'day');
+            optionDates.push({
+                id: newDate.format('YYYY-MM-DD'),
+                value: newDate.format('YYYY-MM-DD'),
+                label: newDate.format('DD/MM/YYYY'),
+            });
+        }
+
+        return optionDates;
     }
 
     return (
@@ -83,11 +100,10 @@ const MovieForm = ({movieData, mutation, setMessageKo}:
                             label='Durée (min)'
                             error={errors.duration?.message}
                 />
-                <InputField register={register("releaseDate", {...REQUIRED, valueAsDate: true})}
-                            type="date"
-                            name='releaseDate'
-                            label='Date de sortie'
-                            error={errors.releaseDate?.message}
+                <SelectField label="Date de sortie" name="releaseDate" register={register("releaseDate", {...REQUIRED,  valueAsDate: true})}
+                             options={getDates() || []}
+                             error={errors.releaseDate?.message}
+                             className="w-full"
                 />
                 <SelectField label="Age minimun" name="ageRestriction" register={register("ageRestriction")}
                              options={formatToSelectOption(ageRestrictions || [], '@id', 'value')}

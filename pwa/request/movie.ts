@@ -15,6 +15,35 @@ export const fetchMovieById = async (id: string): Promise<MovieDescription> => {
     return await response.json();
 }
 
+export const fetchMovieByUri = async (uri: string): Promise<MovieDescription> => {
+    const response = await fetch(uri, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/ld+json',
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du film')
+    }
+
+    return await response.json();
+}
+
+export const fetchMoviesBySearchInTitle = async (search: string): Promise<MovieDescriptionApiResponse> => {
+    const url = `/movies?title=${search}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/ld+json',
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du film')
+    }
+
+    return await response.json();
+}
+
 export const fetchNewMovies = async (): Promise<MovieApiResponse> => {
     const url = `/movie/new_list`;
     const response = await fetch(url, {

@@ -14,6 +14,15 @@ interface Movie {
     movieShows: MovieShow[],
 }
 
+interface MinimalMovie {
+    '@id': string,
+    id: string,
+    '@type': string,
+    title: string,
+    duration?: number,
+    description?: string,
+}
+
 interface MovieDescription {
     '@id': string,
     id: string,
