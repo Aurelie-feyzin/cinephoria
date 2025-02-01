@@ -4,10 +4,10 @@ type MovieTheater = {
     '@type': string,
     cinema: MinimalCinema;
     theaterName: string;
-    startTime: string;
-    endTime: string;
+    numberOfSeats: number;
+    reducedMobilitySeats: number;
     priceInEuros: number;
-    projectionQuality: ProjectionQuality;
+    projectionQuality: FullProjectionQuality;
 }
 
 interface MovieTheaterApiResponse {

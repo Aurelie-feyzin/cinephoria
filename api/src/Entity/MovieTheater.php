@@ -19,11 +19,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ApiResource(mercure: true)]
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['movieTheater:read']]),
-        new GetCollection(normalizationContext: ['groups' => ['movieShow:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['movieTheater:read']]),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
@@ -42,11 +41,13 @@ class MovieTheater
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\NotNull]
     #[Assert\GreaterThan(0)]
+    #[Groups(['movieTheater:read'])]
     private ?int $numberOfSeats = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\NotNull]
     #[Assert\GreaterThan(0)]
+    #[Groups(['movieTheater:read'])]
     private ?int $reducedMobilitySeats = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -56,7 +57,7 @@ class MovieTheater
     #[ORM\ManyToOne(targetEntity: ProjectionQuality::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movieTheater:read'])]
     private ?ProjectionQuality $projectionQuality = null;
 
     /**

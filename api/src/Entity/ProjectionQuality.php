@@ -18,7 +18,7 @@ class ProjectionQuality
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    #[Groups(['movie:read'])]
+    #[Groups(['movie:read', 'movieTheater:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 20)]
@@ -30,6 +30,7 @@ class ProjectionQuality
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\NotNull()]
     #[Assert\GreaterThan(0)]
+    #[Groups(['movieTheater:read'])]
     private ?int $suggestedPrice = null;
 
     public function getName(): ?string
