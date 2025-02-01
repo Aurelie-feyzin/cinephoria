@@ -45,4 +45,34 @@ export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Pr
 
     return await response.json();
 }
+
+export const updateMovieTheater = async (id: string, movieTheaterData: any) => {
+    const response = await fetch(`/movie_theaters/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/merge-patch+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
+        body: JSON.stringify(movieTheaterData),
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la modification de la salle')
+    }
+    return response.json()
+}
+
+export const createMovieTheater = async (movieTheaterData: any) => {
+    const response = await fetch(`/movie_theaters`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/ld+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
+        body: JSON.stringify(movieTheaterData),
+    })
+    if (!response.ok) {
+        throw new Error('Erreur lors de la création de la salle')
+    }
+
+    return await response.json()
 }
