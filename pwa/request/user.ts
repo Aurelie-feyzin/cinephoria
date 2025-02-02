@@ -52,6 +52,7 @@ export const createUser= (data: EmployeeInput|UserInput): Promise<Response> => f
     method: 'POST',
     headers: {
         'Content-Type': 'application/ld+json',
+        'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
     },
     body: JSON.stringify(data)
 });

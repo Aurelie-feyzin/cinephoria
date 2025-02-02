@@ -9,7 +9,6 @@ use App\Entity\User;
 use App\Service\Mailer;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /** @implements ProcessorInterface<User, mixed> */
@@ -38,7 +37,7 @@ final class UserHashPasswordStateProcessor implements ProcessorInterface
 
         $this->innerProcessor->process($data, $operation, $uriVariables, $context);
 
-        if ($this->security->isGranted('ROLE_ADMIN ') && in_array('ROLE_EMPLOYEE', $data->getRoles(), true)) {
+        if ($this->security->isGranted('ROLE_ADMIN') && in_array('ROLE_EMPLOYEE', $data->getRoles(), true)) {
             $this->mailer->sendWelcomeEmployeeEmail($data);
 
             return json_encode([
