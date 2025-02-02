@@ -5,8 +5,12 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
+use App\State\EmployeeListProvider;
+use App\State\UserHashPasswordStateProcessor;
 use App\Trait\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -22,8 +26,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['email'])]
 #[ApiResource(
     operations: [
-        new Get(),
-        new Post(provider: UserPasswordHasher::class),
+        new Get(
+            uriTemplate: '/employees/{id}',
+            normalizationContext: ['groups' => ['employee:read']],
+            security: "is_granted('ROLE_ADMIN')",
+        ),
+        new GetCollection(
+            uriTemplate: '/employees',
+            order: ['lastName' => 'desc'],
+            normalizationContext: ['groups' => ['employee:read']],
+            security: "is_granted('ROLE_ADMIN')",
+            provider: EmployeeListProvider::class
+        ),
+        new Post(provider: UserPasswordHasher::class, processor: UserHashPasswordStateProcessor::class),
+        new Patch(uriTemplate: '/employees/{id}',
+            normalizationContext: ['groups' => ['employee:write']],
+            security: "is_granted('ROLE_ADMIN')"),
     ],
     routePrefix: '/api',
     mercure: true
@@ -35,12 +53,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     #[Assert\NoSuspiciousCharacters]
+    #[Groups(['employee:read', 'employee:write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['employee:read', 'employee:write'])]
     private array $roles = [];
 
     /**
@@ -70,15 +90,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: "/[\W_]/",
         message: 'Your password must contain at least one special character.'
     )]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: (['user:write']))]
     #[Assert\NoSuspiciousCharacters]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['employee:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['employee:read', 'employee:write'])]
     private ?string $firstName = null;
+
+    #[Groups(['employee:read', 'employee:write'])]
+    public function getId(): ?string
+    {
+        return (null === $this->id) ? null : $this->id->toRfc4122();
+    }
 
     public function getEmail(): ?string
     {

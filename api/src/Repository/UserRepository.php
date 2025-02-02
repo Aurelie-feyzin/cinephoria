@@ -50,4 +50,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user);
         $this->getEntityManager()->flush();
     }
+
+    public function findByRole(string $role): mixed
+    {
+        $rsm = $this->createResultSetMappingBuilder('u');
+
+        $query = <<<SQL
+        SELECT %s
+        FROM "user" u
+        WHERE u.roles::jsonb ?? :role
+    SQL;
+
+        $rawQuery = sprintf($query, $rsm->generateSelectClause());
+
+        $query = $this->getEntityManager()->createNativeQuery($rawQuery, $rsm);
+        $query->setParameter('role', $role);
+
+        return $query->getResult();
+    }
 }
