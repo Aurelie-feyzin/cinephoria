@@ -10,6 +10,7 @@ import ViewIcon from "../../components/common/Icon/ViewIcon";
 import ButtonAdd from "../../components/common/button/ButtonAdd";
 import Table, {Column} from "../../components/common/Table";
 import dayjs from "dayjs";
+import Pagination from "../../components/common/Pagination";
 
 
 const MovieList = () => {
@@ -82,24 +83,7 @@ const MovieList = () => {
         {isLoading && <PageLoading message="Récupération des films en cours"/>}
         {error && <PageError message={error.message}/>}
         <Table columns={columns} data={movies} index={'@id'}/>
-        {/*Pagination*/}
-        <div className="mt-4 flex justify-center">
-            <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-            >
-                Précédent
-            </button>
-            <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={!nextPageUrl}
-                className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-            >
-                Suivant
-            </button>
-        </div>
-
+        <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} nextPageUrl={nextPageUrl}/>
     </PageIntranetContainer>
 }
 

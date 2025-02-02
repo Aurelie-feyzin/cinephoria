@@ -9,6 +9,7 @@ import ButtonAdd from "../../../components/common/button/ButtonAdd";
 import PageLoading from "../../../components/common/PageLoading";
 import PageError from "../../../components/common/PageError";
 import {fetchMovieTheaters} from "../../../request/movieTheater";
+import Pagination from "../../../components/common/Pagination";
 
 
 const MovieTheaterList = () => {
@@ -59,24 +60,7 @@ const MovieTheaterList = () => {
         {isLoading && <PageLoading message="Récupération des salles en cours"/>}
         {error && <PageError message={error.message}/>}
         <Table columns={columns} data={movieTheaters} index={'@id'}/>
-        {/*Pagination*/}
-        <div className="mt-4 flex justify-center">
-            <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-            >
-                Précédent
-            </button>
-            <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={!nextPageUrl}
-                className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-            >
-                Suivant
-            </button>
-        </div>
-
+        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl} />
     </PageIntranetContainer>
 }
 
