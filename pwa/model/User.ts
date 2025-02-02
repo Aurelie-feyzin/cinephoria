@@ -15,6 +15,24 @@ type UserInput = {
     plainPassword: string;
 }
 
+type Employee = {
+    '@id': string;
+    '@type': string,
+    id : string,
+    firstName: string;
+    lastName: string;
+    email: string;
+    roles: string[];
+}
+
+type EmployeeInput = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    plainPassword: string;
+    roles: string[];
+}
+
 type Profile = {
     firstName: string;
     lastName: string;

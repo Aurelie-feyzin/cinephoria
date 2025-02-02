@@ -48,7 +48,7 @@ export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
     return response.json()
 }
 
-export const createUser= (data: EmployeeInput): Promise<Response> => fetch(`${API_PATH }users`, {
+export const createUser= (data: EmployeeInput|UserInput): Promise<Response> => fetch(`${API_PATH }users`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/ld+json',
