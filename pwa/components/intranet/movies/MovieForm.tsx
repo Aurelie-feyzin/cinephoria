@@ -43,6 +43,7 @@ const MovieForm = ({movieData, mutation, setMessageKo}:
         try {
             data = {
                 ...data,
+                // Convert the string value of ('true' or 'false') to a boolean
                 favorite: data.favorite === 'true',
                 warning: data.warning === 'true',
             }

@@ -1,9 +1,9 @@
 import React from "react";
 
 
-const ButtonSubmit = () => (
+const ButtonSubmit = ({label = "Enregistrer"}:{label?: string} ) => (
     <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-secondary">
-        Enregistrer
+        {label}
     </button>
 );
 

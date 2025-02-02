@@ -7,6 +7,7 @@ import LinkRegisterForm from "./LinkRegisterForm";
 import AlertInfo from "../common/alert/AlertInfo";
 import LinkLoginForm from "./LinkLoginForm";
 import {customMaxLength, REQUIRED} from "../common/form/validator_tools";
+import ButtonSubmit from "../common/button/ButtonSubmit";
 
 const ForgotPasswordForm = ({setFormVisible }: { setFormVisible: any }) => {
     const {
@@ -54,9 +55,7 @@ const ForgotPasswordForm = ({setFormVisible }: { setFormVisible: any }) => {
                 />
                 <LinkRegisterForm setFormVisible={setFormVisible} />
                 <LinkLoginForm setFormVisible={setFormVisible} />
-                <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
-                    Réinitialiser le mot de passe
-                </button>
+                <ButtonSubmit label='Réinitialiser le mot de passe' />
             </form>
         </>
     );

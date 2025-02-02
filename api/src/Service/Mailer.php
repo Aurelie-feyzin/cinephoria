@@ -31,6 +31,18 @@ class Mailer
         $this->mailer->send($email);
     }
 
+    public function sendWelcomeEmployeeEmail(User $user): void
+    {
+        $email = (new TemplatedEmail())
+            ->to($user->getEmail())
+            ->subject('Création de votre compte employé')
+            ->htmlTemplate('emails/new_employee.html.twig')
+            ->context([
+                'user' => $user,
+            ]);
+        $this->mailer->send($email);
+    }
+
     public function sendCopyContactEmail(ContactDto $contact): void
     {
         $email = (new TemplatedEmail())
@@ -62,7 +74,7 @@ class Mailer
         $prefixForgotPassword = '/forgot-password';
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
-            ->subject('Merci pour votre message')
+            ->subject('Réinitialisation de votre mot de passe')
             ->htmlTemplate('emails/reset_password.html.twig')
             ->context([
                 'user' => $user,

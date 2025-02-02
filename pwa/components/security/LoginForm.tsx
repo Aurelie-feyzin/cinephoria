@@ -7,6 +7,7 @@ import {fetchGetToken} from "../../request/auth";
 import LinkForgotPasswordForm from "./LinkForgotPasswordForm";
 import LinkRegisterForm from "./LinkRegisterForm";
 import {customMaxLength, REQUIRED} from "../common/form/validator_tools";
+import ButtonSubmit from "../common/button/ButtonSubmit";
 
 const LoginForm = ({setFormVisible }: { setFormVisible: any }) => {
     const {
@@ -65,9 +66,7 @@ const LoginForm = ({setFormVisible }: { setFormVisible: any }) => {
                 />
                 <LinkRegisterForm setFormVisible={setFormVisible} />
                 <LinkForgotPasswordForm setFormVisible={setFormVisible} />
-                <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
-                    Se connecter
-                </button>
+                <ButtonSubmit label="Se connecter" />
             </form>
         </>
     );

@@ -10,6 +10,7 @@ import {fetchMovieShows} from "../../../request/movieShow";
 import Link from "next/link";
 import ViewIcon from "../../../components/common/Icon/ViewIcon";
 import EditIcon from "../../../components/common/Icon/EditIcon";
+import Pagination from "../../../components/common/Pagination";
 
 
 const FilmShowLists = () => {
@@ -73,24 +74,7 @@ const FilmShowLists = () => {
             {isLoading && <PageLoading message="Récupération des séances en cours"/>}
             {error && <PageError message={error.message}/>}
             <Table columns={columns} data={movieShows} index={'@id'}/>
-            {/*Pagination*/}
-            <div className="mt-4 flex justify-center">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-                >
-                    Précédent
-                </button>
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={!nextPageUrl}
-                    className="px-4 py-2 mx-1 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-400"
-                >
-                    Suivant
-                </button>
-            </div>
-
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl} />
         </PageIntranetContainer>
     );
 }

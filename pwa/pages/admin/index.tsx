@@ -1,12 +1,13 @@
-import type { NextPage } from "next";
-import dynamic from "next/dynamic";
+import type {NextPage} from "next";
+import React from "react";
+import PageAdminContainer from "../../components/admin/PageAdminContainer";
+import ComingSoon from "../../components/common/ComingSoon";
 
-// load the admin client-side
-const App = dynamic(() => import("../../components/admin/App"), {
-  ssr: false,
-  loading: () => <p>Loading...</p>,
-});
 
-const Admin: NextPage = () => <App />;
+const Admin: NextPage = () => {
+    return <PageAdminContainer titlePage="Accueil">
+        <ComingSoon/>
+    </PageAdminContainer>
+}
 
 export default Admin;
