@@ -8,6 +8,7 @@ import AlertError from "../common/alert/AlertError";
 import LinkForgotPasswordForm from "./LinkForgotPasswordForm";
 import {customMaxLength, REQUIRED, validatePassword} from "../common/form/validator_tools";
 import InfoValidatePassword from "../common/form/InfoValidatePassword";
+import ButtonSubmit from "../common/button/ButtonSubmit";
 
 const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
     const {
@@ -74,9 +75,7 @@ const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
                 <InfoValidatePassword/>
                 <LinkLoginForm setFormVisible={setFormVisible}/>
                 <LinkForgotPasswordForm setFormVisible={setFormVisible} />
-                <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
-                    Enregistrer
-                </button>
+                <ButtonSubmit />
             </form>
         </>
     );

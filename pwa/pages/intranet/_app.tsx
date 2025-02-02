@@ -1,10 +1,10 @@
 import "../styles/globals.css"
-import Layout from "../components/common/Layout"
 import type {AppProps} from "next/app"
 import {DehydratedState, QueryClient, QueryClientProvider} from "react-query"
-import {CinemasProvider} from "../context/CinemaContext";
-import {UserProvider} from "../context/UserContext";
 import {useState} from "react";
+import {UserProvider} from "../../context/UserContext";
+import {CinemasProvider} from "../../context/CinemaContext";
+import Layout from "../../components/common/Layout";
 
 function MyApp({Component, pageProps}: AppProps<{ dehydratedState: DehydratedState }>) {
     const [queryClient] = useState(() => new QueryClient());

@@ -9,10 +9,10 @@ const NavBarIntranet = () => {
     return (
         <header className="bg-black text-white p-4 items-center">
             <div className="flex justify-end space-x-4">
-                <NavBarLink href={'/'}>Retour au site</NavBarLink>
                 {user?.role === 'admin' &&
                     <NavBarLink href={'/admin'}>Admin</NavBarLink>
                 }
+                <NavBarLink href={'/'}>Retour au site</NavBarLink>
                 <p className="px-4 py-2 rounded-md shadow text-white hover:bg-secondary">
                     {user?.firstName}
                 </p>

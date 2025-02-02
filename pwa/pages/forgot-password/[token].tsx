@@ -1,13 +1,14 @@
 import InputField from "../../components/common/form/InputField";
-import {REQUIRED, validatePassword} from "../../components/form/utils";
 import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useRouter} from "next/router";
 import {fetchResetPassword} from "../../request/forgot-password";
 import AlertError from "../../components/common/alert/AlertError";
 import AlertInfo from "../../components/common/alert/AlertInfo";
-import InfoValidatePassword from "../../components/form/InfoValidatePassword";
 import PageContainer from "../../components/common/layout/PageContainer";
+import InfoValidatePassword from "../../components/common/form/InfoValidatePassword";
+import {REQUIRED, validatePassword} from "../../components/common/form/validator_tools";
+import ButtonSubmit from "../../components/common/button/ButtonSubmit";
 
 
 const ResetPassword = () => {
@@ -56,9 +57,7 @@ const ResetPassword = () => {
                             error={errors.password?.message}
                 />
                 <InfoValidatePassword/>
-                <button type="submit" className="w-full bg-primary text-white p-2 rounded hover:bg-blue-600">
-                    Réinitialiser le mot de passe
-                </button>
+                <ButtonSubmit label='Réinitialiser le mot de passe' />
             </form>
         </PageContainer>
     );
