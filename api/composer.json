@@ -8,6 +8,7 @@
         "api-platform/core": "^3.2",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/mongodb-odm-bundle": "*",
         "doctrine/orm": "^2.12",
         "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/cors-bundle": "^2.2",
