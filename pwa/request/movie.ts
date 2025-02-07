@@ -60,8 +60,8 @@ export const fetchNewMovies = async (): Promise<ApiResponse<Movie>> => {
 }
 
 
-export const fetchMovieInCinema = async (today: string, lastDay: string): Promise<MovieApiResponse> => {
-    const url = `/movie/in_cinema?page=1&movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}`;
+export const fetchMovieInCinema = async (today: string, lastDay: string, cinema?: string): Promise<ApiResponse<MovieDescription>> => {
+    const url = `/movies?movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}${cinema ? `&movieShows.movieTheater.cinema=${cinema}` : ''}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

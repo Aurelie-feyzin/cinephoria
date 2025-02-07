@@ -6,10 +6,12 @@ import NavBarLink from "./../NavBarLink";
 import AlertError from "../alert/AlertError";
 import {useUser} from "../../../context/UserContext";
 import LogoutIcon from "../Icon/LogoutIcon";
+import EditIcon from "../Icon/EditIcon";
 
 const NavBar = () => {
     const [navbar, setNavbar] = useState(false);
     const {user, error, logout} = useUser();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
         <nav className="bg-black p-4">
@@ -93,6 +95,8 @@ const NavBar = () => {
                                     <p className="px-4 py-2 rounded-md shadow text-white hover:bg-secondary">
                                         {user?.firstName}
                                     </p>
+                                    <NavBarLink href={'/orders'}>Commandes</NavBarLink>
+
                                     <button
                                         onClick={logout}
                                         className="text-white hover:bg-secondary transition duration-200 p-2 rounded"
@@ -124,15 +128,48 @@ const NavBar = () => {
                                     Intranet
                                 </Link>
                             }
-                            <p className="px-4 py-2 rounded-md shadow text-white hover:bg-secondary">
-                                {user?.firstName}
-                            </p>
-                            <button
-                                onClick={logout}
-                                className="text-white hover:bg-secondary transition duration-200 p-2 rounded"
-                            >
-                                <LogoutIcon/>
-                            </button>
+                            <div className="relative">
+                                <p
+                                    className="px-4 py-2 rounded-md shadow text-white hover:bg-secondary cursor-pointer flex items-center"
+                                    onClick={() => setMenuOpen(!menuOpen)}
+                                >
+                                    {user?.firstName}
+                                    <span className="ml-2">
+            {/* Icône de menu déroulant */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </span>
+                                </p>
+                                {menuOpen && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
+                                        <ul>
+                                            <li>
+                                                <button type="button" disabled  className="block px-4 py-2 disabled:bg-gray-700 rounded-t-md w-full">
+                                                    Profil
+                                                </button>
+{/*                                                <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-t-md">
+                                                    Profil
+                                                </Link>*/}
+                                            </li>
+                                            <li>
+                                                <Link href="/orders" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                                    Commandes
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    onClick={logout}
+                                                    className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-b-md w-full justify-start"
+                                                >
+                                                    <LogoutIcon />
+                                                    Se déconnecter
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>

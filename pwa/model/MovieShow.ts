@@ -43,12 +43,12 @@ interface FullMovieShowApiResponse {
 }
 
 interface MovieShowReservation {
-    '@id': string;
-    '@type': string,
+    id: string;
     date: Date;
     startTime: string;
     endTime: string;
     priceInEuros: number;
     movieTheater: MovieTheater;
     movie: Movie;
+    availableSeats: number;
 }
