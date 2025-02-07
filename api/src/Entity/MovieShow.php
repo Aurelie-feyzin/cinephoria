@@ -35,16 +35,17 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     mercure: true)]
 #[ApiFilter(DateFilter::class, properties: ['date'])]
-#[ApiFilter(SearchFilter::class, properties: ['movieTheater.cinema' => 'exact', 'movie.genres' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['movieTheater.cinema' => 'exact', 'movie.genres' => 'exact', 'movie' => 'exact'])]
 class MovieShow
 {
     use IdTrait;
 
-    #[Groups(['movieShow:read'])]
+    #[Groups(['movieShow:read', 'movieShow:full'])]
     public function getId(): ?string
     {
         return (null === $this->id) ? null : $this->id->toRfc4122();
     }
+
     #[ORM\ManyToOne(targetEntity: MovieTheater::class, inversedBy: 'movieShows')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
@@ -59,7 +60,7 @@ class MovieShow
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotNull]
-    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:full', 'movie:light'])]
     #[ApiFilter(DateFilter::class)]
     private ?DateTimeImmutable $date = null;
 
@@ -77,6 +78,9 @@ class MovieShow
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Assert\GreaterThan(0)]
     private ?int $priceInCents = null;
+
+    #[Groups(['movieShow:read', 'movieShow:full'])]
+    private int $availableSeats = 0;
 
     public function getMovieTheater(): ?MovieTheater
     {
@@ -167,5 +171,17 @@ class MovieShow
     public function getPriceInEuros(): float
     {
         return ($this->priceInCents ?: $this->movieTheater->getProjectionQuality()->getSuggestedPrice()) / 100;
+    }
+
+    public function getAvailableSeats(): int
+    {
+        return $this->availableSeats;
+    }
+
+    public function setAvailableSeats(int $availableSeats): MovieShow
+    {
+        $this->availableSeats = $availableSeats;
+
+        return $this;
     }
 }

@@ -35,7 +35,7 @@ class MovieTheater
     #[ORM\ManyToOne(targetEntity: Cinema::class, inversedBy: 'movieTheaters')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    #[Groups(['movie:read', 'movieShow:read', 'movieTheater:read', 'movieShow:full'])]
+    #[Groups(['movie:read', 'movie:light', 'movieShow:read', 'movieTheater:read', 'movieShow:full'])]
     private ?Cinema $cinema = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
@@ -57,7 +57,7 @@ class MovieTheater
     #[ORM\ManyToOne(targetEntity: ProjectionQuality::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull]
-    #[Groups(['movie:read', 'movieTheater:read', 'movieShow:full'])]
+    #[Groups(['movie:read', 'movieTheater:read', 'movieShow:read', 'movieShow:full'])]
     private ?ProjectionQuality $projectionQuality = null;
 
     /**

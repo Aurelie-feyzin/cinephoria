@@ -18,7 +18,7 @@ class ProjectionQuality
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    #[Groups(['movie:read', 'movieTheater:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieShow:read', 'movieTheater:read', 'movieShow:full'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 20)]
