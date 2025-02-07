@@ -2,17 +2,18 @@ import React, {useEffect, useRef, useState} from 'react';
 import Image from "next/image";
 
 type Props = {
-    movie: Movie
+    movie: MovieDescription
 };
 
 const FullMovieCard:React.FC<Props>  = ({
                        movie,
                    }) => {
     const [showFullSynopsis, setShowFullSynopsis] = useState(false);
-    const synopsisRef = useRef(null);
+    const synopsisRef = useRef<HTMLDivElement | null>(null);
     const [isTruncated, setIsTruncated] = useState(false);
     const [maxLines, setMaxLines] = useState(3);
 
+    // This function is triggered on window resize to adjust the maximum lines of text shown
     useEffect(() => {
         const handleResize = () => {
             const newMaxLines = window.innerWidth >= 1024 ? 7 : 3;
@@ -38,7 +39,6 @@ const FullMovieCard:React.FC<Props>  = ({
     if (!movie) {
         return;
     }
-
 
 
     const toggleSynopsis = () => {
@@ -79,7 +79,7 @@ const FullMovieCard:React.FC<Props>  = ({
 
                 <div className="flex flex-col lg:flex-row justify-between items-center mt-4">
                     <div>
-                        <span>{movie.ageRestriction.value}+</span>
+                        <span>{movie.ageRestriction?.value}+</span>
                         {movie.warning && <span className="text-orange-500 ml-2">⚠️ {movie.warning}</span>}
                     </div>
                     <div>{movie.genres.map((genre) => genre.name).join(', ')}</div>

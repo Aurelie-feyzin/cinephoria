@@ -31,7 +31,7 @@ export const fetchMovieTheatersByCinema = async (cinema: string): Promise<MovieT
     return data['hydra:member'] || [];
 }
 
-export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Promise<MovieTheaterApiResponse> => {
+export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Promise<ApiResponse<MovieTheater>> => {
     const url = `/movie_theaters?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',

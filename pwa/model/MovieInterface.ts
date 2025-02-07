@@ -23,20 +23,6 @@ interface MinimalMovie {
     description?: string,
 }
 
-interface Minimal2Movie {
-    '@id': string,
-    '@type': string,
-    ageRestriction?: string,
-    description?: string,
-    duration?: number,
-    favorite: boolean,
-    genres: MovieGenre[],
-    posterPath?: string,
-    rating: number,
-    title: string,
-    warning?: string,
-}
-
 interface MovieDescription {
     '@id': string,
     id: string,
@@ -69,18 +55,3 @@ interface MovieDescriptionInput {
     rating: number,
 }
 
-interface MovieDescriptionApiResponse {
-    'hydra:member': MovieDescription[];
-    'hydra:view'?: {
-        'hydra:next'?: string;
-        'hydra:last'?: string;
-    };
-}
-
-interface MovieApiResponse {
-    'hydra:member': Movie[];
-    'hydra:view'?: {
-        'hydra:next'?: string;
-        'hydra:last'?: string;
-    };
-}

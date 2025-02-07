@@ -20,7 +20,7 @@ const MovieTheaterList = () => {
         data: movieTheaterData,
         error,
         isLoading,
-    } = useQuery<MovieTheaterApiResponse, Error>(['movies_theaters', currentPage], () => fetchMovieTheaters(currentPage, itemsPerPage), {
+    } = useQuery<ApiResponse<MovieTheater>, Error>(['movies_theaters', currentPage], () => fetchMovieTheaters(currentPage, itemsPerPage), {
         keepPreviousData: true,
     });
 
@@ -30,8 +30,6 @@ const MovieTheaterList = () => {
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
     };
-
-    console.log(movieTheaters);
 
     const columns: Column<MovieTheater>[] = [
         {key: 'cinema', label: 'Cinéma', render: ((row: MovieTheater) => <span>{row.cinema.name}</span>)},
