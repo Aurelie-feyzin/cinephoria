@@ -1,7 +1,7 @@
 parameters:
     level: 6
     excludePaths:
-    	- src/Serializer/MediaObjectNormalizer.php
+    	- src/Serializer/
     paths:
         - bin/
         - config/
