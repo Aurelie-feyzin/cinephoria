@@ -26,8 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(normalizationContext: ['groups' => ['movie:description']]),
         new GetCollection(order: ['releaseDate' => 'desc', 'title' => 'asc'], normalizationContext: ['groups' => ['movie:description']]),
-        new GetCollection(uriTemplate: '/movie/new_list', normalizationContext: ['groups' => ['movie:read']], provider: NewMovieListProvider::class),
-        new GetCollection(uriTemplate: '/movie/in_cinema', normalizationContext: ['groups' => ['movie:read']]),
+        new GetCollection(uriTemplate: 'new_list/movies', normalizationContext: ['groups' => ['movie:description']], provider: NewMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],

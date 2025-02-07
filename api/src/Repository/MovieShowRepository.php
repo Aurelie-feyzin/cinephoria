@@ -6,7 +6,6 @@ namespace App\Repository;
 use App\Entity\MovieShow;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<MovieShow>
@@ -19,24 +18,24 @@ class MovieShowRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param mixed[] $arrayFields
+     *
      * @return MovieShow[]
      */
-    public function getMovieShowsByCinema(string $today, string $lastDay, Uuid $cinemaId): array
+    public function findConflictingShow(array $arrayFields): array
     {
-        try {
-            return $this->createQueryBuilder('ms')
-                ->join('ms.movieTheater', 'mt')
-                ->where('mt.cinema = :cinemaId')
-                ->andWhere('ms.date >= :today')
-                ->andWhere('ms.date <= :lastDay')
-                ->setParameter('cinemaId', $cinemaId)
-                ->setParameter('today', $today)
-                ->setParameter('lastDay', $lastDay)
-                ->getQuery()
-                ->getResult()
-            ;
-        } catch (\Exception $e) {
-            return [];
-        }
+        $query = $this->createQueryBuilder('m')
+            ->where('m.date = :date')
+            ->andWhere('m.movieTheater = :movieTheater')
+            ->andWhere(
+                '(m.startTime < :endTime AND m.endTime > :startTime)'
+            )
+            ->setParameter('movieTheater', $arrayFields['movieTheater'])
+            ->setParameter('date', $arrayFields['date'])
+            ->setParameter('startTime', $arrayFields['startTime'])
+            ->setParameter('endTime', $arrayFields['endTime'])
+            ->getQuery();
+
+        return $query->getResult();
     }
 }

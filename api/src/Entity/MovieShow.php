@@ -11,20 +11,25 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\State\ByCinemaMovieListProvider;
+use App\Repository\MovieShowRepository;
 use App\Trait\IdTrait;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MovieShowRepository::class)]
+#[UniqueEntity(
+    fields: ['movieTheater', 'date', 'startTime', 'endTime'],
+    message: 'La séance rentre en conflit avec une autre séance',
+    repositoryMethod: 'findConflictingShow',
+    errorPath: 'movieTheater')]
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['movieShow:read']]),
         new GetCollection(order: ['date' => 'desc', 'movieTheater.cinema' => 'asc', 'movieTheater.theaterName' => 'asc', 'startTime' => 'asc'], normalizationContext: ['groups' => ['movieShow:read']]),
-        new GetCollection(uriTemplate: '/cinemas/{id}/movie_shows', normalizationContext: ['groups' => ['movieShow:full']], provider: ByCinemaMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],

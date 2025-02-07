@@ -14,11 +14,8 @@ use DateTimeImmutable;
  */
 class NewMovieListProvider implements ProviderInterface
 {
-    private MovieRepository $movieRepository;
-
-    public function __construct(MovieRepository $movieRepository)
+    public function __construct(private readonly MovieRepository $movieRepository)
     {
-        $this->movieRepository = $movieRepository;
     }
 
     /**
