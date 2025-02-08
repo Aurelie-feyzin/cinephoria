@@ -1,0 +1,10 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block body %}
+    <p>Nous venons de recevoir un nouveau message</p>
+    <p>De {{ contact.firstName }} {{ contact.lastName }} </p>
+    <p>Titre du message {{ contact.title | raw }}</p>
+    <p>Message {{ contact.description | raw }}</p>
+
+    <p>Merci de répondre le plus rapidement possible.</p>
+{% endblock %}

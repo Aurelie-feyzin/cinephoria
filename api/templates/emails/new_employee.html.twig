@@ -1,0 +1,13 @@
+{% extends 'emails/base.html.twig' %}
+
+
+{% block body %}
+    <p><strong>Bonjour {{ user.firstName }} {{ user.lastName }}</strong>,</p>
+    <p>Vous avez désormais un compte employee pour l'application cinephoria.</p>
+    <p>L'identifiant pour se connecter est {{ user.email }}</p>
+    <p>Pour que celui-ci soit actif, vous devez réinitialiser le mot de passe.<br/>
+    Pour cela, vous allez recevoir un mail de réinitialisation du mot de passe.
+    </p>
+{% endblock %}
+
+

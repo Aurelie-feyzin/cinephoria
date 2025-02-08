@@ -1,0 +1,3 @@
+Pierre	Dupont	admin@test.fr	P@ssword1	ROLE_ADMIN
+Claire	Martin	employee@test.fr	P@ssword1	ROLE_EMPLOYEE
+Julien	Lemoine	user@test.fr	P@ssword1	ROLE_USER

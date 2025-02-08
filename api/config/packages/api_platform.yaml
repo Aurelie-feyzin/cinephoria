@@ -1,5 +1,5 @@
 api_platform:
-    title: Hello API Platform
+    title: Cinephoria Platform
     version: 1.0.0
     # Mercure integration, remove if unwanted
     mercure:
@@ -21,3 +21,30 @@ api_platform:
     # change this to true if you use controllers
     use_symfony_listeners: false
     keep_legacy_inflector: false
+    error_formats:
+        jsonproblem: [ 'application/problem+json' ]
+        jsonld: [ 'application/ld+json' ] # Hydra error formats
+        jsonapi: [ 'application/vnd.api+json' ]
+    exception_to_status:
+        # The 4 following handlers are registered by default, keep those lines to prevent unexpected side effects
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
+        ApiPlatform\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\ParameterValidator\Exception\ValidationExceptionInterface: 400
+        Doctrine\ORM\OptimisticLockException: 409
+
+        # Validation exception
+        ApiPlatform\Validator\Exception\ValidationException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
+
+        # Custom mapping
+        App\Exception\ProductNotFoundException: 404 # Here is the handler for our custom exception
+
+    eager_loading:
+        # Max number of joined relations before EagerLoading throws a RuntimeException.
+        max_joins: 1000
+
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+            - '%kernel.project_dir%/src/Enum'
+            - '%kernel.project_dir%/src/Document'
+            - '%kernel.project_dir%/src/DTO'
