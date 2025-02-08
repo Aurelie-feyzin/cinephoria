@@ -9,6 +9,7 @@ use App\Trait\IdTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[MappedSuperclass]
@@ -18,6 +19,7 @@ abstract class Installation
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
+    #[Groups(['installationMinimal:read'])]
     protected ?string $name = null;
 
     #[ORM\Column(type: Types::STRING, nullable: false, enumType: InstallationStatus::class)]
@@ -36,6 +38,12 @@ abstract class Installation
     #[ORM\ManyToOne()]
     #[Assert\NotBlank]
     protected ?MovieTheater $movieTheater = null;
+
+    #[Groups(['installationMinimal:read'])]
+    public function getId(): ?string
+    {
+        return (null === $this->id) ? null : $this->id->toRfc4122();
+    }
 
     public function getName(): ?string
     {

@@ -23,15 +23,19 @@ class SeatFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        ini_set('memory_limit', '-1'); // TODO refactor by batch
         $faker = Factory::create('fr-FR');
         $allTheather = $manager->getRepository(MovieTheater::class)->findAll();
         foreach ($allTheather as $theater) {
             $numberOfSeats = $theater->getNumberOfSeats();
+            $reducedMobilitySeats = $theater->getReducedMobilitySeats();
             for ($i = 0; $i < $numberOfSeats; ++$i) {
                 $seat = (new Seat())
                     ->setMovieTheater($theater)
                     ->setStatus($faker->boolean(75) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
-                    ->setName((string) ($i + 1));
+                    ->setName((string) ($i + 1))
+                    ->setReducedMobilitySeat($i < $reducedMobilitySeats)
+                ;
                 $manager->persist($seat);
             }
             $manager->flush();

@@ -26,8 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(normalizationContext: ['groups' => ['movie:description']]),
         new GetCollection(order: ['releaseDate' => 'desc', 'title' => 'asc'], normalizationContext: ['groups' => ['movie:description']]),
-        new GetCollection(uriTemplate: '/movie/new_list', normalizationContext: ['groups' => ['movie:read']], provider: NewMovieListProvider::class),
-        new GetCollection(uriTemplate: '/movie/in_cinema', normalizationContext: ['groups' => ['movie:read']]),
+        new GetCollection(uriTemplate: 'new_list/movies', normalizationContext: ['groups' => ['movie:description']], provider: NewMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
@@ -41,32 +40,32 @@ class Movie
     use IdTrait;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['movie:read', 'movie:description', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:read', 'movieShow:full'])]
     #[Assert\NotBlank]
     #[ApiFilter(SearchFilter::class, strategy: 'ipartial')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?string $posterPath = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    #[Groups(['movie:read', 'movie:description', 'movieShow:read'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:read', 'movieShow:full'])]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private bool $favorite = false;
 
     #[ORM\Column(type: Types::FLOAT, nullable: false)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?float $rating = 0;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
@@ -77,22 +76,22 @@ class Movie
      * @var Collection<int, MovieGenre>
      */
     #[ORM\ManyToMany(targetEntity: MovieGenre::class, inversedBy: 'movies')]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private Collection $genres;
 
     #[ORM\Column(type: Types::STRING, nullable: false, enumType: AgeRestriction::class)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?AgeRestriction $ageRestriction = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
-    #[Groups(['movie:read', 'movie:description'])]
+    #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?bool $warning = false;
 
     /**
      * @var Collection<int, MovieShow>
      */
-    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MovieShow::class)]
-    #[Groups(['movie:read'])]
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: MovieShow::class, fetch: 'EXTRA_LAZY')]
+    #[Groups(['movie:read', 'movie:light'])]
     private Collection $movieShows;
 
     public function __construct()

@@ -35,9 +35,20 @@ interface MovieShowInput {
 }
 
 interface FullMovieShowApiResponse {
-    'hydra:member': FullMovieShow[];
+    'hydra:member': MovieShowReservation[];
     'hydra:view'?: {
         'hydra:next'?: string;
         'hydra:last'?: string;
     };
+}
+
+interface MovieShowReservation {
+    id: string;
+    date: Date;
+    startTime: string;
+    endTime: string;
+    priceInEuros: number;
+    movieTheater: MovieTheater;
+    movie: Movie;
+    availableSeats: number;
 }

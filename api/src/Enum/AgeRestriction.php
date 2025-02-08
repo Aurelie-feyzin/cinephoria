@@ -29,7 +29,7 @@ enum AgeRestriction: string
     case EIGHTEEN = '18 ans';
     case EIGHTEEN_X = '18 ans classé X';
 
-    #[Groups(['read', 'movie:read', 'movie:description'])]
+    #[Groups(['read', 'movie:read', 'movie:description', 'movieShow:full'])]
     public function getValue(): string
     {
         return $this->value;

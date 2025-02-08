@@ -5,18 +5,20 @@ import {useQuery} from "react-query";
 import dayjs from "dayjs";
 import FullMovieCard from "../components/common/FullMovieCard";
 import {useForm} from "react-hook-form";
-import {useCinemas} from "../context/CinemaContext";
 import {orderBy, uniqBy} from "lodash";
 import {fetchMovieInCinema} from "../request/movie";
+import SelectCinema from "../components/common/form/SelectCinema";
+import SelectDay from "../components/common/form/SelectDay";
 import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
+import {fetchMovieShowByMovie} from "../request/movieShow";
 
 
 const Movies = () => {
-    const {cinemas} = useCinemas();
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<MovieDescription[]>([]);
     const [genres, setGenres] = useState<MovieGenre[]>([]);
-    const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+    const [selectedMovie, setSelectedMovie] = useState<MovieDescription | null>(null);
+    const [movieShows, setMovieShows] = useState<MovieShowReservation[]>([]);
     const {register, watch} = useForm();
     const [filteredMovies, setFilteredMovies] = useState(movies);
     const selectedCinema = watch('cinema');
@@ -24,81 +26,51 @@ const Movies = () => {
     const selectedDay = watch('day');
     const now = dayjs();
     const today = now.format('YYYY-MM-DD');
-    const lastDay = now.add(6, 'day').format('YYYY-MM-DD');
-    const {error, isLoading} = useQuery("movie_in_cinema", () => fetchMovieInCinema(today, lastDay), {
-        onSuccess: (data) => {
-            const newMovies = data["hydra:member"];
-            setMovies(newMovies);
-            setGenres(orderBy(uniqBy(newMovies.map((movie: Movie) => movie.genres).flat(), '@id'), 'name'));
-        }
-    });
+    const [after, setAfter] = useState(today);
+    const [before, setBefore] = useState(now.add(6, 'day').format('YYYY-MM-DD'));
+    const {error, isLoading} = useQuery(
+        ["movie_in_cinemas", after, before, selectedCinema],
+        () => fetchMovieInCinema(after, before, selectedCinema), {
+            onSuccess: (data) => {
+                const newMovies = data["hydra:member"];
+                setMovies(newMovies);
+                setGenres(orderBy(uniqBy(newMovies.map((movie: MovieDescription) => movie.genres).flat(), '@id'), 'name'));
+            }
+        });
 
-    const daysOfWeek = [
-        {label: 'Tous les jours', value: ''},
-        {label: 'Lundi', value: 1},
-        {label: 'Mardi', value: 2},
-        {label: 'Mercredi', value: 3},
-        {label: 'Jeudi', value: 4},
-        {label: 'Vendredi', value: 5},
-        {label: 'Samedi', value: 6},
-        {label: 'Dimanche', value: 0},
-    ];
+    const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery(
+        ["movie_shows", selectedMovie, after, before, selectedCinema],
+        () => fetchMovieShowByMovie(selectedMovie['@id'], after, before, selectedCinema),
+        {
+            enabled: !!selectedMovie && !!before && !!after,
+            onSuccess: (data) => {
+                setMovieShows(data["hydra:member"]);
+            }
+        });
+
 
     useEffect(() => {
         const fetchFilteredMovies = () => {
             let filtered = movies;
 
-            if (selectedCinema) {
-                filtered = filtered.filter((movie) => movie.movieShows.filter((show) =>
-                    show.movieTheater.cinema.name === selectedCinema
-                    && dayjs(show.date).format('YYYY-MM-DD') >= today
-                    && dayjs(show.date).format('YYYY-MM-DD') <= lastDay
-                ).length > 0);
-            }
-
             if (selectedGenre) {
                 filtered = filtered.filter((movie) => movie.genres.find((genre) => genre.name === selectedGenre));
-            }
-
-            if (selectedDay) {
-                filtered.map((movie) =>
-                    movie.movieShows.find((show) =>
-                        dayjs(show.date).day() == selectedDay
-                    ));
-                filtered = filtered.filter((movie) => movie.movieShows.find((show) =>
-                    new Date(show.date).getDay() == selectedDay
-                    && dayjs(show.date).format('YYYY-MM-DD') >= today
-                    && dayjs(show.date).format('YYYY-MM-DD') <= lastDay
-                ));
             }
 
             setFilteredMovies(filtered);
         };
 
         fetchFilteredMovies();
-    }, [selectedCinema, selectedGenre, selectedDay, movies, today, lastDay]);
+    }, [movies, selectedGenre]);
 
     return <PageContainer title='les films' titlePage="Actuellement en salle">
         <div className="container mx-auto p-6">
+            {isLoading && <PageLoading/>}
+            {error && <PageError message="Erreur lors de la récupération des films"/>}
             <form className="flex flex-col md:flex-row md:space-x-4 mb-6">
                 <div className="w-full md:w-1/3">
-                    <label htmlFor="cinema-filter" className="block text-secondary font-semibold mb-2">
-                        Cinéma
-                    </label>
-                    <select
-                        id="cinema-filter"
-                        {...register('cinema')}
-                        className="w-full p-2 border rounded-md"
-                    >
-                        <option value="">Tous les cinémas</option>
-                        {cinemas.map((cinema) => (
-                            <option key={cinema.id} value={cinema.name}>
-                                {cinema.name}
-                            </option>
-                        ))}
-                    </select>
+                    <SelectCinema forceSelect={false} register={register}/>
                 </div>
-
                 <div className="w-full md:w-1/3">
                     <label htmlFor="genre-filter" className="block text-secondary font-semibold mb-2">
                         Genre
@@ -116,35 +88,16 @@ const Movies = () => {
                         ))}
                     </select>
                 </div>
-
                 <div className="w-full md:w-1/3">
-                    <label htmlFor="day-filter" className="block text-secondary font-semibold mb-2">
-                        Jour
-                    </label>
-                    <select
-                        id="day-filter"
-                        {...register('day')}
-                        className="w-full p-2 border rounded-md"
-                    >
-                        {daysOfWeek.map((day) => (
-                            <option key={day.value} value={day.value}>
-                                {day.label}
-                            </option>
-                        ))}
-                    </select>
+                    <SelectDay register={register} now={now} setAfter={setAfter} setBefore={setBefore} selectedDay ={selectedDay}/>
                 </div>
             </form>
             <div className="grid grid-cols-1">
-                {isLoading && <PageLoading message="Chargement des films en cours"/>}
-                {error && <PageError message={error?.message}/>}
                 {filteredMovies.length > 0 ? (
                     filteredMovies.map((movie) => (
-                        <div key={movie.id} onClick={() => setSelectedMovie(movie)}>
-
+                        <div key={movie['@id']} onClick={() => setSelectedMovie(movie)}>
                             <FullMovieCard key={movie.id} movie={movie}/>
-
                         </div>
-
                     ))
                 ) : (
                     <p className="text-gray-700 col-span-full text-center">Aucun film trouvé avec les filtres
@@ -159,17 +112,11 @@ const Movies = () => {
                     </button>
                     <h2 className="text-xl font-semibold">{selectedMovie.title}</h2>
                     <ul>
-                        {orderBy(selectedMovie.movieShows, ['movieTheater.cinema.name', 'date'])
-                            .filter((show: MovieShow) => dayjs(show.date).format('YYYY-MM-DD') >= today && dayjs(show.date).format('YYYY-MM-DD') <= lastDay)
-                            .filter((show: MovieShow) => {
-                                if (selectedCinema && show.movieTheater.cinema.name !== selectedCinema) {
-                                    return false;
-                                }
-                                return !(selectedDay && new Date(show.date).getDay() != selectedDay);
-                            })
-                            .map((show: MovieShow) => (
-                                <li key={show['@id']} className="mt-2">
-                                    {show.movieTheater.cinema.name} {dayjs(show.date).format('DD/MM/YYYY')} {show.startTime} {show.endTime} {show.movieTheater.projectionQuality.name}
+                        {orderBy(movieShows, ['movieTheater.cinema.name', 'date'])
+                            .map((show: MovieShowReservation) => (
+                                <li key={show.id} className="mt-2">
+                                    {`Le ${dayjs(show.date).format('DD/MM/YYYY')} de ${show.startTime} à ${show.endTime}
+                                     (${show.movieTheater.projectionQuality.name} - ${show.priceInEuros}€)`}
                                 </li>
                             ))}
                     </ul>

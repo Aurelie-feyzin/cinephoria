@@ -38,8 +38,13 @@ api_platform:
         # Custom mapping
         App\Exception\ProductNotFoundException: 404 # Here is the handler for our custom exception
 
+    eager_loading:
+        # Max number of joined relations before EagerLoading throws a RuntimeException.
+        max_joins: 1000
+
     mapping:
         paths:
             - '%kernel.project_dir%/src/Entity'
             - '%kernel.project_dir%/src/Enum'
-           # - '%kernel.project_dir%/src/DTO'
+            - '%kernel.project_dir%/src/Document'
+            - '%kernel.project_dir%/src/DTO'

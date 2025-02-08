@@ -21,7 +21,7 @@ const MovieList = () => {
         data: moviesData,
         error,
         isLoading,
-    } = useQuery<MovieDescriptionApiResponse, Error>(['movies_description', currentPage], () => fetchMoviesDescription(currentPage, itemsPerPage), {
+    } = useQuery<ApiResponse<MovieDescription>, Error>(['movies_description', currentPage], () => fetchMoviesDescription(currentPage, itemsPerPage), {
         keepPreviousData: true,
     });
 

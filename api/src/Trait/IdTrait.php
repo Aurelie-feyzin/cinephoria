@@ -14,7 +14,7 @@ trait IdTrait
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
     #[ApiProperty(identifier: true)]
-    private ?Uuid $id = null;
+    protected ?Uuid $id = null;
 
     public function getId(): ?string
     {

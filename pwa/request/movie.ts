@@ -29,7 +29,7 @@ export const fetchMovieByUri = async (uri: string): Promise<MovieDescription> =>
     return await response.json();
 }
 
-export const fetchMoviesBySearchInTitle = async (search: string): Promise<MovieDescriptionApiResponse> => {
+export const fetchMoviesBySearchInTitle = async (search: string): Promise<ApiResponse<MovieDescription>> => {
     const url = `/movies?title=${search}`;
     const response = await fetch(url, {
         method: 'GET',
@@ -44,8 +44,8 @@ export const fetchMoviesBySearchInTitle = async (search: string): Promise<MovieD
     return await response.json();
 }
 
-export const fetchNewMovies = async (): Promise<MovieApiResponse> => {
-    const url = `/movie/new_list`;
+export const fetchNewMovies = async (): Promise<ApiResponse<Movie>> => {
+    const url = `/new_list/movies`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -60,8 +60,8 @@ export const fetchNewMovies = async (): Promise<MovieApiResponse> => {
 }
 
 
-export const fetchMovieInCinema = async (today: string, lastDay: string): Promise<MovieApiResponse> => {
-    const url = `/movie/in_cinema?page=1&movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}`;
+export const fetchMovieInCinema = async (today: string, lastDay: string, cinema?: string): Promise<ApiResponse<MovieDescription>> => {
+    const url = `/movies?movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}${cinema ? `&movieShows.movieTheater.cinema=${cinema}` : ''}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -75,7 +75,7 @@ export const fetchMovieInCinema = async (today: string, lastDay: string): Promis
     return await response.json();
 }
 
-export const fetchMoviesDescription = async (page: number, itemsPerPage: number): Promise<MovieDescriptionApiResponse> => {
+export const fetchMoviesDescription = async (page: number, itemsPerPage: number): Promise<ApiResponse<MovieDescription>> => {
     const url = `/movies?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',

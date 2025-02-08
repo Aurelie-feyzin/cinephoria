@@ -16,7 +16,7 @@ class Cinema
 {
     use IdTrait;
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['movie:read', 'movieShow:read', 'movieTheater:read'])]
+    #[Groups(['movie:read', 'movieShow:read', 'movieTheater:read', 'movieShow:full'])]
     private string $name;
 
     #[ORM\OneToOne(targetEntity: Address::class, cascade: ['persist', 'remove'])]

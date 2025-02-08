@@ -1,14 +1,9 @@
 import {useRouter} from "next/router";
 import {useMutation, useQuery} from "react-query";
-import {fetchMovieById, updateMovieById} from "../../../../request/movie";
 import React, {useState} from "react";
 import PageIntranetContainer from "../../../../components/intranet/PageIntranetContainer";
-import {SubmitHandler} from "react-hook-form";
 import AlertError from "../../../../components/common/alert/AlertError";
 import PageLoading from "../../../../components/common/PageLoading";
-import MovieForm from "../../../../components/intranet/movies/MovieForm";
-import {fetchMovieShowById, updateMovieShowById} from "../../../../request/movieShow";
-import MovieShowForm from "../../../../components/intranet/filmShow/MovieShowForm";
 import MovieTheaterForm from "../../../../components/intranet/movieTheater/MovieTheaterForm";
 import {fetchMovieTheaterById, updateMovieTheater} from "../../../../request/movieTheater";
 

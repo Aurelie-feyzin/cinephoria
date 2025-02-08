@@ -2,7 +2,7 @@ import {UseMutationResult, useQuery} from "react-query";
 
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../../common/form/InputField";
-import {REQUIRED, validateTime} from "../../common/form/validator_tools";
+import {REQUIRED} from "../../common/form/validator_tools";
 import SelectField from "../../common/form/SelectField";
 import {formatToSelectOption} from "../../common/form/utils";
 import ButtonSubmit from "../../common/button/ButtonSubmit";
@@ -26,7 +26,7 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
         handleSubmit,
         formState: {errors},
         watch
-    } = useForm<any, Error>({
+    } = useForm<MovieShowInput, Error>({
         defaultValues: movieShowData ? {
             ...movieShowData,
             movieTheater: movieShowData.movieTheater ? movieShowData.movieTheater['@id'] : undefined,
@@ -39,7 +39,7 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
     const watchCinema = watch("cinema");
     const watchMovie = watch("movie");
     const watchStartTime = watch("startTime");
-    const [minEndTime, setMinEndTime] = useState<string|undefined>(undefined)
+    const [minEndTime, setMinEndTime] = useState<string | undefined>(undefined)
     const {cinemas} = useCinemas();
     const {data: movieTheaters, error: errorMovieTheaters, isLoading: isMovieTheaters} = useQuery<any, Error>(
         ['movie_theathers', watchCinema],
@@ -83,9 +83,6 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
 
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
-            data = {
-                ...data,
-            }
             mutation.mutate(data)
         } catch (error) {
             setMessageKo("Erreur, séance non modifiée");

@@ -55,18 +55,3 @@ interface MovieDescriptionInput {
     rating: number,
 }
 
-interface MovieDescriptionApiResponse {
-    'hydra:member': MovieDescription[];
-    'hydra:view'?: {
-        'hydra:next'?: string;
-        'hydra:last'?: string;
-    };
-}
-
-interface MovieApiResponse {
-    'hydra:member': Movie[];
-    'hydra:view'?: {
-        'hydra:next'?: string;
-        'hydra:last'?: string;
-    };
-}

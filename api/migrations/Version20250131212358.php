@@ -28,7 +28,7 @@ final class Version20250131212358 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN projection_installation.projection_quality_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN projection_installation.last_maintenance_date IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN projection_installation.last_repair_date IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE seat (id UUID NOT NULL, movie_theater_id UUID DEFAULT NULL, name VARCHAR(50) NOT NULL, status VARCHAR(255) NOT NULL, repair_details TEXT DEFAULT NULL, last_maintenance_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, last_repair_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE seat (id UUID NOT NULL, movie_theater_id UUID DEFAULT NULL, name VARCHAR(50) NOT NULL, status VARCHAR(255) NOT NULL, repair_details TEXT DEFAULT NULL, last_maintenance_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, last_repair_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, reduced_mobility_seat BOOLEAN DEFAULT false NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_3D5C36663EFE3445 ON seat (movie_theater_id)');
         $this->addSql('COMMENT ON COLUMN seat.id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN seat.movie_theater_id IS \'(DC2Type:uuid)\'');

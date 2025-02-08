@@ -42,6 +42,9 @@ RUN set -eux; \
 ###> doctrine/doctrine-bundle ###
 RUN set -eux; \
 	install-php-extensions pdo_pgsql
+
+RUN set -eux; \
+	install-php-extensions mongodb
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
