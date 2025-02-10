@@ -48,6 +48,7 @@ class CreateReservationStateProcessor implements ProcessorInterface
                     ->setUserId($user->getId())
                     ->setMovieId($movieShow->getMovie()->getId())
                     ->setMovieName($movieShow->getMovie()->getTitle())
+                    ->setMovieBackdropPath($movieShow->getMovie()->getBackdropPath())
                     ->setCinemaId($movieTheater->getCinema()->getId())
                     ->setCinemaName($movieTheater->getCinema()->getName())
                     ->setMovieShowId($movieShow->getId())
