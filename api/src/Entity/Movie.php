@@ -6,6 +6,7 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -48,6 +49,11 @@ class Movie
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?string $posterPath = null;
+
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[ApiProperty(types: ['https://schema.org/image'])]
+    public ?MediaObject $backdrop = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $backdropPath = null;
@@ -121,6 +127,17 @@ class Movie
     {
         $this->posterPath = $posterPath;
 
+        return $this;
+    }
+
+    public function getBackdrop(): ?MediaObject
+    {
+        return $this->backdrop;
+    }
+
+    public function setBackdrop(?MediaObject $backdrop): Movie
+    {
+        $this->backdrop = $backdrop;
         return $this;
     }
 

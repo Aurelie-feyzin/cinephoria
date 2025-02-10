@@ -38,6 +38,10 @@ class Reservation
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    private string $movieBackdropPath;
+
+    #[ODM\Field]
+    #[Assert\NotBlank]
     private string $cinemaId;
 
     #[ODM\Field]
@@ -130,6 +134,17 @@ class Reservation
     {
         $this->movieName = $movieName;
 
+        return $this;
+    }
+
+    public function getMovieBackdropPath(): string
+    {
+        return $this->movieBackdropPath;
+    }
+
+    public function setMovieBackdropPath(string $movieBackdropPath): Reservation
+    {
+        $this->movieBackdropPath = $movieBackdropPath;
         return $this;
     }
 
