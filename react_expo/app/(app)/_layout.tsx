@@ -22,9 +22,7 @@ const AppLayout = ()=> {
     return (
         <Stack>
             <Stack.Screen name="index" options={{ title: 'Réservations' }} />
-{/*
-            <Stack.Screen name="" options={{ title: 'QR Code' }} />
-*/}
+            <Stack.Screen name="reservations/[id]" options={{ title: 'QR Code' }} />
         </Stack>
     );
 }

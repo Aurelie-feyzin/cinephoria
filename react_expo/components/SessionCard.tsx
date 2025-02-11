@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text,  TouchableOpacity, Image } from 'react-native';
 import {Reservation} from "@/model/ReservationInterface";
+import {router} from "expo-router";
 
 const PlaceholderImage = require('@/assets/images/backdrops/placeholder.png');
 const  SessionCard = ({ reservation }:{reservation: Reservation}) => {
-    const { movieName, cinemaName, movieTheaterName, movieShowDate, movieShowEndTime, movieShowStartTime, seatNames } = reservation;
+    const { movieName, cinemaName, movieTheaterName, movieShowDate, movieShowEndTime, movieShowStartTime, seatNames, id } = reservation;
 
     return (
         <View className="bg-gray-950 p-4 rounded-lg shadow-md">
@@ -20,7 +21,7 @@ const  SessionCard = ({ reservation }:{reservation: Reservation}) => {
             </View>
 
             <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => router.navigate(`/reservations/${id}`)}
                 className="mt-4 bg-blue-500 p-3 rounded-lg flex items-center justify-center"
             >
                 <Text className="text-white font-semibold bg-secondary">Voir le QRCode</Text>

@@ -18,3 +18,15 @@ export interface Reservation {
     seatIds: string[];
     seatNames: string[];
 }
+
+export interface ReservationMinimal {
+    '@id': string;
+    '@type': string,
+    movieName: string;
+    cinemaName: string;
+    movieShowDate: string;
+    movieShowStartTime: string;
+    movieShowEndTime: string;
+    movieTheaterName: string;
+    numberOfSeats: number;
+}
