@@ -79,7 +79,7 @@ const Contact = () => {
                                 error={errors.title?.message}
                     />
                     <TextAreaField
-                        register={register("description", {...REQUIRED, ...customMaxLength(180)})}
+                        register={register("description", {...REQUIRED})}
                         name='description'
                         label='Votre message'
                         error={errors.description?.message}

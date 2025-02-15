@@ -128,14 +128,14 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
                                 className="w-full"
                     />
                     <InputTimeField
-                        register={register("startTime", {...REQUIRED,})}
+                        register={register("startTime", {...REQUIRED})}
                         name='startTime'
                         label='Début séance'
                         error={errors.startTime?.message}
                         className="w-full"
                     />
                     <InputTimeField
-                        register={register("endTime", {...REQUIRED, validate: validateTime})}
+                        register={register("endTime", {...REQUIRED})}
                         name='endTime'
                         label='Fin séance'
                         error={errors.endTime?.message}
