@@ -138,6 +138,7 @@ class Movie
     public function setBackdrop(?MediaObject $backdrop): Movie
     {
         $this->backdrop = $backdrop;
+
         return $this;
     }
 

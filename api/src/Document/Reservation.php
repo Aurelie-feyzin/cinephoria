@@ -19,6 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     mercure: true)]
 #[ODM\Document(collection: 'reservations')]
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Reservation
 {
     #[ODM\Id()]
@@ -145,6 +148,7 @@ class Reservation
     public function setMovieBackdropPath(string $movieBackdropPath): Reservation
     {
         $this->movieBackdropPath = $movieBackdropPath;
+
         return $this;
     }
 

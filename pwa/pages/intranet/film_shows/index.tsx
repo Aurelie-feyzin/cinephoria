@@ -28,10 +28,6 @@ const FilmShowLists = () => {
     const movieShows = data?.['hydra:member'] || [];
     const nextPageUrl = data?.['hydra:view']?.['hydra:next'];
 
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
-
     const columns: Column<FullMovieShow>[] = [
         {key: 'movie', label: 'Film', render: ((row: FullMovieShow) => <span>{row.movie.title}</span>)},
         {key: 'cinema', label: 'Cinéma', render: ((row: FullMovieShow) => <span>{row.movieTheater.cinema.name}</span>)},
