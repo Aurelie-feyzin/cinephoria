@@ -30,7 +30,7 @@ class ProjectionInstallationFixtures extends Fixture implements DependentFixture
                 ->setMovieTheater($theater)
                 ->setName($theater->getProjectionQuality()->getName())
                 ->setProjectionQuality($theater->getProjectionQuality())
-                ->setStatus($faker->boolean(75) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
+                ->setStatus($faker->boolean(90) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
             ;
             $manager->persist($projectionInstallation);
         }

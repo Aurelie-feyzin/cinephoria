@@ -32,7 +32,7 @@ class SeatFixtures extends Fixture implements DependentFixtureInterface
             for ($i = 0; $i < $numberOfSeats; ++$i) {
                 $seat = (new Seat())
                     ->setMovieTheater($theater)
-                    ->setStatus($faker->boolean(75) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
+                    ->setStatus($faker->boolean(90) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
                     ->setName((string) ($i + 1))
                     ->setReducedMobilitySeat($i < $reducedMobilitySeats)
                 ;

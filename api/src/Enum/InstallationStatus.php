@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Trait\EnumTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 /** https://fr.wikipedia.org/wiki/Commission_de_classification_des_%C5%93uvres_cin%C3%A9matographiques
  * https://les-tilleuls.coop/blog/exposez-vos-enums-avec-api-platform.
@@ -25,4 +26,10 @@ enum InstallationStatus: string
     case AVAILABLE = 'disponible';
     case TO_REPAIR = 'a_reparer';
     case UNDER_REPAIR = 'en_reparation';
+
+    #[Groups(['read', 'installation:read', 'installation:input', 'installation:full'])]
+    public function getValue(): string
+    {
+        return $this->value;
+    }
 }

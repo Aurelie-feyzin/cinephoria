@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class Seat extends Installation
 {
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
-    #[Groups(['installationMinimal:read'])]
+    #[Groups(['installationMinimal:read', 'installation:full'])]
     private bool $reducedMobilitySeat = false;
 
     public function isReducedMobilitySeats(): bool
