@@ -5,15 +5,19 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 DOCKER_COMP = docker compose
 
 # Docker containers
-PHP_CONT = $(DOCKER_COMP) exec php
-PWA_CONT = $(DOCKER_COMP) exec pwa
+PHP_CONTAINER_CMD = $(DOCKER_COMP) exec php
+PWA_CONTAINER_CMD = $(DOCKER_COMP) exec pwa
+
+# Directories
+DESKTOP_APP_DIR = cd desktop_app
+EXPO_APP_DIR = cd react_expo
 
 # Executables
-PHP      = $(PHP_CONT) php
-COMPOSER = $(PHP_CONT) composer
-SYMFONY_CONSOLE  = $(PHP_CONT) bin/console
+PHP      = $(PHP_CONTAINER_CMD) php
+COMPOSER = $(PHP_CONTAINER_CMD) composer
+SYMFONY_CONSOLE  = $(PHP_CONTAINER_CMD) bin/console
 VENDOR  =  $(PHP) vendor/bin
-PNPM  =  $(PWA_CONT) pnpm
+PWA_PNPM_CMD  =  $(PWA_CONTAINER_CMD) pnpm
 
 ## —— Docker ————————————————————————————————————————————————————————————————
 build:
@@ -30,7 +34,7 @@ logs:
 
 ## —— Symfony ————————————————————————————————————————————————————————————————
 bash:
-	$(PHP_CONT) bash
+	$(PHP_CONTAINER_CMD) bash
 
 db-diff: ## Generate a migration
 	$(SYMFONY_CONSOLE) doctrine:migrations:diff
@@ -63,13 +67,27 @@ security-checker:
 	$(COMPOSER) audit
 ## —— PWA —————————————————————————————————————————————————————
 sh:
-	$(PWA_CONT) sh
+	$(PWA_CONTAINER_CMD) sh
 
-lint: ## Lints JS coding standarts
-	$(PNPM) lint
+pwa-lint: ## Lints JS coding standarts
+	$(PWA_PNPM_CMD) lint
 
-audit: ## Checks for known security issues with the installed packages.
-	$(PNPM) audit
+pwa-audit: ## Checks for known security issues with the installed packages.
+	$(PWA_PNPM_CMD) audit
+
+## —— DESKTOP APP —————————————————————————————————————————————————————
+tauri-lint: ## Lints JS coding standarts
+	$(DESKTOP_APP_DIR) && pnpm lint
+
+tauri-audit: ## Checks for known security issues with the installed packages.
+	$(DESKTOP_APP_DIR) && pnpm audit
+
+## —— Expo APP —————————————————————————————————————————————————————
+expo-lint: ## Lints JS coding standarts
+	$(EXPO_APP_DIR) && pnpm lint
+
+expo-audit: ## Checks for known security issues with the installed packages.
+	$(EXPO_APP_DIR) && pnpm audit
 
 ## —— Quality and security —————————————————————————————————————————————————————
 code-quality: ## Run the tests
@@ -78,10 +96,18 @@ code-quality: ## Run the tests
 	$(MAKE) phpmd
 	$(MAKE) phpstan
 	@$(call GREEN, "PWA code quality")
-	$(MAKE) lint
+	$(MAKE) pwa-lint
+	@$(call GREEN, "DESKTOP code quality")
+	$(MAKE) tauri-lint
+	@$(call GREEN, "EXPO code quality")
+	$(MAKE) expo-lint
 
 security:
 	@$(call GREEN, "PHP security")
 	$(MAKE) security-checker
-	@$(call GREEN, "JS security")
-	$(MAKE) audit
+	@$(call GREEN, "PWA security")
+	$(MAKE) pwa-audit
+	@$(call GREEN, "DESKTOP security")
+	$(MAKE) tauri-audit
+	@$(call GREEN, "Expo security")
+	$(MAKE) expo-audit
