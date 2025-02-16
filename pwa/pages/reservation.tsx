@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import PageContainer from "../components/common/layout/PageContainer";
 import dayjs from "dayjs";
@@ -14,19 +14,21 @@ import ReservationForm from "../components/common/ReservationForm";
 import {useQuery} from "react-query";
 import {fetchMovieInCinema} from "../request/movie";
 import {fetchMovieShowByMovie} from "../request/movieShow";
+import PageLoading from "../components/common/PageLoading";
+import PageError from "../components/common/PageError";
 
 const Reservation = () => {
     const {user} = useUser();
     const {register, watch} = useForm<any, Error>({
         defaultValues: {
-            cinema: '',
-            ["day-filter"]: undefined,
-            movie: undefined
+            cinema: localStorage.getItem("selectedCinema") || '',
+            ["day-filter"]: localStorage.getItem("selectedDay") || undefined,
+            movie:localStorage.getItem("selectedMovieId") || '',
         }
     });
     const [movies, setMovies] = useState<MovieDescription[]>([]);
     const [movieShows, setMovieShows] = useState<MovieShowReservation[]>([]);
-    const [selectedMovie, setSelectedMovie] = useState<MovieDescription | null>(null);
+    const [selectedMovie, setSelectedMovie] = useState<MovieDescription | null>();
     const [selectedFilmShow, setSelectedFilmShow] = useState<MovieShowReservation | null>(null);
     const selectedCinema = watch('cinema', '');
     const selectedDay = watch('day');
@@ -35,8 +37,7 @@ const Reservation = () => {
     const [after, setAfter] = useState(today);
     const [before, setBefore] = useState(now.add(6, 'day').format('YYYY-MM-DD'));
 
-
-    const {error, isLoading} = useQuery(
+    const {error, isLoading} = useQuery<ApiResponse<MovieDescription>, Error>(
         ["movie_in_cinema", after, before, selectedCinema],
         () => fetchMovieInCinema(after, before, selectedCinema), {
             enabled: !!selectedCinema && !!before && !!after,
@@ -46,23 +47,37 @@ const Reservation = () => {
             }
         });
 
-    const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery<FullMovieShowApiResponse>(
+    const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery<FullMovieShowApiResponse, Error>(
         ["movie_shows", selectedMovie, after, before, selectedCinema],
-        () => fetchMovieShowByMovie(selectedMovie['@id'], after, before, selectedCinema),
+        () => fetchMovieShowByMovie(selectedMovie?.['@id'] as string, after, before, selectedCinema),
         {
-            enabled: !!selectedMovie && !!before && !!after && typeof selectedMovie['@id'] === 'string',
+            enabled: !!selectedMovie && !!before && !!after,
             onSuccess: (data: FullMovieShowApiResponse) => setMovieShows(data?.["hydra:member"] || []),
         });
 
     const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const id = event.target.value;
         setSelectedMovie(movies.find((movie) => movie['@id'] === id) || null);
+        localStorage.setItem("selectedMovieId", id);
     };
+
+    useEffect(() => {
+        const savedCinemaId = localStorage.getItem("selectedMovieId");
+        setSelectedMovie(movies.find((movie) => movie['@id'] === savedCinemaId) || null)
+    }, [movies]);
+
+    useEffect(() => {
+        localStorage.setItem("selectedCinema", selectedCinema);
+    }, [selectedCinema]);
+
+    useEffect(() => {
+        localStorage.setItem("selectedDay", selectedDay);
+    }, [selectedDay]);
 
     return (<PageContainer title='réservation'>
             <div className="container mx-auto p-6">
-                <form className="flex flex-col md:flex-row md:space-x-4 mb-6">
-                    <div className="w-full md:w-1/2">
+                <form className="flex flex-col md:flex-row md:space-x-4 mb-2">
+                    <div className="w-full md:w-1/2 mb-2">
                         <SelectCinema forceSelect={true} register={register}/>
                     </div>
 
@@ -91,6 +106,9 @@ const Reservation = () => {
                                         </option>
                                     ))}
                                 </select>
+                                {isLoading &&
+                                    <p role="alert" className="block text-white text-sm">Liste des films en cours de chargement</p>}
+                                {error && <p role="alert" className="block text-white text-sm">{error.message}</p>}
                             </div> :
                             <AlertInfo visible={!selectedCinema}
                                        titleMessage="Merci de sélectionnez un cinéma pour voir la liste des films disponibles."/>
@@ -114,6 +132,8 @@ const Reservation = () => {
 
                             <div className="justify-between items-center m-4">
                                 <ul className="mb-4">
+                                    {isLoadingFilmShows && <PageLoading message="Séances en cours de chargement" />}
+                                    {errorFilmShows && <PageError message="Erreur pendant la récupération des séances" />}
                                     {orderBy(movieShows, ['movieTheater.cinema.name', 'date'])
                                         .map((show: MovieShowReservation) => (
                                             <li key={show.id} className="mt-2">
