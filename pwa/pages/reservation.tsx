@@ -64,7 +64,11 @@ const Reservation = () => {
     useEffect(() => {
         const savedCinemaId = localStorage.getItem("selectedMovieId");
         setSelectedMovie(movies.find((movie) => movie['@id'] === savedCinemaId) || null)
-    }, [movies]);
+        const selectedFilmShow = localStorage.getItem("selectedFilmShow");
+        if (selectedFilmShow) {
+            setSelectedFilmShow(movieShows.find((show) => show.id === selectedFilmShow) || null)
+        }
+    }, [movieShows, movies]);
 
     useEffect(() => {
         localStorage.setItem("selectedCinema", selectedCinema);
@@ -124,7 +128,7 @@ const Reservation = () => {
 
                 {selectedMovie && (
                     <div
-                        className="bg-black text-white rounded-lg shadow-md overflow-hidden m-4">
+                        className="bg-black text-white rounded-lg shadow-md overflow-hidden p-6">
                                 <h2 className="text-xl font-bold text-secondary text-center">
                                     Séance dans le
                                     cinéma {movieShows.find((movieShow) => movieShow.movieTheater.cinema["@id"] === selectedCinema)?.movieTheater.cinema.name}
@@ -152,7 +156,7 @@ const Reservation = () => {
                                 <AlertInfo visible={!user} titleMessage='Connection obligatoire'>
                                     <p>Il faut être connecté pour réserver
                                         <Link href="/signIn"
-                                              className="px-4 py-2 rounded-md shadow text-white bg-primary hover:bg-secondary ml-1">
+                                              className="px-4 py-2 rounded-md shadow text-white bg-primary hover:bg-secondary ml-2">
                                             Se connecter
                                         </Link></p>
                                 </AlertInfo>

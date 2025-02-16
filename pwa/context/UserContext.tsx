@@ -69,6 +69,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
 
     const logout = () => {
         Cookies.remove('jwt_token');
+        localStorage.clear();
         setUser(null);
     };
 
