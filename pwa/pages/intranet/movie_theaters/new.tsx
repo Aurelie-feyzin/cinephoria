@@ -3,8 +3,6 @@ import React, {useState} from "react";
 import AlertError from "../../../components/common/alert/AlertError";
 import PageIntranetContainer from "../../../components/intranet/PageIntranetContainer";
 import {useMutation} from "react-query";
-import {createMovieShow} from "../../../request/movieShow";
-import MovieShowForm from "../../../components/intranet/filmShow/MovieShowForm";
 import MovieTheaterForm from "../../../components/intranet/movieTheater/MovieTheaterForm";
 import {createMovieTheater} from "../../../request/movieTheater";
 
