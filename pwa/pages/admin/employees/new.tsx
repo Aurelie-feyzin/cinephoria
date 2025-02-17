@@ -23,19 +23,12 @@ const CreateMovie = () => {
     const router = useRouter();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
-    const newUser = async (employeeData: EmployeeInput) => {
-        const result = await createUser(employeeData);
-
-        return await result.json();
-    }
-
     const mutation = useMutation({
-        mutationFn: (employeeData: any) => newUser(employeeData),
+        mutationFn: (employeeData: any) => createUser(employeeData),
         onSuccess: (response) => {
             if (response) {
-                const data = JSON.parse(response);
-                if (data.email) {
-                    fetchForgotPassword({email: data.email}).then(() => router.push('/admin/employees'));
+                if (response.email) {
+                    fetchForgotPassword({email: response.email}).then(() => router.push('/admin/employees'));
                 }
             }
         },

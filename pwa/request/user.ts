@@ -48,11 +48,18 @@ export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
     return response.json()
 }
 
-export const createUser= (data: EmployeeInput|UserInput): Promise<Response> => fetch(`${API_PATH }users`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/ld+json',
-        'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
-    },
-    body: JSON.stringify(data)
-});
+export const createUser= async (data: EmployeeInput|UserInput): Promise<User> => {
+    const response = await fetch(`${API_PATH }users`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/ld+json',
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la création du compte')
+    }
+
+    return await response.json()
+}
