@@ -2,19 +2,13 @@ import {UseMutationResult, useQuery} from "react-query";
 
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../../common/form/InputField";
-import {REQUIRED, validateTime} from "../../common/form/validator_tools";
+import {REQUIRED} from "../../common/form/validator_tools";
 import SelectField from "../../common/form/SelectField";
 import {formatToSelectOption} from "../../common/form/utils";
 import ButtonSubmit from "../../common/button/ButtonSubmit";
-import React, {SetStateAction, useEffect, useState} from "react";
-import dayjs from "dayjs";
-import {fetchMovieByUri, fetchMoviesBySearchInTitle} from "../../../request/movie";
+import React, {SetStateAction} from "react";
 import {useCinemas} from "../../../context/CinemaContext";
-import Autocomplete from "../../common/form/Autocomplete";
-import {fetchMovieTheatersByCinema} from "../../../request/movieTheater";
-import InputTimeField from "../../common/form/InputTimeField";
 import {fetchProjectionQualities} from "../../../request/projectionQuality";
-import PageError from "../../common/PageError";
 
 const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
                        {
@@ -26,8 +20,7 @@ const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
         register,
         handleSubmit,
         formState: {errors},
-        watch
-    } = useForm<any, Error>({
+    } = useForm<MovieTheaterInput, Error>({
         defaultValues: movieTheaterData ? {
             ...movieTheaterData,
             cinema: movieTheaterData ? movieTheaterData.cinema['@id'] : undefined,
@@ -66,7 +59,7 @@ const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
                 <InputField register={register("theaterName", {...REQUIRED})}
                             name='theaterName'
                             label='Nom de la salle'
-                            error={errors.theaterName}
+                            error={errors.theaterName?.message}
                             className="w-full"
                 />
                 <SelectField label="Qualité de projection" name="projectionQuality" register={register("projectionQuality", {...REQUIRED})}
@@ -80,8 +73,9 @@ const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
                                 type="number"
                                 name='numberOfSeats'
                                 label='Nombre de sièges'
-                                error={errors.numberOfSeats}
+                                error={errors.numberOfSeats?.message}
                                 className="w-full"
+                                disabled={!!movieTheaterData}
                     />
                     <InputField
                         register={register("reducedMobilitySeats", {...REQUIRED, valueAsNumber: true})}
@@ -90,6 +84,7 @@ const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
                         label='Dont mobilité réduite'
                         error={errors.reducedMobilitySeats?.message}
                         className="w-full"
+                        disabled={!!movieTheaterData}
                     />
                 </div>
                 <ButtonSubmit/>

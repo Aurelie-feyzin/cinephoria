@@ -28,9 +28,11 @@ module.exports = {
           500: "#ee4322"
         },
         black: "#1d1e1c",
-        white: "#ffffff",
-        primary: "#2E4D34", //#2E4D34 #A3B89C
+        white: "#F8F6F0", // ##ffffff
+        primary: "#2E4D34",
+        primary_light: "#A3B89C",
         secondary: "#C9A85C",
+        custom_brown: "#7A5A3C",
         transparent: "transparent",
       },
     },

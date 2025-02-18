@@ -58,7 +58,7 @@ abstract class Installation
     #[Groups(['installation:input', 'installation:full'])]
     protected ?\DateTimeImmutable $lastRepairDate = null;
 
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne(targetEntity: MovieTheater::class)]
     #[Assert\NotBlank]
     #[Groups(['installation:read', 'installation:input', 'installation:full'])]
     protected ?MovieTheater $movieTheater = null;

@@ -9,8 +9,10 @@ import LinkForgotPasswordForm from "./LinkForgotPasswordForm";
 import {customMaxLength, REQUIRED, validatePassword} from "../common/form/validator_tools";
 import InfoValidatePassword from "../common/form/InfoValidatePassword";
 import ButtonSubmit from "../common/button/ButtonSubmit";
+import {useMutation} from "react-query";
+import {LOGIN_FORM} from "../../pages/signIn";
 
-const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
+const RegistrationForm = ({setFormVisible}: { setFormVisible: any }) => {
     const {
         register,
         handleSubmit,
@@ -19,17 +21,21 @@ const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
     const [registationOk, setRegistrationOk] = useState(false);
     const [registationKo, setRegistrationKo] = useState(false);
 
-    const onSubmit: SubmitHandler<UserInput> = async (data) => {
-        try {
-            const response = await createUser(data);
-            if (!response.ok) {
-                setRegistrationOk(false);
-                setRegistrationKo(true);
-                return;
-            }
+    const mutation = useMutation({
+        mutationFn: (data: any) => createUser(data),
+        onSuccess: (response) => {
             setRegistrationOk(true);
             setRegistrationKo(false);
-          //  setRegistrationForm(false);
+        },
+        onError: () => {
+            setRegistrationOk(false);
+            setRegistrationKo(true);
+        },
+    })
+
+    const onSubmit: SubmitHandler<UserInput> = async (data) => {
+        try {
+            mutation.mutate(data);
         } catch (error) {
             setRegistrationKo(true);
             setRegistrationOk(false);
@@ -41,8 +47,15 @@ const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
             <div className="max-w-md mb-4 mx-auto rounded-lg">
                 <AlertInfo visible={registationOk}
                            titleMessage='Compte crée avec succés'
-                           message="Votre compte a bien été crée, vous allez recevoir un émail de confirmation d'inscription."
-                />
+                           message="Votre compte a bien été crée, vous allez recevoir un émail de confirmation d'inscription.
+                           Vous pouvez vous connecter dès maintenant."
+                >
+                    <button type="button"
+                            className="text-center item-center bg-primary text-white p-2 rounded hover:bg-secondary flex"
+                            onClick={() => setFormVisible(LOGIN_FORM)}>
+                        Connectez-vous
+                    </button>
+                </AlertInfo>
                 <AlertError visible={registationKo}
                             titleMessage='Erreur pendant la création du compte'
                             message="Une erreur c'est produite pendant la création du compte."
@@ -74,8 +87,8 @@ const RegistrationForm =  ({setFormVisible }: { setFormVisible: any }) => {
                 />
                 <InfoValidatePassword/>
                 <LinkLoginForm setFormVisible={setFormVisible}/>
-                <LinkForgotPasswordForm setFormVisible={setFormVisible} />
-                <ButtonSubmit />
+                <LinkForgotPasswordForm setFormVisible={setFormVisible}/>
+                <ButtonSubmit/>
             </form>
         </>
     );

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\State\MovieTheaterStateProcessor;
 use App\Trait\IdTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,14 +18,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity]
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['movieTheater:read']]),
         new GetCollection(normalizationContext: ['groups' => ['movieTheater:read']]),
-        new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
-        new Post(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Patch(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
+        new Post(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
     ],
     mercure: true)]
 #[ApiFilter(SearchFilter::class, properties: ['cinema' => 'exact'])]
@@ -145,5 +147,18 @@ class MovieTheater
     public function setMovieShows(Collection $movieShows): void
     {
         $this->movieShows = $movieShows;
+    }
+
+    #[Groups(['movieTheater:read'])]
+    public function hasMovieShow(): bool
+    {
+        return !$this->movieShows->isEmpty();
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context, mixed $payload): void
+    {
+        dump($context);
+        dump($payload);
     }
 }

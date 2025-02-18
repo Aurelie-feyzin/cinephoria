@@ -12,10 +12,19 @@ import {fetchSeatsByMovieTheater} from "../../request/seat";
 import {router} from "next/client";
 import AlertError from "./alert/AlertError";
 import PageLoading from "./PageLoading";
+import dayjs from "dayjs";
+import {useUser} from "../../context/UserContext";
 
+type ReservationInput = {
+    numberOfSeats: number,
+    isSelectSeat: string,
+    isReducedMobility: string,
+    seats: string[],
+}
 
 const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
-    const {register, handleSubmit, formState: {errors}, watch} = useForm<any, Error>(
+    const {user} = useUser();
+    const {register, handleSubmit, formState: {errors}, watch} = useForm<ReservationInput, Error>(
         {
             defaultValues: {
                 isSelectSeat: String(false),
@@ -30,7 +39,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
     const numberOfSeats = watch('numberOfSeats');
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
-    const {error, isLoading} = useQuery(
+    const {error, isLoading} = useQuery<ApiResponse<MinimalSeat>, Error>(
         ["seats", filmShow?.movieTheater["@id"]],
         () => fetchSeatsByMovieTheater(filmShow?.movieTheater["@id"]), {
             enabled: !!filmShow?.movieTheater["@id"],
@@ -66,8 +75,13 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
 
 
     return (
-        <div className="max-w-full mx-auto bg-black p-6 rounded-lg shadow-md gap-4">
+        user &&
+        <div className="max-w-full mx-auto bg-black rounded-lg shadow-md gap-4 pt-3">
             <h2 className="text-secondary text-center font-bold text-xl">Réservation</h2>
+            <h3 className="text-custom_brown font-bold mb-2">
+                {`Séance du ${dayjs(filmShow.date).format('DD/MM/YYYY')} de ${filmShow.startTime} à ${filmShow.endTime}
+                                     (${filmShow.movieTheater.projectionQuality.name} - ${filmShow.priceInEuros}€)`}
+            </h3>
             <AlertError visible={!!messageKo} message="Impossible de finaliser la réservation"/>
             <form className="max-w-full mx-auto" onSubmit={handleSubmit(handleReservation)}>
                 <InputField
@@ -87,17 +101,17 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
                               options={OptionBooleans}
                               register={register("isReducedMobility")}
                               error={errors.isSelectSeat?.message}/>
-                {isChooseSeats === 'true' && isLoading && <PageLoading message="chargement de la liste des sièges disponibles" />}
+                {isChooseSeats === 'true' && isLoading &&
+                    <PageLoading message="chargement de la liste des sièges disponibles"/>}
                 {isChooseSeats === 'true' && !isLoading &&
                     <SelectField label="Siéges" name="seats" register={register("seats")}
                                  options={formatToSelectOption(seats.filter((seat) => isReducedMobility === 'true' ? seat.reducedMobilitySeats : !seat.reducedMobilitySeats) || [], 'id', 'name')}
-                                 error={errors.seats?.message || error}
+                                 error={errors.seats?.message || error?.message}
                                  className="w-full"
                                  placeholder="Choisissez les sieges"
                                  multiple
                     />
                 }
-
                 <ButtonSubmit/>
             </form>
         </div>

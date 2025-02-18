@@ -5,16 +5,18 @@ import {useQuery} from "react-query";
 import dayjs from "dayjs";
 import FullMovieCard from "../components/common/FullMovieCard";
 import {useForm} from "react-hook-form";
-import {orderBy, uniqBy} from "lodash";
+import {groupBy, orderBy, uniqBy} from "lodash";
 import {fetchMovieInCinema} from "../request/movie";
 import SelectCinema from "../components/common/form/SelectCinema";
 import SelectDay from "../components/common/form/SelectDay";
 import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
 import {fetchMovieShowByMovie} from "../request/movieShow";
+import {useRouter} from "next/router";
 
 
 const Movies = () => {
+    const router = useRouter();
     const [movies, setMovies] = useState<MovieDescription[]>([]);
     const [genres, setGenres] = useState<MovieGenre[]>([]);
     const [selectedMovie, setSelectedMovie] = useState<MovieDescription | null>(null);
@@ -28,7 +30,7 @@ const Movies = () => {
     const today = now.format('YYYY-MM-DD');
     const [after, setAfter] = useState(today);
     const [before, setBefore] = useState(now.add(6, 'day').format('YYYY-MM-DD'));
-    const {error, isLoading} = useQuery(
+    const {error, isLoading} = useQuery<ApiResponse<MovieDescription>, Error>(
         ["movie_in_cinemas", after, before, selectedCinema],
         () => fetchMovieInCinema(after, before, selectedCinema), {
             onSuccess: (data) => {
@@ -40,7 +42,7 @@ const Movies = () => {
 
     const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery(
         ["movie_shows", selectedMovie, after, before, selectedCinema],
-        () => fetchMovieShowByMovie(selectedMovie['@id'], after, before, selectedCinema),
+        () => fetchMovieShowByMovie(selectedMovie?.['@id'] as string, after, before, selectedCinema),
         {
             enabled: !!selectedMovie && !!before && !!after,
             onSuccess: (data) => {
@@ -62,6 +64,13 @@ const Movies = () => {
 
         fetchFilteredMovies();
     }, [movies, selectedGenre]);
+
+    const handleSelectedMovieShow = (show: MovieShowReservation) => {
+        localStorage.setItem("selectedMovieId", show.movie["@id"]);
+        localStorage.setItem("selectedCinema", show.movieTheater.cinema["@id"]);
+        localStorage.setItem("selectedFilmShow", show.id);
+        router.push('/reservation');
+    };
 
     return <PageContainer title='les films' titlePage="Actuellement en salle">
         <div className="container mx-auto p-6">
@@ -89,7 +98,8 @@ const Movies = () => {
                     </select>
                 </div>
                 <div className="w-full md:w-1/3">
-                    <SelectDay register={register} now={now} setAfter={setAfter} setBefore={setBefore} selectedDay ={selectedDay}/>
+                    <SelectDay register={register} now={now} setAfter={setAfter} setBefore={setBefore}
+                               selectedDay={selectedDay}/>
                 </div>
             </form>
             <div className="grid grid-cols-1">
@@ -111,15 +121,27 @@ const Movies = () => {
                         Fermer
                     </button>
                     <h2 className="text-xl font-semibold">{selectedMovie.title}</h2>
-                    <ul>
-                        {orderBy(movieShows, ['movieTheater.cinema.name', 'date'])
-                            .map((show: MovieShowReservation) => (
-                                <li key={show.id} className="mt-2">
-                                    {`Le ${dayjs(show.date).format('DD/MM/YYYY')} de ${show.startTime} à ${show.endTime}
+
+                    {Object.entries(groupBy(orderBy(movieShows, ['movieTheater.cinema.name', 'date']), 'movieTheater.cinema.name'))
+                        .map(([cinemaName, shows]: [string, MovieShowReservation[]]) => (
+                            <div key={cinemaName}>
+                                <span className="font-semibold">{cinemaName}</span>
+                                <ul>
+                                    {shows.map((show: MovieShowReservation) =>
+                                        <li key={show.id} className="mt-2">
+                                            {`Le ${dayjs(show.date).format('DD/MM/YYYY')} de ${show.startTime} à ${show.endTime}
                                      (${show.movieTheater.projectionQuality.name} - ${show.priceInEuros}€)`}
-                                </li>
-                            ))}
-                    </ul>
+                                            <button
+                                                type='button'
+                                                onClick={() => handleSelectedMovieShow(show)}
+                                                className="ml-2 mt-2 px-2 bg-primary text-white rounded hover:bg-secondary disabled:bg-gray-400"
+                                            >Réserver
+                                            </button>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        ))}
                 </div>
             )}
         </div>
