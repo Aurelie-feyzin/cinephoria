@@ -6,6 +6,7 @@ export interface Reservation {
     userId: string;
     movieId: string;
     movieName: string;
+    movieBackdropPath: string;
     cinemaId: string;
     cinemaName: string;
     movieShowId: string;

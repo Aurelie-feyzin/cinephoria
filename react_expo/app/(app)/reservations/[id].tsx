@@ -22,7 +22,7 @@ const ReservationQrCode = ()=> {
     useEffect(() => {
         const getSession = async () => {
             try {
-                const data = await fetchOneSession(token, id);
+                const data = await fetchOneSession(token, id as string);
                 const formatedData = {
                     cinemaName: data.cinemaName,
                     numberOfSeats: data.numberOfSeats,
