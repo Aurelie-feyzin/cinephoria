@@ -54,7 +54,8 @@ To set up the backend, databases and web app, use Docker Compose to launch the s
 docker compose build --no-cache
 ```
 This will start all required services such as the backend (Symfony, ApiPlatform), PostgreSQL, MongoDB, Mailpit, and web app in Docker containers.
-3) Configuring Symfony
+
+3) Configuring Symfony  
 Ensure the backend is running:
 ```bash
 docker compose up -d
