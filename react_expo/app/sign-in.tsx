@@ -64,10 +64,10 @@ const LoginForm = () => {
             <View className="flex-1 justify-center">
                 <SafeAreaView>
                     {loginKo &&
-                        <div className="bg-red-100 border-t border-b border-red-500 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">
-                            <p className="font-bold">"Erreur de connexion"</p>
-                            <p className="text-sm">{messageKo}</p>
-                        </div>
+                        <View className="bg-red-100 border-t border-b border-red-500 text-red-700 px-4 py-3 rounded-md mb-4" role="alert">
+                            <Text className="font-bold">"Erreur de connexion"</Text>
+                            <Text className="text-sm">{messageKo}</Text>
+                        </View>
                     }
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -102,7 +102,7 @@ const LoginForm = () => {
                                 )}
                             />
                             {errors.username?.message && (
-                                <p role="alert" className="block text-white text-sm">{errors.username?.message}</p>
+                                <Text role="alert" className="block text-white text-sm">{errors.username?.message}</Text>
                             )}
                         </Pressable>
 
@@ -130,7 +130,7 @@ const LoginForm = () => {
                                 )}
                             />
                             {errors.password?.message && (
-                                <p role="alert" className="block text-white text-sm">{errors.password?.message}</p>
+                                <Text role="alert" className="block text-white text-sm">{errors.password?.message}</Text>
                             )}
                         </Pressable>
 

@@ -43,9 +43,6 @@ db-migrate: ## Migrate the database
 	@$(call GREEN, "Migrating database...")
 	$(SYMFONY_CONSOLE) doctrine:migrations:migrate --no-interaction
 
-graphql-schema:
-	$(SYMFONY_CONSOLE) api:graphql:export -o config/graphql/schema.graphql
-
 fixtures: ## Load the fixtures
 	@$(call GREEN, "Loading fixtures...")
 	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction

@@ -4,6 +4,9 @@ import {useSession} from "@/context/authContext";
 import {fetchSessions} from "@/api/reservationApi";
 import SessionCard from "@/components/SessionCard";
 import {useStorageState} from "@/state/useStorageState";
+import {sortBy} from 'lodash';
+import {Reservation} from "@/model/ReservationInterface";
+
 
 const MoviesScreen = () => {
     const { user } = useSession();
@@ -15,7 +18,7 @@ const MoviesScreen = () => {
         const getSessions = async () => {
             try {
                 const data = await fetchSessions(token);
-                setReservations(data);  // On suppose que la réponse contient les séances
+                setReservations(sortBy(data, 'movieShowDate'));
             } catch (error) {
                 console.error("Erreur lors de la récupération des séances", error);
             } finally {
@@ -44,6 +47,9 @@ const MoviesScreen = () => {
                     data={reservations}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <SessionCard reservation={item} />}
+                    ItemSeparatorComponent={() =>
+                        <View style={{ height: 10 }} />
+                }
                 />
             )}
         </View>

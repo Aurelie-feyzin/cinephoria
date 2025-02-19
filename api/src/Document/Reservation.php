@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace App\Document;
 
+use ApiPlatform\Doctrine\Odm\Filter\DateFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\State\UserReservationsProvider;
 use DateTimeImmutable;
@@ -15,9 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 // https://www.mongodb.com/developer/products/mongodb/building-rest-api-with-mongodb-and-php/
 #[ApiResource(
     operations: [
+        new Get(uriTemplate: '/reservations/{id}', security: "is_granted('ROLE_USER')"),
         new GetCollection(uriTemplate: '/user/reservations', security: "is_granted('ROLE_USER')", provider: UserReservationsProvider::class),
     ],
     mercure: true)]
+#[ApiFilter(DateFilter::class, properties: ['movieShowDate'])]
 #[ODM\Document(collection: 'reservations')]
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

@@ -54,4 +54,18 @@ class ReservationRepository extends ServiceDocumentRepository
 
         return $queryBuilder->count()->getQuery()->execute();
     }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return Reservation[]
+     */
+    public function findFuturReservationForUser(string $userId, $date): array
+    {
+        return $this->createQueryBuilder()
+            ->field('r.userId')->equals($userId)
+            ->field('r.movieShowDate')->gte($date)
+            ->getQuery()
+        ->toArray();
+    }
 }

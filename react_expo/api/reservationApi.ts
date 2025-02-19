@@ -3,7 +3,8 @@ import {Reservation, ReservationMinimal} from "@/model/ReservationInterface";
 
 export const fetchSessions = async (token: string|null): Promise<Reservation[]> => {
     try {
-        const response = await fetch(`${HOST_PATH}user/reservations`, {
+        const now = new Date().toLocaleDateString('en-CA');
+        const response = await fetch(`${HOST_PATH}user/reservations?movieShowDate%5Bafter%5D=${now}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

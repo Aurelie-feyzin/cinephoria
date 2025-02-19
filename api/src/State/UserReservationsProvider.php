@@ -36,6 +36,22 @@ class UserReservationsProvider implements ProviderInterface
             throw new UserNotFoundException('User not found');
         }
 
-        return $this->reservationRepository->findBy(['userId' => $user->getId()]);
+        $allReservation = $this->reservationRepository->findBy(['userId' => $user->getId()]);
+
+        if (!array_key_exists('movieShowDate', $context['filters'])) {
+            return $allReservation;
+        }
+
+        $filterDateString = $context['filters']['movieShowDate']['after'];
+        $reservations = [];
+
+        /** @var Reservation $reservation */
+        foreach ($allReservation as $reservation) {
+            if ($reservation->getMovieShowDate()->format('Y-m-d') >= $filterDateString) {
+                $reservations[] = $reservation;
+            }
+        }
+
+        return $reservations;
     }
 }
