@@ -1,0 +1,35 @@
+#https://depot.dev/docs/container-builds/how-to-guides/optimal-dockerfiles/node-pnpm-dockerfile
+FROM node:20-alpine AS base
+
+# Base stage for dev
+FROM base AS deps
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+RUN echo "Before: corepack version => $(corepack --version || echo 'not installed')" &&\
+    npm install -g corepack@latest   &&\
+    echo "After : corepack version => $(corepack --version)"
+
+RUN corepack enable && \
+	corepack prepare --activate pnpm@latest && \
+	pnpm config -g set store-dir /.pnpm-store \
+
+COPY package*.json pnpm-lock.yaml ./
+
+# Afficher les fichiers copiés
+RUN ls -la /app
+
+
+#RUN pnpm install
+
+COPY . .
+
+RUN pnpm add -g expo-cli
+
+# Exposer le port sur lequel Expo va tourner
+EXPOSE 19000 19001 19002
+
+# Démarrer le serveur Expo
+CMD ["expo", "start", "--tunnel"]
