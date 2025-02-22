@@ -7,7 +7,7 @@ use App\Document\Reservation;
 use App\Document\Review;
 use App\Enum\ReviewStatus;
 use DateTime;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\MongoDBBundle\Fixture\ODMFixtureInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -15,7 +15,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 /** @SuppressWarnings(PHPMD.StaticAccess) */
-class ReviewFixtures extends Fixture implements DependentFixtureInterface
+class ReviewFixtures implements ODMFixtureInterface, DependentFixtureInterface
 {
     public function __construct(
         private readonly DocumentManager $documentManager,
@@ -29,9 +29,6 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr-FR');
@@ -49,9 +46,9 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
                     ->setRating($faker->numberBetween(0, 5))
                     ->setReservation($reservation)
                 ;
-                $this->documentManager->persist($review);
+                $manager->persist($review);
             }
         }
-        $this->documentManager->flush();
+        $manager->flush();
     }
 }
