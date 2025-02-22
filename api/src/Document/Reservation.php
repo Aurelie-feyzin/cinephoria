@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use App\State\UserReservationsProvider;
 use DateTimeImmutable;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 // https://api-platform.com/docs/v3.2/core/mongodb/
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(uriTemplate: '/reservations/{id}', security: "is_granted('ROLE_USER')"),
         new GetCollection(uriTemplate: '/user/reservations', security: "is_granted('ROLE_USER')", provider: UserReservationsProvider::class),
     ],
+    normalizationContext: ['groups' => ['reservation']],
     mercure: true)]
 #[ApiFilter(DateFilter::class, properties: ['movieShowDate'])]
 #[ODM\Document(collection: 'reservations')]
@@ -30,74 +32,94 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Reservation
 {
     #[ODM\Id()]
+    #[Groups('reservation')]
     private ?string $id;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $userId;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $movieId;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups(['reservation', 'review'])]
     private string $movieName;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $movieBackdropPath;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $cinemaId;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $cinemaName;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $movieShowId;
 
     #[ODM\Field]
     #[Assert\NotBlank]
     #[Assert\Date]
+    #[Groups('reservation')]
     private DateTimeImmutable $movieShowDate;
 
     #[ODM\Field]
     #[Assert\NotBlank]
     #[Assert\Time]
+    #[Groups('reservation')]
     private string $movieShowStartTime;
 
     #[ODM\Field]
     #[Assert\NotBlank]
     #[Assert\Time]
+    #[Groups('reservation')]
     private string $movieShowEndTime;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $movieTheaterId;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private string $movieTheaterName;
 
     #[ODM\Field]
     #[Assert\NotBlank]
+    #[Groups('reservation')]
     private int $numberOfSeats = 0;
 
     /**
      * @var string[]
      */
     #[ODM\Field(type: 'collection')]
+    #[Groups('reservation')]
     private array $seatIds = [];
 
     /**
      * @var string[]
      */
     #[ODM\Field(type: 'collection')]
+    #[Groups('reservation')]
     private array $seatNames = [];
+
+    #[ODM\ReferenceOne(targetDocument: Review::class, mappedBy: 'reservation')]
+    #[Groups('reservation')]
+    private ?Review $review = null;
 
     public function getId(): ?string
     {
@@ -332,5 +354,15 @@ class Reservation
         }
 
         return $this;
+    }
+
+    public function getReview(): ?Review
+    {
+        return $this->review;
+    }
+
+    public function setReview(?Review $review): void
+    {
+        $this->review = $review;
     }
 }
