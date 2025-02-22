@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Image from "next/image";
+import SpeechBubble from "./Icon/SpeechBubble";
 
 type Props = {
     movie: MovieDescription
@@ -83,7 +84,7 @@ const FullMovieCard:React.FC<Props>  = ({
                         {movie.warning && <span className="text-orange-500 ml-2">⚠️ {movie.warning}</span>}
                     </div>
                     <div>{movie.genres.map((genre) => genre.name).join(', ')}</div>
-                    <div className="text-secondary font-bold">⭐ {movie.rating} / 5</div>
+                    <div className="text-secondary font-bold">⭐ {movie.rating === 0 ? '-' : movie.rating} / 5</div>
                 </div>
             </div>
         </div>

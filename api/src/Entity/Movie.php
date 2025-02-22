@@ -192,7 +192,7 @@ class Movie
 
     public function getRating(): ?float
     {
-        return $this->rating;
+        return round($this->rating, 1);
     }
 
     public function setRating(float $rating): static

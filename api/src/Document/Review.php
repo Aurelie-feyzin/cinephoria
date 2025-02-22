@@ -52,6 +52,10 @@ class Review
     #[Groups(['review'])]
     private Reservation $reservation;
 
+    #[ODM\Field(type: Types::STRING, nullable: false)]
+    #[Assert\NotNull]
+    private ?string $movieId;
+
     #[ODM\Field(type: Types::STRING, nullable: false, enumType: ReviewStatus::class)]
     #[Groups(['reservation', 'review'])]
     private ReviewStatus $status;
@@ -121,6 +125,19 @@ class Review
     public function setReservation(Reservation $reservation): Review
     {
         $this->reservation = $reservation;
+        $this->setMovieId($reservation->getMovieId());
+
+        return $this;
+    }
+
+    public function getMovieId(): string
+    {
+        return $this->movieId;
+    }
+
+    public function setMovieId(string $movieId): Review
+    {
+        $this->movieId = $movieId;
 
         return $this;
     }

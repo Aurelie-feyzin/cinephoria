@@ -7,36 +7,27 @@ use App\Document\Reservation;
 use App\Entity\MovieShow;
 use App\Repository\SeatRepository;
 use App\Repository\UserRepository;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\Bundle\MongoDBBundle\Fixture\ODMFixtureInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 
 /** @SuppressWarnings(PHPMD.StaticAccess) */
-class ReservationFixtures extends Fixture implements DependentFixtureInterface
+class ReservationFixtures implements ODMFixtureInterface
 {
     public function __construct(
         private readonly SeatRepository $seatRepository,
-        private readonly DocumentManager $documentManager,
+        private readonly EntityManagerInterface $entityManager,
         private readonly UserRepository $userRepository,
     ) {
-    }
-
-    public function getDependencies(): array
-    {
-        return [
-            MovieShowFixtures::class,
-            UserFixtures::class,
-        ];
     }
 
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr-FR');
         $basicUsers = $this->userRepository->findByRole('ROLE_USER');
-        $allMovieShows = $manager->getRepository(MovieShow::class)->findAll();
+        $allMovieShows = $this->entityManager->getRepository(MovieShow::class)->findAll();
 
         foreach ($basicUsers as $user) {
             $nbReservations = $faker->numberBetween(0, 10);
@@ -62,10 +53,10 @@ class ReservationFixtures extends Fixture implements DependentFixtureInterface
 
                 $this->addUnassignedSeats($numberOfSeats, $reservation, $movieShow->getId());
 
-                $this->documentManager->persist($reservation);
+                $manager->persist($reservation);
             }
         }
-        $this->documentManager->flush();
+        $manager->flush();
     }
 
     private function addUnassignedSeats(int $unassignedSeats, Reservation $reservation, string $movieShowId): void
