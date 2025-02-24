@@ -5,3 +5,9 @@ type ApiResponse<T> = {
         'hydra:last'?: string;
     };
 };
+
+type Enum = {
+    '@id': string,
+    '@type' : string,
+    value: string,
+}

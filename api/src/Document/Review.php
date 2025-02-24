@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(uriTemplate: '/movie/{id}/reviews', provider: UserReservationsProvider::class),
         new GetCollection(uriTemplate: '/reviews', normalizationContext: ['groups' => ['review']]),
         new Post(security: "is_granted('ROLE_USER')"),
-        new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Patch(security: "is_granted('ROLE_USER')"),
     ],
     mercure: true)]
 #[ODM\Document(collection: 'reviews')]
@@ -36,7 +36,6 @@ class Review
     #[ODM\Id()]
     private ?string $id;
     #[ODM\Field(type: Types::STRING)]
-    #[Assert\NotBlank()]
     #[Groups(['reservation', 'review'])]
     private string $comment;
 
@@ -58,7 +57,7 @@ class Review
 
     #[ODM\Field(type: Types::STRING, nullable: false, enumType: ReviewStatus::class)]
     #[Groups(['reservation', 'review'])]
-    private ReviewStatus $status;
+    private ReviewStatus $status = ReviewStatus::SUBMITTED;
 
     #[ODM\Field(type: Types::DATE_IMMUTABLE, nullable: false)]
     #[Groups(['reservation', 'review'])]
@@ -93,7 +92,7 @@ class Review
         return $this;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }

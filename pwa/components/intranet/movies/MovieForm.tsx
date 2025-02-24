@@ -1,5 +1,4 @@
 import {UseMutationResult, useQuery} from "react-query";
-import {fetchAgeRestrictions} from "../../../request/ageRestriction";
 import {fetchMovieGenres} from "../../../request/movieGenre";
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../../common/form/InputField";
@@ -11,6 +10,7 @@ import RadioButtons, {OptionBooleans} from "../../common/form/RadioButtons";
 import ButtonSubmit from "../../common/button/ButtonSubmit";
 import React, {SetStateAction} from "react";
 import dayjs from "dayjs";
+import {fetchEnums, URL_ENUM} from "../../../request/api";
 
 
 const MovieForm = ({movieData, mutation, setMessageKo}:
@@ -20,7 +20,7 @@ const MovieForm = ({movieData, mutation, setMessageKo}:
                        setMessageKo: SetStateAction<any>
                    }) => {
     const {data: ageRestrictions, error: errorAge, isLoading: isLoadinAge} = useQuery(
-        ['age_registrations'], () => fetchAgeRestrictions(),
+        ['age_registrations'], () => fetchEnums(URL_ENUM.age_restriction),
     )
     const {data: movieGenres, error: errorGenre, isLoading: isLoadinGenre} = useQuery(
         ['movie_genres'], () => fetchMovieGenres(),

@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
-export const fetchUserReservations = async (page: number, itemsPerPage: number): Promise<ApiResponse<Reservation>> => {
-    const response = await fetch(`/user/reservations?page=${page}&itemsPerPage=${itemsPerPage}`, {
+export const fetchUserReservations = async (past: boolean, page: number, itemsPerPage: number): Promise<ApiResponse<Reservation>> => {
+    const response = await fetch(`/user/reservations?page=${page}&itemsPerPage=${itemsPerPage}&past=${past}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
