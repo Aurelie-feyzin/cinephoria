@@ -4,7 +4,7 @@ interface ReviewInReservation {
     id: string;
     comment: string,
     rating: number,
-    approved: string,
+    status: Enum,
     updatedAt: Date,
 }
 
@@ -14,7 +14,7 @@ interface Review {
     id: string;
     comment: string,
     rating: number,
-    approved: string,
+    status: Enum,
     updatedAt: Date,
     reservation: ReservationInReview,
 }
@@ -24,6 +24,4 @@ interface ReviewInput {
     '@type': string,
     id: string;
     comment: string,
-    rating: number,
-    reservation: string
 }

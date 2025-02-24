@@ -8,6 +8,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Document\Reservation;
 use App\Entity\User;
 use App\Repository\ReservationRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,6 +26,8 @@ class UserReservationsProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      *
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     *
      * @return Reservation[]
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
@@ -38,16 +41,40 @@ class UserReservationsProvider implements ProviderInterface
 
         $allReservation = $this->reservationRepository->findBy(['userId' => $user->getId()]);
 
-        if (!array_key_exists('movieShowDate', $context['filters'])) {
+        if (!array_key_exists('movieShowDate', $context['filters'])
+        && !array_key_exists('past', $context['filters'])
+        ) {
             return $allReservation;
         }
 
-        $filterDateString = $context['filters']['movieShowDate']['after'];
+        $past = false;
+
+        if (array_key_exists('past', $context['filters'])) {
+            $filterDateString = (new DateTimeImmutable())->format('Y-m-d');
+            $past = !('false' === $context['filters']['past']);
+        } else {
+            $filterDateString = $context['filters']['movieShowDate']['after'];
+        }
+
+        return $this->findReservations($allReservation, $past, $filterDateString);
+    }
+
+    /**
+     * @param Reservation[] $allReservation
+     *
+     * @return Reservation[]
+     */
+    private function findReservations(array $allReservation, bool $past, string $filterDateString): array
+    {
         $reservations = [];
 
         /** @var Reservation $reservation */
         foreach ($allReservation as $reservation) {
-            if ($reservation->getMovieShowDate()->format('Y-m-d') >= $filterDateString) {
+            if (false === $past && $reservation->getMovieShowDate()->format('Y-m-d') >= $filterDateString) {
+                $reservations[] = $reservation;
+                continue;
+            }
+            if (true === $past && $reservation->getMovieShowDate()->format('Y-m-d') < $filterDateString) {
                 $reservations[] = $reservation;
             }
         }
