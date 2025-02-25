@@ -45,7 +45,7 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
                 <span key={index} onClick={() => onClick(index+1)}>{star}</span>
             )}
             {Array(emptyStar).fill(<StarIcon color='white' />).map((star, index) => (
-                <span key={index} onClick={() => onClick(fillStar + index +1)} >{star}</span> // étoile vide
+                <span key={index} onClick={() => onClick(fillStar + index +1)} >{star}</span>
             ))}
             {!!messageKo && <AlertError visible={!!messageKo} message={messageKo} />}
         </div>);

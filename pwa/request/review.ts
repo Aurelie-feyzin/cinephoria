@@ -1,13 +1,28 @@
 import Cookies from "js-cookie";
 
 
-export const fetchReviews= async (page: number, itemsPerPage: number, status: string): Promise<ApiResponse<Review>> => {
+export const fetchReviews = async (page: number, itemsPerPage: number, status: string): Promise<ApiResponse<Review>> => {
     const url = `/reviews?page=${page}&itemsPerPage=${itemsPerPage}&status=${status}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
             'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des avis');
+    }
+
+    return await response.json();
+}
+
+export const fetchReviewsByMovieId = async (page: number, itemsPerPage: number, movieUri: string): Promise<ApiResponse<Review>> => {
+    const url = `${movieUri}/reviews?page=${page}&itemsPerPage=${itemsPerPage}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/ld+json',
         }
     });
     if (!response.ok) {

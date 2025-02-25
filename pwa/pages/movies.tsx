@@ -105,8 +105,8 @@ const Movies = () => {
             <div className="grid grid-cols-1">
                 {filteredMovies.length > 0 ? (
                     filteredMovies.map((movie) => (
-                        <div key={movie['@id']} onClick={() => setSelectedMovie(movie)}>
-                            <FullMovieCard key={movie.id} movie={movie}/>
+                        <div key={movie['@id']} >
+                            <FullMovieCard key={movie.id} movie={movie} setSelectedMovie={setSelectedMovie}/>
                         </div>
                     ))
                 ) : (
