@@ -38,7 +38,7 @@ class ReviewFixtures implements ODMFixtureInterface, DependentFixtureInterface
         $reservationRepo = $this->documentManager->getRepository(Reservation::class);
         $passedReservations = $reservationRepo->matching($criteria);
         foreach ($passedReservations as $reservation) {
-            if ($faker->boolean(30)) {
+            if ($faker->boolean(75)) {
                 $review = (new Review())
                     ->setStatus($faker->boolean(10) ? ReviewStatus::REJECTED :
                         ($faker->boolean() ? ReviewStatus::SUBMITTED : $faker->randomElement(ReviewStatus::class)))

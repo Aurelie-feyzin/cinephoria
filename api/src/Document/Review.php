@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Enum\ReviewStatus;
+use App\State\ReviewsByMovieProvider;
 use App\State\UserReservationsProvider;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(uriTemplate: '/reviews/{id}', security: "is_granted('ROLE_USER')"),
         new GetCollection(uriTemplate: '/user/reviews', security: "is_granted('ROLE_USER')", provider: UserReservationsProvider::class),
-        new GetCollection(uriTemplate: '/movie/{id}/reviews', provider: UserReservationsProvider::class),
+        new GetCollection(uriTemplate: '/movies/{id}/reviews', provider: ReviewsByMovieProvider::class),
         new GetCollection(uriTemplate: '/reviews', normalizationContext: ['groups' => ['review']]),
         new Post(security: "is_granted('ROLE_USER')"),
         new Patch(security: "is_granted('ROLE_USER')"),
