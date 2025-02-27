@@ -27,10 +27,6 @@ const MovieTheaterList = () => {
     const movieTheaters = movieTheaterData?.['hydra:member'] || [];
     const nextPageUrl = movieTheaterData?.['hydra:view']?.['hydra:next'];
 
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
-
     const columns: Column<MovieTheater>[] = [
         {key: 'cinema', label: 'Cinéma', render: ((row: MovieTheater) => <span>{row.cinema.name}</span>)},
         {key: 'theaterName', label: 'Nom de la salle'},

@@ -8,24 +8,12 @@ import {useRouter} from "next/router";
 import dayjs from "dayjs";
 import Pagination from "../components/common/Pagination";
 import PageLoading from "../components/common/PageLoading";
+import CardReservation from "../components/user/CardReservation";
 
 const Orders = () => {
     const {user} = useUser();
     const router = useRouter();
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const itemsPerPage = 30;
-
-    const {
-        data: userReservationData,
-        error: userReservationError,
-        isLoading: userReservationLoading,
-    } = useQuery<ApiResponse<Reservation>, Error>(['movies_theaters', currentPage], () => fetchUserReservations(currentPage, itemsPerPage), {
-        keepPreviousData: true,
-    });
-
-    const reservations: Reservation[] = userReservationData?.['hydra:member'] || [];
-    const hasPagination: boolean = !!userReservationData?.['hydra:view']?.['hydra:last'];
-    const nextPageUrl: string|undefined = userReservationData?.['hydra:view']?.['hydra:next'];
+    const [activeTab, setActiveTab] = useState("futur");
 
     useEffect(() => {
         if (!user) {
@@ -34,30 +22,36 @@ const Orders = () => {
     }, [router, user]);
 
     return (
-        <PageContainer title='Vos réservations' titlePage="Commandes">
-            {userReservationLoading && <PageLoading />}
-            <AlertError visible={!!userReservationError}
-                        titleMessage="Erreur pendant la récupération de vos commandes"
-            />
-            <div className="container mx-auto bg-black text-white">
-                    {reservations.map((reservation) => (
-                    <div
-                        key={reservation.id}
-                        className="flex flex-col md:flex-row bg-black rounded-lg shadow-lg p-4 w-full mb-4"
-                    >
-                        <div className="flex-1 ml-4 text-white mt-2 flex flex-col md:flex-row items-start md:items-center w-full">
-                            <h2 className="text-xl font-bold text-secondary md:text-left md:flex-shrink-0 mr-4 mb-2 md:mb-0">
-                                {`${reservation.cinemaName} - ${reservation.movieName}`}
-                            </h2>
-                            <div className="flex flex-col md:flex-row items-start md:items-center  md:lowercase space-y-2 md:space-y-0 md:space-x-2">
-                                <p className="text-left w-auto">{`Le ${dayjs(reservation.movieShowDate).format('DD/MM/YYYY')} de ${reservation.movieShowStartTime} à ${reservation.movieShowEndTime}`}</p>
-                                <p className="text-left w-auto md:mt-0">{`Salle ${reservation.movieTheaterName} pour ${reservation.numberOfSeats} personne(s)`}.</p>
+        <PageContainer title='Vos réservations' titlePage="Vos réservations">
+            <div className="w-full bg-black text-white">
+                <div className="relative right-0">
+                    <ul className="relative flex flex-wrap list-none bg-primary_light border-b border-gray-700" role="list">
+                        {["futur", "past"].map((tab) => (
+                            <li key={tab} className="flex-auto text-center">
+                                <button
+                                    className={`flex items-center justify-center w-full px-4 py-3 text-sm font-medium transition-all 
+                            border-b-2 border-transparent 
+                            ${activeTab === tab ? "border-white text-white" : "text-gray-300 hover:text-white hover:border-gray-400"}`}
+                                    onClick={() => setActiveTab(tab)}
+                                >
+                                    {tab === "futur" ? "A venir" : "Passée"}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="p-5">
+                        {activeTab === "futur" && (
+                            <div id="futur" role="tabpanel">
+                                <CardReservation past={false}/>
                             </div>
-                        </div>
+                        )}
+                        {activeTab === "past" && (
+                            <div id="past" role="tabpanel">
+                                <CardReservation past/>
+                            </div>
+                        )}
                     </div>
-                ))}
-                {hasPagination && <Pagination nextPageUrl={nextPageUrl} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
-
+                </div>
             </div>
         </PageContainer>
     );

@@ -13,7 +13,7 @@ import {customMaxLength, REQUIRED} from "../components/common/form/validator_too
 const Contact = () => {
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
     const [messageoK, setMessageOk] = useState<boolean>(false);
-    const {user} = useUser(); // Utiliser le hook pour accéder au contexte
+    const {user} = useUser();
     const {
         register,
         handleSubmit,
