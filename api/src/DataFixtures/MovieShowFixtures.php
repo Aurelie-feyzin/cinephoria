@@ -33,7 +33,7 @@ class MovieShowFixtures extends Fixture implements DependentFixtureInterface
         /** @var Movie[] $allMovies */
         $allMovies = $manager->getRepository(Movie::class)->findAll();
         $firstWednseday = $this->getFirstDate();
-        $numberOfProgrammingDays = 21;
+        $numberOfProgrammingDays = 35;
         /** @var MovieTheater $theater */
         foreach ($allTheather as $theater) {
             for ($i = 0; $i < $numberOfProgrammingDays; ++$i) {
