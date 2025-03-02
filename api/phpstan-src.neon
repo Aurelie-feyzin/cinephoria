@@ -1,0 +1,16 @@
+parameters:
+    level: 6
+    excludePaths:
+    	- src/Serializer/
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+    ignoreErrors:
+        - '#expects string, null given#'
+        - '#expects int, null given#'
+        - '#expects int, string given#'
+    paths:
+        - tests
