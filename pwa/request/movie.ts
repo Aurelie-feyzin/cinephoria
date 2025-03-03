@@ -1,3 +1,4 @@
+import {fetchWithAuth} from "./auth";
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
 import {ApiResponse} from "../model/ApiResponseType";
@@ -94,15 +95,16 @@ export const fetchMoviesDescription = async (page: number, itemsPerPage: number)
 }
 
 
-export const updateMovieById = async (id: string, movieData: any) => {
-    const response = await fetch(`${API_PATH}movies/${id}`, {
+export const updateMovieById = async (id: string, movieData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(
+        `${API_PATH}movies/${id}`,
+        {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieData),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la modification du film')
     }
@@ -110,15 +112,14 @@ export const updateMovieById = async (id: string, movieData: any) => {
 }
 
 
-export const createMovie = async (movieData: any) => {
-    const response = await fetch(`${API_PATH}movies`, {
+export const createMovie = async (movieData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(`${API_PATH}movies`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieData),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la création du film')
     }

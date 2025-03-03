@@ -15,13 +15,13 @@ type ProfileContext = {
 
 const UserContext = createContext<ProfileContext>({} as ProfileContext);
 
-export const useUser = () => useContext(UserContext); // Hook personnalisé pour accéder au contexte
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [user, setUser] = useState<Profile | null>(null);
     const [error, setError] = useState<string|null>(null);
     const router = useRouter();
-
+    const isProduction = typeof window !== 'undefined' && window.location.protocol === 'https:';
 
     useEffect(() => {
         const token = Cookies.get('jwt_token');
@@ -42,14 +42,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
 
     const login = (tokenResponse: TokenResponse) => {
         const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
-        Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
+        Cookies.set('jwt_token', tokenResponse.token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
         Cookies.set('refresh_token', tokenResponse.refresh_token, {expires: 24, path: '', secure: isProduction, sameSite: 'Strict'});
         getProfile()
             .then((data) => {
                 setUser(data);
                 setError(null);
                 const from = router.query.from;
-                console.log('Query param from:', from);
 
                 if (from === 'forgot-password') {
                     router.push('/');
@@ -67,7 +66,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             .then((response) => response.json())
             .then((data) => {
                 if (data.token) {
-                    Cookies.set('jwt_token', data.token, {expires: 1 / 24, path: '', secure: true, sameSite: 'Strict'});
+                    Cookies.set('jwt_token', data.token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
+                    Cookies.set('refresh_token', data.refresh_token, {expires: 7, path: '', secure: isProduction, sameSite: 'Strict'});
                     setError(null);
                     return data.token as string;
                 }
@@ -82,8 +82,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
 
     const logout = () => {
         Cookies.remove('jwt_token');
+        Cookies.remove('refresh_token');
         localStorage.clear();
         setUser(null);
+        setError(null);
         router.push('/');
     };
 

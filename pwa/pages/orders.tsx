@@ -3,17 +3,11 @@
 import React, {useEffect, useState} from "react";
 import PageContainer from "../components/common/layout/PageContainer";
 import {useUser} from "../context/UserContext";
-import {useQuery} from "react-query";
-import {fetchUserReservations} from "../request/reservation";
-import AlertError from "../components/common/alert/AlertError";
 import {useRouter} from "next/router";
-import dayjs from "dayjs";
-import Pagination from "../components/common/Pagination";
-import PageLoading from "../components/common/PageLoading";
 import CardReservation from "../components/user/CardReservation";
 
 const Orders = () => {
-    const {user} = useUser();
+    const {user, refreshAccessToken} = useUser();
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("futur");
 
@@ -44,12 +38,12 @@ const Orders = () => {
                     <div className="p-5">
                         {activeTab === "futur" && (
                             <div id="futur" role="tabpanel">
-                                <CardReservation past={false}/>
+                                <CardReservation past={false} refreshAccessToken={refreshAccessToken} />
                             </div>
                         )}
                         {activeTab === "past" && (
                             <div id="past" role="tabpanel">
-                                <CardReservation past/>
+                                <CardReservation past refreshAccessToken={refreshAccessToken}/>
                             </div>
                         )}
                     </div>

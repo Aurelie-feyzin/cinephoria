@@ -7,14 +7,16 @@ import PageIntranetContainer from "../../../components/intranet/PageIntranetCont
 import {useMutation} from "react-query";
 import {createMovieShow} from "../../../request/movieShow";
 import MovieShowForm from "../../../components/intranet/filmShow/MovieShowForm";
+import {useUser} from "../../../context/UserContext";
 
 
 const CreateMovieShow = () => {
     const router = useRouter();
+    const {refreshAccessToken} = useUser();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const mutation = useMutation({
-        mutationFn: (movieData: any) => createMovieShow(movieData),
+        mutationFn: (movieData: any) => createMovieShow(movieData, refreshAccessToken),
         onSuccess: (response) => {
             const id = response['id']
             router.push(`/intranet/film_shows/${id}`)

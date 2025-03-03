@@ -11,9 +11,11 @@ import PageLoading from "../../../../components/common/PageLoading";
 import MovieForm from "../../../../components/intranet/movies/MovieForm";
 import {fetchMovieShowById, updateMovieShowById} from "../../../../request/movieShow";
 import MovieShowForm from "../../../../components/intranet/filmShow/MovieShowForm";
+import {useUser} from "../../../../context/UserContext";
 
 const EditMoviePage = () => {
     const router = useRouter();
+    const {refreshAccessToken} = useUser();
     const {id} = router.query;
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
@@ -26,7 +28,7 @@ const EditMoviePage = () => {
     )
 
     const mutation = useMutation({
-        mutationFn: (movieShowData: any) => updateMovieShowById(id as string, movieShowData),
+        mutationFn: (movieShowData: any) => updateMovieShowById(id as string, movieShowData, refreshAccessToken),
         onSuccess: () => {
             router.push(`/intranet/film_shows/${id}`)
         },

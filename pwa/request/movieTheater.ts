@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
 import {ApiResponse} from "../model/ApiResponseType";
 import {MovieTheater} from "../model/movieTheater";
+import {fetchWithAuth} from "./auth";
 
 export const fetchMovieTheaterById = async (id: string): Promise<MovieTheater> => {
     const url = `${API_PATH}movie_theaters/${id}`;
@@ -49,30 +50,30 @@ export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Pr
     return await response.json();
 }
 
-export const updateMovieTheater = async (id: string, movieTheaterData: any) => {
-    const response = await fetch(`${API_PATH}movie_theaters/${id}`, {
+export const updateMovieTheater = async (id: string, movieTheaterData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(`${API_PATH}movie_theaters/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieTheaterData),
-    })
+    },
+        refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la modification de la salle')
     }
     return response.json()
 }
 
-export const createMovieTheater = async (movieTheaterData: any) => {
-    const response = await fetch(`${API_PATH}movie_theaters`, {
+export const createMovieTheater = async (movieTheaterData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(
+        `${API_PATH}movie_theaters`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieTheaterData),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la création de la salle')
     }

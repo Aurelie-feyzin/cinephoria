@@ -7,14 +7,16 @@ import PageIntranetContainer from "../../../components/intranet/PageIntranetCont
 import {useMutation} from "react-query";
 import MovieTheaterForm from "../../../components/intranet/movieTheater/MovieTheaterForm";
 import {createMovieTheater} from "../../../request/movieTheater";
+import {useUser} from "../../../context/UserContext";
 
 
 const CreateMovieTheater = () => {
     const router = useRouter();
+    const {refreshAccessToken} = useUser();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const mutation = useMutation({
-        mutationFn: (movieTheaterData: any) => createMovieTheater(movieTheaterData),
+        mutationFn: (movieTheaterData: any) => createMovieTheater(movieTheaterData, refreshAccessToken),
         onSuccess: (response) => {
             const id = response.id
             router.push(`/intranet/movie_theaters/${id}`)

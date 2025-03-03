@@ -8,8 +8,10 @@ import AlertError from "../../../../components/common/alert/AlertError";
 import PageLoading from "../../../../components/common/PageLoading";
 import MovieTheaterForm from "../../../../components/intranet/movieTheater/MovieTheaterForm";
 import {fetchMovieTheaterById, updateMovieTheater} from "../../../../request/movieTheater";
+import {useUser} from "../../../../context/UserContext";
 
 const EditMoviePage = () => {
+    const {refreshAccessToken} = useUser();
     const router = useRouter();
     const {id} = router.query;
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
@@ -23,7 +25,7 @@ const EditMoviePage = () => {
     )
 
     const mutation = useMutation({
-        mutationFn: (movieShowData: any) => updateMovieTheater(id as string, movieShowData),
+        mutationFn: (movieShowData: any) => updateMovieTheater(id as string, movieShowData, refreshAccessToken),
         onSuccess: () => {
             router.push(`/intranet/movie_theaters/${id}`)
         },

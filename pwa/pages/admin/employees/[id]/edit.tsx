@@ -12,22 +12,24 @@ import {fetchEmployee, updateEmployeeById} from "../../../../request/user";
 import PageAdminContainer from "../../../../components/admin/PageAdminContainer";
 import {fetchForgotPassword} from "../../../../request/forgot-password";
 import {EmployeeInput} from "../../../../model/User";
+import {useUser} from "../../../../context/UserContext";
 
 const EditMoviePage = () => {
     const router = useRouter();
     const {id} = router.query;
+    const {refreshAccessToken} = useUser();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const {data: employeeData, isLoading} = useQuery(
         ['movie_show', id],
-        () => fetchEmployee(id as string),
+        () => fetchEmployee(id as string, refreshAccessToken),
         {
             enabled: !!id,
         }
     )
 
     const mutation = useMutation({
-        mutationFn: (employeeData: any) => updateEmployeeById(id as string, employeeData),
+        mutationFn: (employeeData: any) => updateEmployeeById(id as string, employeeData, refreshAccessToken),
         onSuccess: () => {
             router.push('/admin/employees')
         },

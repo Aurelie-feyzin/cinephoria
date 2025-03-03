@@ -1,15 +1,17 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
 import {Cinema} from "../model/Cinema";
+import {fetchWithAuth} from "./auth";
 
-export const fetchDashboard = async (): Promise<Cinema[]> => {
-    const response = await fetch(`${API_PATH}dashboard/dashboard`, {
+export const fetchDashboard = async (refreshAccessToken: () => Promise<string | null>): Promise<Cinema[]> => {
+    const response = await fetchWithAuth(
+    `${API_PATH}dashboard/dashboard`,
+        {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         }
-    });
+    }, refreshAccessToken);
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération des données du dashboard');
     }

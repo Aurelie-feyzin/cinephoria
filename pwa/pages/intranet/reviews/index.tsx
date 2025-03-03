@@ -13,7 +13,11 @@ import {fetchEnums, URL_ENUM} from "../../../request/api";
 import AlertError from "../../../components/common/alert/AlertError";
 import {ApiResponse} from "../../../model/ApiResponseType";
 import {Review} from "../../../model/Review";
+import {useUser} from "../../../context/UserContext";
+
+
 const ReviewList = () => {
+    const {refreshAccessToken} = useUser();
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [published, setPublished] = useState<string>();
     const [rejected, setRejected] = useState<string>();
@@ -27,7 +31,7 @@ const ReviewList = () => {
         error,
         isLoading,
         refetch
-    } = useQuery<ApiResponse<Review>, Error>(['reviews', submitted, currentPage], () => fetchReviews(currentPage, itemsPerPage, submitted), {
+    } = useQuery<ApiResponse<Review>, Error>(['reviews', submitted, currentPage], () => fetchReviews(currentPage, itemsPerPage, submitted, refreshAccessToken), {
         keepPreviousData: true,
     });
 
@@ -44,7 +48,7 @@ const ReviewList = () => {
     )
 
     const mutation = useMutation({
-        mutationFn: (reviewData: any) => updateReviewById(reviewData.id as string, reviewData),
+        mutationFn: (reviewData: any) => updateReviewById(reviewData.id as string, reviewData, refreshAccessToken),
         onSuccess: () => {
             refetch()
         },

@@ -15,7 +15,7 @@ import {ApiResponse} from "../../model/ApiResponseType";
 import {Reservation} from "../../model/ReservationInterface";
 
 
-const CardReservation = ({past}: { past: boolean }) => {
+const CardReservation = ({past,refreshAccessToken}: { past: boolean, refreshAccessToken: () => Promise<string|null> }) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 30;
 
@@ -24,7 +24,7 @@ const CardReservation = ({past}: { past: boolean }) => {
         error: userReservationError,
         isLoading: userReservationLoading,
         refetch,
-    } = useQuery<ApiResponse<Reservation>, Error>(['movies_theaters', currentPage], () => fetchUserReservations(past, currentPage, itemsPerPage), {
+    } = useQuery<ApiResponse<Reservation>, Error>(['movies_theaters', currentPage], () => fetchUserReservations(past, currentPage, itemsPerPage, refreshAccessToken), {
         keepPreviousData: true,
     });
 

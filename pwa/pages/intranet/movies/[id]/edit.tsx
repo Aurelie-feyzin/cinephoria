@@ -9,9 +9,11 @@ import {SubmitHandler} from "react-hook-form";
 import AlertError from "../../../../components/common/alert/AlertError";
 import PageLoading from "../../../../components/common/PageLoading";
 import MovieForm from "../../../../components/intranet/movies/MovieForm";
+import {useUser} from "../../../../context/UserContext";
 
 const EditMoviePage = () => {
     const router = useRouter();
+    const {refreshAccessToken} = useUser();
     const {id} = router.query;
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
@@ -24,7 +26,7 @@ const EditMoviePage = () => {
     )
 
     const mutation = useMutation({
-        mutationFn: (movieData: any) => updateMovieById(id as string, movieData),
+        mutationFn: (movieData: any) => updateMovieById(id as string, movieData, refreshAccessToken),
         onSuccess: () => {
             router.push(`/intranet/movies/${id}`)
         },

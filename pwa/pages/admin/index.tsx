@@ -10,14 +10,16 @@ import PageError from "../../components/common/PageError";
 import dynamic from 'next/dynamic';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import {useUser} from "../../context/UserContext";
 
 const Admin: NextPage = () => {
+    const {refreshAccessToken} = useUser();
     const [barChartByMovie, setBarChartByMovie] = useState<any>(null)
     const [donutChartByCinema, setDonutChartByCinema] = useState<any>(null)
     const [lineChartByDay, setLineChartByDay] = useState<any>(null)
     const {error, isLoading} = useQuery<any, Error>(
         ['dashboard'],
-        () => fetchDashboard(),
+        () => fetchDashboard(refreshAccessToken),
         {
             onSuccess: (data) => {
                 setBarChartByMovie({
