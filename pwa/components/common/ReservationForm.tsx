@@ -24,7 +24,7 @@ type ReservationInput = {
 }
 
 const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
-    const {user} = useUser();
+    const {user, refreshAccessToken} = useUser();
     const {register, handleSubmit, formState: {errors}, watch} = useForm<ReservationInput, Error>(
         {
             defaultValues: {
@@ -51,7 +51,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
         });
 
     const mutation = useMutation({
-        mutationFn: (reservationData: any) => createReservation(reservationData),
+        mutationFn: (reservationData: any) => createReservation(reservationData, refreshAccessToken),
         onSuccess: () => {
             router.push(`/orders`)
         },

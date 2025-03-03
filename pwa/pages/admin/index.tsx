@@ -6,14 +6,16 @@ import {fetchDashboard} from "../../request/dashboard";
 import ReactApexChart from "react-apexcharts";
 import PageLoading from "../../components/common/PageLoading";
 import PageError from "../../components/common/PageError";
+import {useUser} from "../../context/UserContext";
 
 const Admin: NextPage = () => {
+    const {refreshAccessToken} = useUser();
     const [barChartByMovie, setBarChartByMovie] = useState<any>(null)
     const [donutChartByCinema, setDonutChartByCinema] = useState<any>(null)
     const [lineChartByDay, setLineChartByDay] = useState<any>(null)
     const {error, isLoading} = useQuery<any, Error>(
         ['dashboard'],
-        () => fetchDashboard(),
+        () => fetchDashboard(refreshAccessToken),
         {
             onSuccess: (data) => {
                 setBarChartByMovie({

@@ -3,6 +3,7 @@ import StarIcon from "../common/Icon/StarIcon";
 import {useMutation} from "react-query";
 import {createReview, updateReviewById} from "../../request/review";
 import AlertError from "../common/alert/AlertError";
+import {useUser} from "../../context/UserContext";
 
 
 const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, refetch: any }) => {
@@ -10,13 +11,15 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
     const [fillStar, setFillStar] = useState(5);
     const [review, setReview] = useState(reservation?.review);
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
+    const {refreshAccessToken} = useUser();
 
     const mutation = useMutation({
-        mutationFn: (reviewData: any) => review ? updateReviewById(review['@id'] as string, reviewData)
+        mutationFn: (reviewData: any) => review ? updateReviewById(review['@id'] as string, reviewData, refreshAccessToken)
             : createReview({
-                ...reviewData,
-                reservation: reservation?.['@id'],
-            }),
+                    ...reviewData,
+                    reservation: reservation?.['@id'],
+                }, refreshAccessToken
+            ),
         onSuccess: () => {
             refetch()
         },
@@ -32,7 +35,7 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
         setReview(review);
     }, [reservation]);
 
-    const onClick = (rating: number) =>  {
+    const onClick = (rating: number) => {
         setFillStar(rating);
         setEmptyStar(5 - rating);
         mutation.mutate({rating})
@@ -41,13 +44,13 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
     return (
         <div className="flex font-bold">
             <span>Votre note: </span>
-            {Array(fillStar).fill(<StarIcon color='secondary' />).map((star, index) =>
-                <span key={index} onClick={() => onClick(index+1)}>{star}</span>
+            {Array(fillStar).fill(<StarIcon color='secondary'/>).map((star, index) =>
+                <span key={index} onClick={() => onClick(index + 1)}>{star}</span>
             )}
-            {Array(emptyStar).fill(<StarIcon color='white' />).map((star, index) => (
-                <span key={index} onClick={() => onClick(fillStar + index +1)} >{star}</span>
+            {Array(emptyStar).fill(<StarIcon color='white'/>).map((star, index) => (
+                <span key={index} onClick={() => onClick(fillStar + index + 1)}>{star}</span>
             ))}
-            {!!messageKo && <AlertError visible={!!messageKo} message={messageKo} />}
+            {!!messageKo && <AlertError visible={!!messageKo} message={messageKo}/>}
         </div>);
 }
 

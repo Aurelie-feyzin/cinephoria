@@ -1,31 +1,30 @@
 import {API_PATH} from "./utils";
 import Cookies from "js-cookie";
+import {fetchWithAuth} from "./auth";
 
 
-export const fetchEmployee = async (id: string): Promise<Employee> => {
+export const fetchEmployee = async (id: string, refreshAccessToken: () => Promise<string | null>): Promise<Employee> => {
     const url = `${API_PATH}employees/${id}`;
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         }
-    });
+    }, refreshAccessToken);
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération de l\'employé');
     }
 
     return await response.json();
 }
-export const fetchEmployees = async (page: number, itemsPerPage: number): Promise<Employee> => {
+export const fetchEmployees = async (page: number, itemsPerPage: number, refreshAccessToken: () => Promise<string | null>): Promise<Employee> => {
     const url = `${API_PATH}employees?page=${page}&itemsPerPage=${itemsPerPage}`;
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         }
-    });
+    }, refreshAccessToken);
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération des employées');
     }
@@ -33,15 +32,14 @@ export const fetchEmployees = async (page: number, itemsPerPage: number): Promis
     return await response.json();
 }
 
-export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
-    const response = await fetch(`${API_PATH}employees/${id}`, {
+export const updateEmployeeById = async (id: string, EmployeeInput: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(`${API_PATH}employees/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(EmployeeInput),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la modification du compte')
     }

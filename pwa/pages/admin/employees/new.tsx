@@ -7,6 +7,7 @@ import EmployeeForm from "../../../components/admin/UserForm";
 import {fetchForgotPassword} from "../../../request/forgot-password";
 import {createEmployee} from "../../../request/user";
 import {SubmitHandler} from "react-hook-form";
+import {useUser} from "../../../context/UserContext";
 
 function genPassword() {
     let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,11 +21,12 @@ function genPassword() {
 }
 
 const CreateMovie = () => {
+    const {refreshAccessToken} = useUser();
     const router = useRouter();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const mutation = useMutation({
-        mutationFn: (employeeData: any) => createEmployee(employeeData),
+        mutationFn: (employeeData: any) => createEmployee(employeeData, refreshAccessToken),
         onSuccess: (response) => {
             if (response) {
                 if (response.email) {

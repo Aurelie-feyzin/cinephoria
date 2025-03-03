@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {fetchWithAuth} from "./auth";
 
 export const fetchMovieShowById = async (id: string): Promise<FullMovieShow> => {
     const url = `${API_PATH}movie_shows/${id}`;
@@ -61,15 +62,16 @@ export const fetchMovieShows = async (page: number, itemsPerPage: number): Promi
     return await response.json();
 }
 
-export const updateMovieShowById = async (id: string, movieShowData: any) => {
-    const response = await fetch(`${API_PATH}movie_shows/${id}`, {
+export const updateMovieShowById = async (id: string, movieShowData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(
+        `${API_PATH}movie_shows/${id}`,
+        {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieShowData),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la modification de la séance')
     }
@@ -77,15 +79,14 @@ export const updateMovieShowById = async (id: string, movieShowData: any) => {
 }
 
 
-export const createMovieShow = async (movieShowData: any) => {
-    const response = await fetch(`${API_PATH}movie_shows`, {
+export const createMovieShow = async (movieShowData: any, refreshAccessToken: () => Promise<string | null>) => {
+    const response = await fetchWithAuth(`${API_PATH}movie_shows`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
         },
         body: JSON.stringify(movieShowData),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la création de la séance')
     }
