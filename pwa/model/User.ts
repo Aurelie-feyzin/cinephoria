@@ -1,4 +1,7 @@
-
+interface TokenResponse {
+    token: string,
+    refresh_token: string
+}
 interface User {
     '@id': string;
     '@type': string,
