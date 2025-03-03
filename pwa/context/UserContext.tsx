@@ -3,10 +3,12 @@ import Cookies from 'js-cookie';
 import {useRouter} from "next/router";
 import {Profile} from "../model/User";
 import {getProfile} from "../request/user";
+import {fetchRefreshToken} from "../request/auth";
 
 type ProfileContext = {
     user?: Profile | null;
-    login: (token:string) => void
+    login: (tokenResponse:TokenResponse) => void
+    refreshAccessToken: () => Promise<string | null>
     logout: () => void;
     error?: string | null;
 }
@@ -38,10 +40,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     }, []);
 
-    const login = (token: string) => {
+    const login = (tokenResponse: TokenResponse) => {
         const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
         Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
-            getProfile()
+        Cookies.set('refresh_token', tokenResponse.refresh_token, {expires: 24, path: '', secure: isProduction, sameSite: 'Strict'});
+        getProfile()
             .then((data) => {
                 setUser(data);
                 setError(null);
@@ -59,6 +62,24 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             });
     };
 
+    const refreshAccessToken = async () => {
+        return await fetchRefreshToken()
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.token) {
+                    Cookies.set('jwt_token', data.token, {expires: 1 / 24, path: '', secure: true, sameSite: 'Strict'});
+                    setError(null);
+                    return data.token as string;
+                }
+
+                return null;
+            })
+            .catch(() => {
+                logout();
+                return null;
+            });
+    };
+
     const logout = () => {
         Cookies.remove('jwt_token');
         localStorage.clear();
@@ -67,7 +88,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     };
 
     return (
-        <UserContext.Provider value={{user, error, login, logout}}>
+        <UserContext.Provider value={{user, error, login, logout, refreshAccessToken}}>
             {children}
         </UserContext.Provider>
     );

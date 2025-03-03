@@ -39,7 +39,7 @@ const LoginForm = ({setFormVisible }: { setFormVisible: any }) => {
                 return;
             }
             const tokenResponse = await response.json();
-            login(tokenResponse.token);
+            login(tokenResponse);
         } catch (error) {
             setLoginKo(true);
         }

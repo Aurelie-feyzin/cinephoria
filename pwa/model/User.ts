@@ -1,5 +1,11 @@
 export type Role = "employee" | "admin" | undefined;
 export type RoleSymfony = "ROLE_USER" | "ROLE_EMPLOYEE" | "ROLE_ADMIN" ;
+
+export interface TokenResponse {
+    token: string,
+    refresh_token: string
+}
+
 export interface User {
     '@id': string;
     '@type': string,
