@@ -142,17 +142,22 @@ class MovieShow
         return $this;
     }
 
-    /**
-     * @throws \DateMalformedStringException
-     */
     #[Assert\IsTrue(message: 'L\'heure de fin n\'est pas valide')]
     public function isValidEndTime(): bool
     {
-        $startTime = $this->date->modify('+ 0 day '.$this->startTime);
-        $duration = $this->movie->getDuration();
-        $minimalEndTime = $startTime->modify('+'.$duration.' minutes');
+        if (!$this->date || !$this->startTime || !$this->endTime || !$this->movie || null === $this->movie->getDuration()) {
+            return false;
+        }
 
-        return $this->date->modify('+ 0 day '.$this->endTime) >= $minimalEndTime;
+        try {
+            $startTime = new DateTimeImmutable($this->date->format('Y-m-d').' '.$this->startTime);
+            $minimalEndTime = $startTime->modify('+'.$this->movie->getDuration().' minutes');
+            $endTime = new DateTimeImmutable($this->date->format('Y-m-d').' '.$this->endTime);
+        } catch (\Exception) {
+            return false;
+        }
+
+        return $endTime >= $minimalEndTime;
     }
 
     public function getPriceInCents(): ?int

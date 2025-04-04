@@ -51,8 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdTrait;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, nullable: false)]
     #[Assert\NoSuspiciousCharacters]
+    #[Assert\Email]
+    #[Assert\NotNull]
     #[Groups(['employee:read', 'employee:write'])]
     private ?string $email = null;
 
@@ -94,12 +96,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NoSuspiciousCharacters]
     private ?string $plainPassword = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Groups(['employee:read'])]
+    #[Assert\NotBlank(groups: (['user:write']))]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['employee:read', 'employee:write'])]
+    #[Assert\NotBlank(groups: (['user:write']))]
     private ?string $firstName = null;
 
     #[Groups(['employee:read', 'employee:write'])]
