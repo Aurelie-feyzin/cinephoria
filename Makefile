@@ -61,6 +61,14 @@ phpmd:
 phpstan:
 	${VENDOR}/phpstan analyse --no-progress --no-interaction --configuration=phpstan.neon --memory-limit=-1
 
+phpunit:
+	@$(call GREEN, "Preparation bdd...")
+	$(SYMFONY_CONSOLE) doctrine:database:drop --force --if-exists --env test
+	$(SYMFONY_CONSOLE) doctrine:database:create --env test
+	$(SYMFONY_CONSOLE) doctrine:query:sql 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";' --env test
+	$(SYMFONY_CONSOLE) doctrine:schema:update --force --complete --env test
+	$(PHP) bin/phpunit
+
 security-checker:
 	$(COMPOSER) audit
 ## —— PWA —————————————————————————————————————————————————————

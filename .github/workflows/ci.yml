@@ -54,8 +54,16 @@ jobs:
         name: Run migrations
         run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
       -
+       name: Set JWT keys for tests in container
+       run: |
+        docker compose exec -T php mkdir -p config/jwt
+        echo "${{ secrets.JWT_PRIVATE_KEY }}" | docker compose exec -T php tee config/jwt/private-test.pem > /dev/null
+        echo "${{ secrets.JWT_PUBLIC_KEY }}" | docker compose exec -T php tee config/jwt/public-test.pem > /dev/null
+        docker compose exec -T php chmod 600 config/jwt/private-test.pem
+        docker compose exec -T php chmod 644 config/jwt/public-test.pem
+      -
         name: Run PHPUnit
-        run: docker compose exec -T php bin/phpunit
+        run: docker compose exec --workdir /app -T php bin/phpunit
       -
         name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console -e test doctrine:schema:validate

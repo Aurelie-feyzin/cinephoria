@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    excludePaths:
+    	- src/Serializer/
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/

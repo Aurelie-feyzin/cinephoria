@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(mercure: true)]
 #[ORM\Entity]
@@ -18,9 +19,11 @@ class MovieGenre
 
     #[ORM\Column(length: 255)]
     #[Groups(['movie:read', 'movie:description', 'movieShow:full'])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
     private ?int $tmbdId = null;
 
     /**

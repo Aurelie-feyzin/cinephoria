@@ -15,3 +15,8 @@ lexik_jwt_authentication:
         check_path: /api/login_check
         username_path: email
         password_path: security.credentials.password
+
+when@test:
+    lexik_jwt_authentication:
+        secret_key: '%kernel.project_dir%/config/jwt/private-test.pem'
+        public_key: '%kernel.project_dir%/config/jwt/public-test.pem'
