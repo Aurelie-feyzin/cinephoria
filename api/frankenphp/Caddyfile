@@ -8,7 +8,7 @@
 
 {$CADDY_EXTRA_CONFIG}
 
-{$SERVER_NAME:localhost} {
+http://192.168.1.48 {
 	log {
 		# Redact the authorization query parameter that can be set by Mercure
 		format filter {
@@ -38,13 +38,25 @@
 
 	vulcain
 
-	# Add links to the API docs and to the Mercure Hub if not set explicitly (e.g. the PWA)
-	header ?Link `</docs.jsonld>; rel="http://www.w3.org/ns/hydra/core#apiDocumentation", </.well-known/mercure>; rel="mercure"`
-	# Disable Topics tracking if not enabled explicitly: https://github.com/jkarlin/topics
-	header ?Permissions-Policy "browsing-topics=()"
+	# CORS (Cross-Origin Resource Sharing) Configuration
 
-	# Matches requests for HTML documents, for static files and for Next.js files,
-	# except for known API paths and paths with extensions handled by API Platform
+	@preflight {
+		method OPTIONS
+		header Origin *
+		header Access-Control-Request-Method *
+	}
+	respond @preflight 204
+
+	# CORS Headers pour toutes les réponses
+	header {
+		Access-Control-Allow-Origin "{http.request.header.Origin}"
+		Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+		Access-Control-Allow-Headers "Origin, Content-Type, Accept, Authorization"
+		Access-Control-Allow-Credentials true
+		Access-Control-Max-Age 3600
+	}
+
+	# Reverse Proxy pour l'application PWA
 	@pwa expression `(
 			header({'Accept': '*text/html*'})
 			&& !path(

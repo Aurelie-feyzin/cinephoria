@@ -54,8 +54,14 @@ const LoginForm = () => {
             router.replace('/');
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
+            console.log(error);
+            if (error?.code === 401 && error?.message === 'Invalid credentials.') {
+                setMessageKo('Identification impossible : émail et/ou mot de passe incorrect.');
+            } else {
+                setMessageKo('Une erreur c\'est produite pendant la récupération de votre profil.)');
+            }
             setLoginKo(true);
-            setMessageKo('Une erreur c\'est produite pendant la récupération de votre profil.');
+           // setMessageKo('Une erreur c\'est produite pendant la récupération de votre profil.');
         }
     };
 
