@@ -22,7 +22,7 @@ export interface Installation {
 }
 
 export const fetchInstallationStatus = async (): Promise<Enum[]> => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST_PATH}/installation_statuses`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_PATH}installation_statuses`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
@@ -38,7 +38,7 @@ export const fetchInstallationStatus = async (): Promise<Enum[]> => {
 }
 
 export const fetchInstallation = async (id: string) => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_PATH}/installations/${id}`;
+    const url = `${process.env.NEXT_PUBLIC_API_PATH}installations/${id}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -53,7 +53,7 @@ export const fetchInstallation = async (id: string) => {
 };
 
 export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number) => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_PATH}/out_of_service/installations?page=${page}&itemsPerPage=${itemsPerPage}`;
+    const url = `${process.env.NEXT_PUBLIC_API_PATH}out_of_service/installations?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -68,7 +68,7 @@ export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPe
 };
 
 export const fetchGetInstallationByMovieTheater = async (movieTheater: string) => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_PATH}/installations?movieTheater=${movieTheater}&itemsPerPage=999`;
+    const url = `${process.env.NEXT_PUBLIC_API_PATH}installations?movieTheater=${movieTheater}&itemsPerPage=999`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

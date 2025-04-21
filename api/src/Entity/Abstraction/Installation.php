@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['installation:full']], security: "is_granted('ROLE_EMPLOYEE')", provider: InstallationProvider::class),
-        new GetCollection(uriTemplate: 'out_of_service/installations', normalizationContext: ['groups' => ['installation:read']], provider: InstallationsProvider::class),
+        new GetCollection(uriTemplate: '/out_of_service/installations', normalizationContext: ['groups' => ['installation:read']], provider: InstallationsProvider::class),
         new GetCollection(normalizationContext: ['groups' => ['installation:read']], provider: InstallationsProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),

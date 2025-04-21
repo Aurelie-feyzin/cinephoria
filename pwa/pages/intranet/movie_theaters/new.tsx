@@ -14,8 +14,8 @@ const CreateMovieTheater = () => {
     const mutation = useMutation({
         mutationFn: (movieTheaterData: any) => createMovieTheater(movieTheaterData),
         onSuccess: (response) => {
-            const uri = response['@id']
-            router.push(`/intranet${uri}`)
+            const id = response.id
+            router.push(`/intranet/movie_theaters/${id}`)
         },
         onError: () => {
             setMessageKo('Erreur lors de la création');

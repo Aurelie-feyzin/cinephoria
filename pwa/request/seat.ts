@@ -1,7 +1,8 @@
+import {API_PATH} from "./utils";
 
 
 export const fetchSeatsByMovieTheater = async (movieTheaterId: string): Promise<ApiResponse<MinimalSeat>> => {
-    const url = `/seats?movieTheater=${movieTheaterId}`;
+    const url = `${API_PATH}seats?movieTheater=${movieTheaterId}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

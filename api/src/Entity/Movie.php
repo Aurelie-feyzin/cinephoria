@@ -26,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['movie:description']]),
-        new GetCollection(order: ['releaseDate' => 'desc', 'title' => 'asc'], normalizationContext: ['groups' => ['movie:description']]),
-        new GetCollection(uriTemplate: 'new_list/movies', normalizationContext: ['groups' => ['movie:description']], provider: NewMovieListProvider::class),
+        new GetCollection(order: ['releaseDate' => 'desc', 'title' => 'asc'], normalizationContext: ['groups' => ['movie:description', 'id']]),
+        new GetCollection(uriTemplate: '/new_list/movies', normalizationContext: ['groups' => ['movie:description']], provider: NewMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],

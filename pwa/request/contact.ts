@@ -1,7 +1,7 @@
-import {HOST_PATH} from "./utils";
+import {API_PATH} from "./utils";
 
 
-export const newContact= (data: ContactInput): Promise<Response> => fetch(`${HOST_PATH}contact`, {
+export const newContact= (data: ContactInput): Promise<Response> => fetch(`/contact`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/ld+json',

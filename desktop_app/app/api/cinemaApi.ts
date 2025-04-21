@@ -5,7 +5,7 @@ export interface MinimalCinema {
 }
 
 export const fetchCinemas = async (): Promise<MinimalCinema[]> => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST_PATH}/cinemas`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_PATH}cinemas`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',

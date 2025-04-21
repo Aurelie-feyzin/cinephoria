@@ -38,10 +38,10 @@ const MovieTheaterList = () => {
             label: 'Actions',
             render: (row) => (
                 <div className="flex">
-                    <Link href={`/intranet${row['@id']}`} className="hover:bg-secondary">
+                    <Link href={`/intranet/movie_theaters/${row.id}`} className="hover:bg-secondary">
                         <ViewIcon/>
                     </Link>
-                    <Link href={`/intranet${row['@id']}/edit`} className="hover:bg-secondary">
+                    <Link href={`/intranet/movie_theaters/${row.id}/edit`} className="hover:bg-secondary">
                         <EditIcon/>
                     </Link>
                 </div>

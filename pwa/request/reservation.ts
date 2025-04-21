@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
+import {API_PATH} from "./utils";
 
 export const fetchUserReservations = async (past: boolean, page: number, itemsPerPage: number): Promise<ApiResponse<Reservation>> => {
-    const response = await fetch(`/user/reservations?page=${page}&itemsPerPage=${itemsPerPage}&past=${past}`, {
+    const response = await fetch(`${API_PATH}user/reservations?page=${page}&itemsPerPage=${itemsPerPage}&past=${past}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
@@ -16,7 +17,7 @@ export const fetchUserReservations = async (past: boolean, page: number, itemsPe
 }
 
 export const createReservation = async (reservationData: any) => {
-    const response = await fetch(`/reservation_dtos`, {
+    const response = await fetch(`${API_PATH}reservation_dtos`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',

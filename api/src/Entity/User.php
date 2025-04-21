@@ -43,7 +43,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['employee:write']],
             security: "is_granted('ROLE_ADMIN')"),
     ],
-    routePrefix: '/api',
     mercure: true
 ),
 ]

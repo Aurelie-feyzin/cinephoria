@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
+import {API_PATH} from "./utils";
 
 export const fetchMovieById = async (id: string): Promise<MovieDescription> => {
-    const url = `/movies/${id}`;
+    const url = `${API_PATH}movies/${id}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -30,7 +31,7 @@ export const fetchMovieByUri = async (uri: string): Promise<MovieDescription> =>
 }
 
 export const fetchMoviesBySearchInTitle = async (search: string): Promise<ApiResponse<MovieDescription>> => {
-    const url = `/movies?title=${search}`;
+    const url = `${API_PATH}movies?title=${search}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -45,7 +46,7 @@ export const fetchMoviesBySearchInTitle = async (search: string): Promise<ApiRes
 }
 
 export const fetchNewMovies = async (): Promise<ApiResponse<Movie>> => {
-    const url = `/new_list/movies`;
+    const url = `${API_PATH}new_list/movies`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -61,7 +62,7 @@ export const fetchNewMovies = async (): Promise<ApiResponse<Movie>> => {
 
 
 export const fetchMovieInCinema = async (today: string, lastDay: string, cinema?: string): Promise<ApiResponse<MovieDescription>> => {
-    const url = `/movies?movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}${cinema ? `&movieShows.movieTheater.cinema=${cinema}` : ''}`;
+    const url = `${API_PATH}movies?movieShows.date%5Bbefore%5D=${lastDay}&movieShows.date%5Bafter%5D=${today}${cinema ? `&movieShows.movieTheater.cinema=${cinema}` : ''}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -76,7 +77,7 @@ export const fetchMovieInCinema = async (today: string, lastDay: string, cinema?
 }
 
 export const fetchMoviesDescription = async (page: number, itemsPerPage: number): Promise<ApiResponse<MovieDescription>> => {
-    const url = `/movies?page=${page}&itemsPerPage=${itemsPerPage}`;
+    const url = `${API_PATH}movies?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -92,7 +93,7 @@ export const fetchMoviesDescription = async (page: number, itemsPerPage: number)
 
 
 export const updateMovieById = async (id: string, movieData: any) => {
-    const response = await fetch(`/movies/${id}`, {
+    const response = await fetch(`${API_PATH}movies/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
@@ -108,7 +109,7 @@ export const updateMovieById = async (id: string, movieData: any) => {
 
 
 export const createMovie = async (movieData: any) => {
-    const response = await fetch(`/movies`, {
+    const response = await fetch(`${API_PATH}movies`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',

@@ -2,6 +2,7 @@
 type MovieTheater = {
     '@id': string;
     '@type': string,
+    id: string;
     cinema: MinimalCinema;
     theaterName: string;
     numberOfSeats: number;

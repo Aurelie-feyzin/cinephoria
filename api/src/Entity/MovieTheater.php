@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => ['movieTheater:read']]),
-        new GetCollection(normalizationContext: ['groups' => ['movieTheater:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['movieTheater:read', 'id']]),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
         new Post(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
     ],

@@ -14,6 +14,7 @@ import AlertError from "./alert/AlertError";
 import PageLoading from "./PageLoading";
 import dayjs from "dayjs";
 import {useUser} from "../../context/UserContext";
+import {API_PATH} from "../../request/utils";
 
 type ReservationInput = {
     numberOfSeats: number,
@@ -63,7 +64,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
         try {
             const reservationData = {
                 ...data,
-                movieShow: `/movie_shows/${filmShow?.id}`
+                movieShow: `${API_PATH}movie_shows/${filmShow?.id}`
             }
             delete reservationData.isReducedMobility;
             delete reservationData.isSelectSeat;

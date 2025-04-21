@@ -1,7 +1,7 @@
-import {HOST_PATH} from "./utils";
+import {API_PATH} from "./utils";
 
 export const fetchCinemas = async (): Promise<Cinema[]> => {
-    const response = await fetch(`${HOST_PATH}cinemas`, {
+    const response = await fetch(`${API_PATH}cinemas`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
