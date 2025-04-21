@@ -18,6 +18,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class MovieShowTest extends ApiTestCase
 {
     use TestFixtureLoaderTrait;
+
+    private const MOVIE_SHOW_API_PATH = 'http://cinephoria.dvp/api/movie_shows';
+
     private ?EntityManagerInterface $entityManager;
     private ?Client $client;
     private ?Movie $movie;
@@ -65,7 +68,7 @@ class MovieShowTest extends ApiTestCase
             return $this->token;
         }
 
-        $response = $this->client->request('POST', '/api/auth', ['json' => $body ?: [
+        $response = $this->client->request('POST', 'http://cinephoria.dvp/api/auth', ['json' => $body ?: [
             'username' => 'employee@test.com',
             'password' => 'P@ssword1',
         ]]);
@@ -79,10 +82,10 @@ class MovieShowTest extends ApiTestCase
 
     public function testPostMovieShowWithValidData(): void
     {
-        $this->client->request('POST', '/movie_shows', [
+        $this->client->request('POST', self::MOVIE_SHOW_API_PATH, [
             'json' => [
-                'movie' => '/movies/'.$this->movie->getId(),
-                'movieTheater' => '/movie_theaters/'.$this->theater->getId(),
+                'movie' => MovieTestFixtures::MOVIE_API_PATH.$this->movie->getId(),
+                'movieTheater' => MovieTheatherTestFixtures::MOVIE_THEATHER_API_PATH.$this->theater->getId(),
                 'date' => (new DateTimeImmutable('+1 day'))->format('Y-m-d'),
                 'startTime' => '18:00',
                 'endTime' => '20:00',
@@ -99,10 +102,10 @@ class MovieShowTest extends ApiTestCase
 
     public function testUserCannotCreateMovieShow(): void
     {
-        $this->client->request('POST', '/movie_shows', [
+        $this->client->request('POST', self::MOVIE_SHOW_API_PATH, [
             'json' => [
-                'movie' => '/movies/'.$this->movie->getId(),
-                'movieTheater' => '/movie_theaters/'.$this->theater->getId(),
+                'movie' => MovieTestFixtures::MOVIE_API_PATH.$this->movie->getId(),
+                'movieTheater' => MovieTheatherTestFixtures::MOVIE_THEATHER_API_PATH.$this->theater->getId(),
                 'date' => (new DateTimeImmutable('+1 day'))->format('Y-m-d'),
                 'startTime' => '18:00',
                 'endTime' => '20:00',
@@ -127,10 +130,10 @@ class MovieShowTest extends ApiTestCase
         $this->movie->setDuration($duration);
         $this->entityManager->flush();
 
-        $this->client->request('POST', '/movie_shows', [
+        $this->client->request('POST', self::MOVIE_SHOW_API_PATH, [
             'json' => [
-                'movie' => '/movies/'.$this->movie->getId(),
-                'movieTheater' => '/movie_theaters/'.$this->theater->getId(),
+                'movie' => MovieTestFixtures::MOVIE_API_PATH.$this->movie->getId(),
+                'movieTheater' => MovieTheatherTestFixtures::MOVIE_THEATHER_API_PATH.$this->theater->getId(),
                 'date' => (new DateTimeImmutable('tomorrow'))->format('Y-m-d'),
                 'startTime' => $startTime,
                 'endTime' => $endTime,

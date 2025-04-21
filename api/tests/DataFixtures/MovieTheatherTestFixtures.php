@@ -12,6 +12,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class MovieTheatherTestFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const MOVIE_THEATHER_API_PATH = '/api/movie_theaters/';
+
     public function load(ObjectManager $manager): void
     {
         $projection = (new ProjectionQuality())

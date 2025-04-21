@@ -89,10 +89,8 @@ Make a copy of .env.dist and rename it to .env to configure the environment.
 cp .env.dist .env # Copy .env.dist and rename it to .env
 ```
 
-6) Optional: Add Local Host Mapping
-
-To make development easier, you can create a custom hostname for the application by editing your /etc/hosts file.
-Open the /etc/hosts file with a text editor using superuser privileges. For example:
+6) Add Local Host Mapping
+To make development easier, create a custom hostname for the application by editing your /etc/hosts file.
 ```bash
 sudo nano /etc/hosts
 ```

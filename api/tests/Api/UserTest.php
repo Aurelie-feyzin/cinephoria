@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UserTest extends ApiTestCase
 {
+    private const URL_USERS = 'http://cinephoria.dvp/api/users';
     private ?EntityManagerInterface $entityManager;
 
     protected function setUp(): void
@@ -29,7 +30,7 @@ class UserTest extends ApiTestCase
             $this->entityManager->flush();
         }
 
-        static::createClient()->request('POST', '/api/users', [
+        static::createClient()->request('POST', self::URL_USERS, [
             'json' => [
                 'firstName' => 'firstName',
                 'lastName' => 'lastName',
@@ -48,7 +49,7 @@ class UserTest extends ApiTestCase
 
     public function testDuplicateEmail(): void
     {
-        static::createClient()->request('POST', '/api/users', [
+        static::createClient()->request('POST', self::URL_USERS, [
             'json' => [
                 'firstName' => 'firstName',
                 'lastName' => 'lastName',
@@ -65,7 +66,7 @@ class UserTest extends ApiTestCase
 
     public function testNotValidEmail(): void
     {
-        static::createClient()->request('POST', '/api/users', [
+        static::createClient()->request('POST', self::URL_USERS, [
             'json' => [
                 'firstName' => 'firstName',
                 'lastName' => 'lastName',
@@ -84,7 +85,7 @@ class UserTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        $client->request('POST', '/api/users', [
+        $client->request('POST', self::URL_USERS, [
             'json' => [
                 'firstName' => 'Weak',
                 'lastName' => 'Password',
