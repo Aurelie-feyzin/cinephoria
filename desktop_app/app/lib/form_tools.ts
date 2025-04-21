@@ -6,14 +6,14 @@ export type Option = {
     label: string,
 }
 
-export function formatToSelectOption(apiResult: any[], idField: string, labelField: string): Option[] {
-    const options: Option[] = [];
-    apiResult.forEach((item: object) => {
-        options.push({
-            id: item[idField],
-            value: item[idField],
-            label: upperFirst(item[labelField]),
-        });
-    });
-    return options;
+export function formatToSelectOption<T extends Record<string, any>>(
+    apiResult: T[],
+    idField: keyof T,
+    labelField: keyof T
+): Option[] {
+    return apiResult.map((item) => ({
+        id: String(item[idField]),
+        value: item[idField],
+        label: upperFirst(String(item[labelField])),
+    }));
 }

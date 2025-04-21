@@ -9,6 +9,11 @@ const InputField = ({type = 'text', name, label, register, error, className}:
             {...register}
             type={type}
             className="mt-1 block w-full border text-primary border-gray-300 p-2 rounded"
+            onChange={(e) => {
+                register.onChange(e);
+                if (type==='date') {
+                    e.target.blur(); // force close native datepicker
+            }}}
         />
         <p role="alert" className="block text-white text-sm">{error}</p>
     </div>

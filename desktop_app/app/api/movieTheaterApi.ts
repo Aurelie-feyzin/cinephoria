@@ -1,3 +1,4 @@
+import { MinimalCinema } from '@/app/api/cinemaApi';
 interface FullProjectionQuality {
     '@id': string;
     '@type': string,
