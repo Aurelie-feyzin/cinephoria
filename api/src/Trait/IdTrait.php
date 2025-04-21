@@ -5,6 +5,7 @@ namespace App\Trait;
 
 use ApiPlatform\Metadata\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 
 trait IdTrait
@@ -16,6 +17,7 @@ trait IdTrait
     #[ApiProperty(identifier: true)]
     protected ?Uuid $id = null;
 
+    #[Groups(['id'])]
     public function getId(): ?string
     {
         return (null === $this->id) ? null : $this->id->toRfc4122();

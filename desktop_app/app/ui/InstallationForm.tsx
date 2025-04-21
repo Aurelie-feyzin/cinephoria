@@ -16,7 +16,7 @@ import {
 } from "@/app/api/installationApi";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import TextAreaField from "@/app/ui/form/TextAreaField";
-import {fetchCinemas} from "@/app/api/cinemaApi";
+import {fetchCinemas, MinimalCinema} from "@/app/api/cinemaApi";
 import InputField from "@/app/ui/form/InputField";
 import {useRouter} from "next/navigation";
 import {Enum} from "@/app/api/apiResponseType";
@@ -43,7 +43,7 @@ const InstallationForm = ({installation, setMessageKo}:
         register,
         handleSubmit,
         formState: {errors},
-        watch
+        watch,
     } = useForm<InstallationInput, Error>({
         defaultValues: installation ? {
             ...installation,
@@ -136,7 +136,7 @@ const InstallationForm = ({installation, setMessageKo}:
                                  options={formatToSelectOption(cinemas || [], '@id', 'name')}
                                  error={errors.cinema?.message || errorCinemas?.message}
                                  className="w-full"
-                                 placeholder="Choisissez une salle"
+                                 placeholder="Choisissez un cinema"
                                  isLoading={isLoadingCinemas}
                     />
 

@@ -38,10 +38,10 @@ const MovieTheaterList = () => {
             label: 'Actions',
             render: (row) => (
                 <div className="flex">
-                    <Link href={`/intranet${row['@id']}`} className="hover:bg-secondary">
+                    <Link href={`/intranet/movie_theaters/${row.id}`} className="hover:bg-secondary">
                         <ViewIcon/>
                     </Link>
-                    <Link href={`/intranet${row['@id']}/edit`} className="hover:bg-secondary">
+                    <Link href={`/intranet/movie_theaters/${row.id}/edit`} className="hover:bg-secondary">
                         <EditIcon/>
                     </Link>
                 </div>
@@ -53,7 +53,7 @@ const MovieTheaterList = () => {
                                   action={<ButtonAdd label="Ajouter une salle" href='/intranet/movie_theaters/new'/>}>
         {isLoading && <PageLoading message="Récupération des salles en cours"/>}
         {error && <PageError message={error.message}/>}
-        <Table columns={columns} data={movieTheaters} index={'@id'}/>
+        <Table columns={columns} data={movieTheaters}/>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl} />
     </PageIntranetContainer>
 }

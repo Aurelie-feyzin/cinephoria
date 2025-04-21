@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
+import {API_PATH} from "./utils";
 
 export const fetchDashboard = async (): Promise<Cinema[]> => {
-    const response = await fetch(`/dashboard/dashboard`, {
+    const response = await fetch(`${API_PATH}dashboard/dashboard`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',

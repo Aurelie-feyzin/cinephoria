@@ -27,8 +27,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../pwa/model/Cinema.ts",
-    "../pwa/model/movieTheater.ts"
   ],
   "exclude": ["node_modules"]
 }

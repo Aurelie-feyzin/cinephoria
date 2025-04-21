@@ -29,7 +29,7 @@ final class UserHashPasswordStateProcessor implements ProcessorInterface
     /**
      * @throws \JsonException
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): false|string|null
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?User
     {
         if ($data->getPlainPassword()) {
             $data->setPassword($this->userPasswordHasher->hashPassword($data, $data->getPlainPassword()));
@@ -40,9 +40,7 @@ final class UserHashPasswordStateProcessor implements ProcessorInterface
         if ($this->security->isGranted('ROLE_ADMIN') && in_array('ROLE_EMPLOYEE', $data->getRoles(), true)) {
             $this->mailer->sendWelcomeEmployeeEmail($data);
 
-            return json_encode([
-                'email' => $data->getUserIdentifier(),
-            ], JSON_THROW_ON_ERROR);
+            return $data;
         }
 
         $this->mailer->sendWelcomeEmail($data);

@@ -89,6 +89,20 @@ Make a copy of .env.dist and rename it to .env to configure the environment.
 cp .env.dist .env # Copy .env.dist and rename it to .env
 ```
 
+6) Add Local Host Mapping
+To make development easier, create a custom hostname for the application by editing your /etc/hosts file.
+```bash
+sudo nano /etc/hosts
+```
+Add the following line at the end of the file:
+```text
+192.168.1.48    cinephoria.dvp
+```
+Save the file and exit the editor.
+
+You can now access the application using http://cinephoria.dvp instead of the IP address.
+Note: This only works locally on your machine. Make sure that 192.168.1.48 is reachable from your network.
+
 ## Data Initialization
 
 The project contains a Makefile at the root, which centralizes some of the commands necessary to manage the project, especially for the backend and web app.
@@ -120,9 +134,9 @@ Before starting the applications (web, mobile, desktop), it's essential to have 
 ```bash
 docker compose up -d
 ```
-Open https://localhost in your favorite web browser
+Open http://cinephoria.dvp or http://192.168.1.48/ in your favorite web browser
 Mailpit is available at http://localhost:8025/ for testing emails locally during development.
-The API Documentation is available at http://localhost/docs for an overview of the available endpoints and their usage.
+The API Documentation is available at http://192.168.1.48/docs for an overview of the available endpoints and their usage.
 
  2) Start the Mobile Application:
 

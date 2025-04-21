@@ -69,7 +69,7 @@ const Installations = () => {
         >
             {isLoading && <PageLoading message="Récupération des installations non disponible en cours"/>}
             {error && <PageError message={error.message}/>}
-            <Table columns={columns} data={installations} index={'@id'}/>
+            <Table columns={columns} data={installations} />
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl}/>
 
         </PageContainer>

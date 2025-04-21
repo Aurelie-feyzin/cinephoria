@@ -11,6 +11,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class MovieTestFixtures extends Fixture
 {
+    public const MOVIE_API_PATH = '/api/movies/';
+
     public function load(ObjectManager $manager): void
     {
         $movie = (new Movie())

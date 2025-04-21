@@ -22,7 +22,7 @@ export default function Home() {
   } = useForm<LoginInput>();
   const [loginKo, setLoginKo] = useState(false);
   const [messageKo, setMessageKo] = useState('');
-  const {login} = useUser();
+  const {login, error} = useUser();
 
   const onSubmit: SubmitHandler<LoginInput> = async (data) => {
     try {
@@ -41,6 +41,10 @@ export default function Home() {
       }
       const tokenResponse = await response.json();
       login(tokenResponse.token);
+      if (error) {
+        setLoginKo(true);
+        setMessageKo(error);
+      }
     } catch (error) {
       console.log(error);
       setLoginKo(true);

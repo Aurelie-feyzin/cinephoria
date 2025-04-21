@@ -1,6 +1,7 @@
+import {API_PATH} from "./utils";
 
 export const fetchAgeRestrictions = async (): Promise<AgeRestriction[]> => {
-    const response = await fetch('/age_restrictions', {
+    const response = await fetch(`${API_PATH}ageRestrictions`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',

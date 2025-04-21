@@ -52,7 +52,7 @@ const EmployeeList = () => {
                                   action={<ButtonAdd label="Ajouter un employé" href='/admin/employees/new'/>}>
         {isLoading && <PageLoading message="Récupération des films en cours"/>}
         {error && <PageError message={error.message}/>}
-        <Table columns={columns} data={employee} index={'@id'}/>
+        <Table columns={columns} data={employee}/>
         <Pagination nextPageUrl={nextPageUrl} currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
     </PageAdminContainer>

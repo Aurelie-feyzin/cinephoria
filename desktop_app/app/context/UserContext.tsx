@@ -1,7 +1,7 @@
 'use client'
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import {getToken, removeToken, saveToken} from "@/app/service/tokenService";
 
 type Profile = {
     firstName: string;
@@ -19,7 +19,7 @@ type ProfileContext = {
 
 const UserContext = createContext<ProfileContext>({} as ProfileContext);
 
-export const useUser = () => useContext(UserContext); // Hook personnalisé pour accéder au contexte
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [user, setUser] = useState<Profile | null>(null);
@@ -28,7 +28,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
 
 
     useEffect(() => {
-        const token = Cookies.get('jwt_token');
+        const token = getToken();
 
         if (token) {
             fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
@@ -58,7 +58,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, [router]);
 
     const login = (token: string) => {
-        Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: true, sameSite: 'Strict'});
+        saveToken(token);
         fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
             method: 'GET',
             headers: {
@@ -69,16 +69,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             .then((data) => {
                 setUser(data);
                 setError(null);
+                if (data.role === null) {
+                    throw new Error('Vous n\'avez pas les droits pour utiliser l\'application', { cause: 'unauthorized' });
+                }
                 router.push('/installations');
             })
-            .catch(() => {
-                setError('Erreur lors de la récupération du profil après la connexion');
+            .catch((error) => {
+                setError(error.cause === 'unauthorized' ? error.message : 'Erreur lors de la récupération du profil après la connexion');
             });
     };
 
     const logout = () => {
-        Cookies.remove('jwt_token');
+        removeToken();
         setUser(null);
+        router.push('/');
     };
 
     return (

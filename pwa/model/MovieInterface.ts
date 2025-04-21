@@ -25,7 +25,7 @@ interface MinimalMovie {
 
 interface MovieDescription {
     '@id': string,
-    id: string,
+     id: string,
     '@type': string,
     title: string,
     posterPath?: string,

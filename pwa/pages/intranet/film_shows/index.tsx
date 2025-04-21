@@ -69,7 +69,7 @@ const FilmShowLists = () => {
                                    action={<ButtonAdd label="Ajouter une séance" href='/intranet/film_shows/new'/>}>
             {isLoading && <PageLoading message="Récupération des séances en cours"/>}
             {error && <PageError message={error.message}/>}
-            <Table columns={columns} data={movieShows} index={'@id'}/>
+            <Table columns={columns} data={movieShows}/>
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl} />
         </PageIntranetContainer>
     );

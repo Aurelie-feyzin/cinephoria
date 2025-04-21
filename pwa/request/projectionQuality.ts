@@ -1,6 +1,7 @@
+import {API_PATH} from "./utils";
 
 export const fetchProjectionQualities = async (): Promise<ProjectionQuality[]> => {
-    const url = '/projection_qualities';
+    const url = `${API_PATH}projection_qualities`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

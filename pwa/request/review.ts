@@ -1,8 +1,9 @@
 import Cookies from "js-cookie";
+import {API_PATH} from "./utils";
 
 
 export const fetchReviews = async (page: number, itemsPerPage: number, status: string): Promise<ApiResponse<Review>> => {
-    const url = `/reviews?page=${page}&itemsPerPage=${itemsPerPage}&status=${status}`;
+    const url = `${API_PATH}reviews?page=${page}&itemsPerPage=${itemsPerPage}&status=${status}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -48,7 +49,7 @@ export const updateReviewById = async (url: string, reviewData: any) => {
 }
 
 export const createReview = async (reviewInput: ReviewInput) => {
-    const response = await fetch(`/reviews`, {
+    const response = await fetch(`${API_PATH}reviews`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',

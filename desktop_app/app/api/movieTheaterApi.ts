@@ -1,3 +1,4 @@
+import { MinimalCinema } from '@/app/api/cinemaApi';
 interface FullProjectionQuality {
     '@id': string;
     '@type': string,
@@ -18,7 +19,7 @@ export interface MovieTheater  {
 }
 
 export const fetchMovieTheatersByCinema = async (cinema: string): Promise<MovieTheater[]> => {
-    const url = `${process.env.NEXT_PUBLIC_HOST_PATH}/movie_theaters?cinema=${cinema}`;
+    const url = `${process.env.NEXT_PUBLIC_API_PATH}movie_theaters?cinema=${cinema}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

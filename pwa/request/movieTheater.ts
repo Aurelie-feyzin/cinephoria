@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
+import {API_PATH} from "./utils";
 
 export const fetchMovieTheaterById = async (id: string): Promise<MovieTheater> => {
-    const url = `/movie_theaters/${id}`;
+    const url = `${API_PATH}movie_theaters/${id}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -16,7 +17,7 @@ export const fetchMovieTheaterById = async (id: string): Promise<MovieTheater> =
 }
 
 export const fetchMovieTheatersByCinema = async (cinema: string): Promise<MovieTheater> => {
-    const url = `/movie_theaters?cinema=${cinema}`;
+    const url = `${API_PATH}movie_theaters?cinema=${cinema}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -32,7 +33,7 @@ export const fetchMovieTheatersByCinema = async (cinema: string): Promise<MovieT
 }
 
 export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Promise<ApiResponse<MovieTheater>> => {
-    const url = `/movie_theaters?page=${page}&itemsPerPage=${itemsPerPage}`;
+    const url = `${API_PATH}movie_theaters?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -47,7 +48,7 @@ export const fetchMovieTheaters = async (page: number, itemsPerPage: number): Pr
 }
 
 export const updateMovieTheater = async (id: string, movieTheaterData: any) => {
-    const response = await fetch(`/movie_theaters/${id}`, {
+    const response = await fetch(`${API_PATH}movie_theaters/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
@@ -62,7 +63,7 @@ export const updateMovieTheater = async (id: string, movieTheaterData: any) => {
 }
 
 export const createMovieTheater = async (movieTheaterData: any) => {
-    const response = await fetch(`/movie_theaters`, {
+    const response = await fetch(`${API_PATH}movie_theaters`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',

@@ -1,6 +1,7 @@
+import {API_PATH} from "./utils";
 
 export const fetchMovieGenres = async (): Promise<MovieGenre[]> => {
-    const response = await fetch('/movie_genres', {
+    const response = await fetch(`${API_PATH}movie_genres`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',

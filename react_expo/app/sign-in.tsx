@@ -52,10 +52,14 @@ const LoginForm = () => {
             const tokenResponse = await response.json();
             signIn(tokenResponse.token);
             router.replace('/');
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
+            // @ts-ignore
+            if (error?.code === 401 && error?.message === 'Invalid credentials.') {
+                setMessageKo('Identification impossible : émail et/ou mot de passe incorrect.');
+            } else {
+                setMessageKo('Une erreur c\'est produite pendant la récupération de votre profil.)');
+            }
             setLoginKo(true);
-            setMessageKo('Une erreur c\'est produite pendant la récupération de votre profil.');
         }
     };
 
@@ -88,7 +92,7 @@ const LoginForm = () => {
                                 render={({field: {onChange, onBlur, value}}) => (
                                     <TextInput
                                         autoCapitalize="none"
-                                        autoCompleteType="email"
+                                        autoComplete="email"
                                         autoCorrect={false}
                                         onBlur={onBlur}
                                         onChangeText={onChange}
@@ -115,7 +119,7 @@ const LoginForm = () => {
                                 render={({field: {onChange, onBlur, value}}) => (
                                     <TextInput
                                         autoCapitalize="none"
-                                        autoCompleteType="password"
+                                        autoComplete="password"
                                         autoCorrect={false}
                                         onBlur={onBlur}
                                         onChangeText={onChange}

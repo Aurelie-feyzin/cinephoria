@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 
 export const fetchEmployee = async (id: string): Promise<Employee> => {
-    const url = `/api/employees/${id}`;
+    const url = `${API_PATH}employees/${id}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -18,7 +18,7 @@ export const fetchEmployee = async (id: string): Promise<Employee> => {
     return await response.json();
 }
 export const fetchEmployees = async (page: number, itemsPerPage: number): Promise<Employee> => {
-    const url = `/api/employees?page=${page}&itemsPerPage=${itemsPerPage}`;
+    const url = `${API_PATH}employees?page=${page}&itemsPerPage=${itemsPerPage}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -34,7 +34,7 @@ export const fetchEmployees = async (page: number, itemsPerPage: number): Promis
 }
 
 export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
-    const response = await fetch(`/api/employees/${id}`, {
+    const response = await fetch(`${API_PATH}employees/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
@@ -48,18 +48,37 @@ export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
     return response.json()
 }
 
-export const createUser= async (data: EmployeeInput|UserInput): Promise<User> => {
-    const response = await fetch(`${API_PATH }users`, {
+const postUser = async (data: EmployeeInput | UserInput, includeAuth = false): Promise<User> => {
+    const headers: HeadersInit = {
+        'Content-Type': 'application/ld+json',
+    };
+
+    if (includeAuth) {
+        const token = Cookies.get('jwt_token');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        } else {
+            throw new Error('JWT token not found for authenticated request');
+        }
+    }
+
+    const response = await fetch(`${API_PATH}users`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/ld+json',
-        },
-        body: JSON.stringify(data)
+        headers,
+        body: JSON.stringify(data),
     });
 
     if (!response.ok) {
-        throw new Error('Erreur lors de la création du compte')
+        throw new Error('Erreur lors de la création du compte');
     }
 
-    return await response.json()
-}
+    return await response.json();
+};
+
+export const createUser = async (data: UserInput): Promise<User> => {
+    return postUser(data);
+};
+
+export const createEmployee = async (data: EmployeeInput): Promise<User> => {
+    return postUser(data, true);
+};

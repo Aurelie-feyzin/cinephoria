@@ -43,8 +43,9 @@ RUN set -eux; \
 RUN set -eux; \
 	install-php-extensions pdo_pgsql
 
-RUN set -eux; \
-	install-php-extensions mongodb
+RUN pecl uninstall mongodb && \
+    pecl install mongodb-1.20.0 && \
+    docker-php-ext-enable mongodb
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
