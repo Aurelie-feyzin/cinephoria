@@ -31,7 +31,7 @@ export const fetchMovieShowInCinema = async (cinemaId: string, today: string, la
     return await response.json();
 }
 
-export const fetchMovieShowByMovie = async (movie:string,  after: string, before: string, cinema?: string): Promise<FullMovieShowApiResponse> => {
+export const fetchMovieShowByMovie = async (movie:string,  after: string, before: string, cinema?: string): Promise<MovieShowReservationApiResponse> => {
     const url = `${API_PATH}movie_shows?movie=${movie}&date%5Bbefore%5D=${before}&date%5Bafter%5D=${after}${cinema ? `&movieTheater.cinema=${cinema}` : ''}`;
     const response = await fetch(url, {
         method: 'GET',

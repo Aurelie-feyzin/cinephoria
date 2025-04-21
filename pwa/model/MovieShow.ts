@@ -35,7 +35,7 @@ interface MovieShowInput {
 }
 
 interface FullMovieShowApiResponse {
-    'hydra:member': MovieShowReservation[];
+    'hydra:member': FullMovieShow[];
     'hydra:view'?: {
         'hydra:next'?: string;
         'hydra:last'?: string;
@@ -51,4 +51,12 @@ interface MovieShowReservation {
     movieTheater: MovieTheater;
     movie: Movie;
     availableSeats: number;
+}
+
+interface MovieShowReservationApiResponse {
+    'hydra:member': MovieShowReservation[];
+    'hydra:view'?: {
+        'hydra:next'?: string;
+        'hydra:last'?: string;
+    };
 }

@@ -102,7 +102,7 @@ const ReviewList = () => {
                                 titleMessage="Erreur pendant la récupération des status"
                     />
                     }
-                <Table columns={columns} data={reviews} index={'@id'}/>
+                <Table columns={columns} data={reviews}/>
                 <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl}/>
             </>}
     </PageIntranetContainer>

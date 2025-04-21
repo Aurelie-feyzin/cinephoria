@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_ADMIN')",
             provider: EmployeeListProvider::class
         ),
-        new Post(provider: UserPasswordHasher::class, processor: UserHashPasswordStateProcessor::class),
+        new Post(normalizationContext: ['groups' => ['employee:write']], provider: UserPasswordHasher::class, processor: UserHashPasswordStateProcessor::class),
         new Patch(uriTemplate: '/employees/{id}',
             normalizationContext: ['groups' => ['employee:write']],
             security: "is_granted('ROLE_ADMIN')"),

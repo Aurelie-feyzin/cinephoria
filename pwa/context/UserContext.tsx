@@ -49,7 +49,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, []);
 
     const login = (token: string) => {
-        Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: true, sameSite: 'Strict'});
+        const isProduction = window.location.protocol === 'https:';
+        Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
         fetch('/api/profile', {
             method: 'GET',
             headers: {
@@ -71,6 +72,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         Cookies.remove('jwt_token');
         localStorage.clear();
         setUser(null);
+        router.push('/');
     };
 
     return (

@@ -47,12 +47,12 @@ const Reservation = () => {
             }
         });
 
-    const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery<FullMovieShowApiResponse, Error>(
+    const {error: errorFilmShows, isLoading: isLoadingFilmShows} = useQuery<MovieShowReservationApiResponse, Error>(
         ["movie_shows", selectedMovie, after, before, selectedCinema],
         () => fetchMovieShowByMovie(selectedMovie?.['@id'] as string, after, before, selectedCinema),
         {
             enabled: !!selectedMovie && !!before && !!after,
-            onSuccess: (data: FullMovieShowApiResponse) => setMovieShows(data?.["hydra:member"] || []),
+            onSuccess: (data: MovieShowReservationApiResponse) => setMovieShows(data?.["hydra:member"] || []),
         });
 
     const handleMovieChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

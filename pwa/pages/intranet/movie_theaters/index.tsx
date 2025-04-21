@@ -53,7 +53,7 @@ const MovieTheaterList = () => {
                                   action={<ButtonAdd label="Ajouter une salle" href='/intranet/movie_theaters/new'/>}>
         {isLoading && <PageLoading message="Récupération des salles en cours"/>}
         {error && <PageError message={error.message}/>}
-        <Table columns={columns} data={movieTheaters} index={'@id'}/>
+        <Table columns={columns} data={movieTheaters}/>
         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} nextPageUrl={nextPageUrl} />
     </PageIntranetContainer>
 }

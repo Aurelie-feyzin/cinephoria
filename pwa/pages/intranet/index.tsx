@@ -28,10 +28,6 @@ const MovieList = () => {
     const movies = moviesData?.['hydra:member'] || [];
     const nextPageUrl = moviesData?.['hydra:view']?.['hydra:next'];
 
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
-
     const columns: Column<MovieDescription>[] = [
         {key: 'title', label: 'Titre'},
         {
@@ -82,7 +78,7 @@ const MovieList = () => {
                                   action={<ButtonAdd label="Ajouter un film" href='intranet/movies/new'/>}>
         {isLoading && <PageLoading message="Récupération des films en cours"/>}
         {error && <PageError message={error.message}/>}
-        <Table columns={columns} data={movies} index={'@id'}/>
+        <Table columns={columns} data={movies}/>
         <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} nextPageUrl={nextPageUrl}/>
     </PageIntranetContainer>
 }

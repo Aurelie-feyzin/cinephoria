@@ -5,7 +5,7 @@ import PageIntranetContainer from "../../../components/intranet/PageIntranetCont
 import {useMutation} from "react-query";
 import EmployeeForm from "../../../components/admin/UserForm";
 import {fetchForgotPassword} from "../../../request/forgot-password";
-import {createUser} from "../../../request/user";
+import {createEmployee} from "../../../request/user";
 import {SubmitHandler} from "react-hook-form";
 
 function genPassword() {
@@ -24,7 +24,7 @@ const CreateMovie = () => {
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const mutation = useMutation({
-        mutationFn: (employeeData: any) => createUser(employeeData),
+        mutationFn: (employeeData: any) => createEmployee(employeeData),
         onSuccess: (response) => {
             if (response) {
                 if (response.email) {

@@ -9,10 +9,9 @@ export type Column<T> = {
 type TableProps<T> = {
     columns: Column<T>[];
     data: T[];
-    index: keyof T;
 };
 
-const Table = <T extends { [key: string]: any }>({columns, data, index}: TableProps<T>) => (
+const Table = <T extends { [key: string]: any }>({columns, data}: TableProps<T>) => (
     <table className="table-auto mx-auto bg-white border border-gray-300 shadow-md">
         <thead>
         <tr className="bg-gray-100">

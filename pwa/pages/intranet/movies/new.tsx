@@ -14,8 +14,8 @@ const CreateMovie = () => {
     const mutation = useMutation({
         mutationFn: (movieData: any) => createMovie(movieData),
         onSuccess: (response) => {
-            const uri = response['@id']
-            router.push(`/intranet/${uri}`)
+            const id = response.id
+            router.push(`/intranet/movies/${id}`)
         },
         onError: () => {
             setMessageKo('Erreur lors de la mise à jour');
