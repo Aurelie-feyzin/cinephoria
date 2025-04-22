@@ -7,15 +7,17 @@ import {useParams} from "next/navigation";
 import {useQuery} from "@tanstack/react-query";
 import {fetchInstallation} from "@/app/api/installationApi";
 import PageLoading from "@/app/ui/PageLoading";
+import {useUser} from "@/app/context/UserContext";
 
 
 const EditOutOfServiceInstallation = () => {
     const {id} = useParams();
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
+    const { refreshAccessToken } = useUser();
 
     const {data, isLoading, error} = useQuery({
             queryKey: ['installation', id],
-            queryFn: () => fetchInstallation(id as string),
+            queryFn: () => fetchInstallation(id as string, refreshAccessToken),
             enabled: !!id && typeof id === 'string',
         }
     )

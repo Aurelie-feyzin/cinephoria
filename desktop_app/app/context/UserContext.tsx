@@ -1,7 +1,8 @@
 'use client'
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
-import {getToken, removeToken, saveToken} from "@/app/service/tokenService";
+import {getItem, KEY_REFRESH_TOKEN, KEY_TOKEN_JTW, removeItem, saveItem} from "@/app/service/storageService";
+import {fetchRefreshToken} from "@/app/api/auth";
 
 type Profile = {
     firstName: string;
@@ -10,9 +11,15 @@ type Profile = {
     role?:string;
 }
 
+interface TokenResponse {
+    token: string,
+    refresh_token: string
+}
+
 type ProfileContext = {
     user?: Profile | null;
-    login: (token:string) => void
+    login: (tokenResponse: TokenResponse) => void
+    refreshAccessToken: () => Promise<string | null>
     logout: () => void;
     error?: string | null;
 }
@@ -28,7 +35,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
 
 
     useEffect(() => {
-        const token = getToken();
+        const token = getItem(KEY_TOKEN_JTW);
 
         if (token) {
             fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
@@ -57,12 +64,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     }, [router]);
 
-    const login = (token: string) => {
-        saveToken(token);
+    const login = (tokenResponse: TokenResponse) => {
+        saveItem(KEY_TOKEN_JTW, tokenResponse.token);
+        saveItem(KEY_REFRESH_TOKEN, tokenResponse.refresh_token);
         fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${tokenResponse.token}`,
             },
         })
             .then((response) => response.json())
@@ -79,14 +87,36 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             });
     };
 
+    const refreshAccessToken = async () => {
+        console.log('refreshAccessToken');
+        return await fetchRefreshToken()
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.token) {
+                    saveItem(KEY_TOKEN_JTW, data.token);
+                    saveItem(KEY_REFRESH_TOKEN, data.refresh_token);
+                    setError(null);
+                    return data.token as string;
+                }
+
+                return null;
+            })
+            .catch(() => {
+                logout();
+                return null;
+            });
+    };
+
     const logout = () => {
-        removeToken();
+        removeItem(KEY_TOKEN_JTW);
+        removeItem(KEY_REFRESH_TOKEN);
         setUser(null);
         router.push('/');
     };
 
     return (
-        <UserContext.Provider value={{user, error, login, logout}}>
+        <UserContext.Provider value={{user, error, refreshAccessToken, login, logout}}>
             {children}
         </UserContext.Provider>
     );

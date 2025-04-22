@@ -12,11 +12,13 @@ import EditIcon from "@/app/ui/Icon/EditIcon";
 import {fetchGetInstallationUnderMaintenance, InstallationMinimalDescription} from "@/app/api/installationApi";
 import ButtonAdd from "@/app/ui/button/ButtonAdd";
 import {ApiResponse} from "@/app/api/apiResponseType";
+import {useUser} from "@/app/context/UserContext";
 
 
 const Installations = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 30;
+    const { refreshAccessToken } = useUser();
 
     const {
         data,
@@ -24,7 +26,7 @@ const Installations = () => {
         isLoading,
     } = useQuery<ApiResponse<InstallationMinimalDescription>, Error>({
         queryKey: ['installation_out_of_service_list', currentPage],
-        queryFn: () => fetchGetInstallationUnderMaintenance(currentPage, itemsPerPage),
+        queryFn: () => fetchGetInstallationUnderMaintenance(currentPage, itemsPerPage, refreshAccessToken),
         placeholderData: keepPreviousData,
     });
 

@@ -40,7 +40,7 @@ export default function Home() {
         return;
       }
       const tokenResponse = await response.json();
-      login(tokenResponse.token);
+      login(tokenResponse);
       if (error) {
         setLoginKo(true);
         setMessageKo(error);

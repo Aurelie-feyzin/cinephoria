@@ -1,7 +1,7 @@
 import {InstallationInput} from "@/app/ui/InstallationForm";
 import {Enum} from "@/app/api/apiResponseType";
-import {getToken} from "@/app/service/tokenService";
 import { MovieTheater } from '@/app/api/movieTheaterApi';
+import {fetchWithAuth} from "@/app/api/auth";
 export interface InstallationMinimalDescription {
     '@id': string;
     '@type': string,
@@ -38,48 +38,45 @@ export const fetchInstallationStatus = async (): Promise<Enum[]> => {
     return data['hydra:member'] || [];
 }
 
-export const fetchInstallation = async (id: string) => {
+export const fetchInstallation = async (id: string, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations/${id}`;
     const token = await getToken();
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${token}`,
         },
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération d\'une installation')
     }
     return await response.json();
 };
 
-export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number) => {
+export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}out_of_service/installations?page=${page}&itemsPerPage=${itemsPerPage}`;
     const token = await getToken();
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${token}`,
         },
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération des installations hors service')
     }
     return await response.json();
 };
 
-export const fetchGetInstallationByMovieTheater = async (movieTheater: string) => {
+export const fetchGetInstallationByMovieTheater = async (movieTheater: string, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations?movieTheater=${movieTheater}&itemsPerPage=999`;
     const token = await getToken();
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/ld+json',
-            'Authorization': `Bearer ${token}`,
         },
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération des installations hors service')
     }
@@ -88,16 +85,15 @@ export const fetchGetInstallationByMovieTheater = async (movieTheater: string) =
     return data['hydra:member'] || [];
 };
 
-export const updateInstallation = async (id: string, data: InstallationInput) => {
+export const updateInstallation = async (id: string, data: InstallationInput, refreshAccessToken:  () => Promise<string | null>) => {
     const token = await getToken();
-    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST_PATH}${id}`, {
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_HOST_PATH}${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-    })
+    }, refreshAccessToken)
     if (!response.ok) {
         throw new Error('Erreur lors de la modification d\'une installation')
     }

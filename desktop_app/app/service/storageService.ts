@@ -1,7 +1,9 @@
-// tokenService.ts
 import Cookies from 'js-cookie';
 
 let store: any = null;
+
+export const KEY_TOKEN_JTW = 'jtw_token';
+export const KEY_REFRESH_TOKEN = 'refresh_token';
 
 export const isTauri = () => '__TAURI__' in window;
 
@@ -12,14 +14,14 @@ async function loadStore() {
     }
 }
 
-export const saveToken = async (token: string) => {
+export const saveItem = async (key: string, value: string) => {
     if (isTauri()) {
         await loadStore();
-        await store.set('jwt_token', token);
+        await store.set(key, value);
         await store.save();
     } else {
-        Cookies.set('jwt_token', token, {
-            expires: 1 / 24,
+        Cookies.set(key, value, {
+            expires: KEY_TOKEN_JTW ? 1 / 24 : 1,
             path: '',
             secure: false,
             sameSite: 'Strict',
@@ -27,21 +29,21 @@ export const saveToken = async (token: string) => {
     }
 };
 
-export const getToken = async (): Promise<string | undefined> => {
+export const getItem = async (key: string): Promise<string | undefined> => {
     if (isTauri()) {
         await loadStore();
-        return await store.get('jwt_token');
+        return await store.get(key);
     } else {
-        return Cookies.get('jwt_token');
+        return Cookies.get(key);
     }
 };
 
-export const removeToken = async () => {
+export const removeItem = async (key: string) => {
     if (isTauri()) {
         await loadStore();
-        await store.delete('jwt_token');
+        await store.delete(key);
         await store.save();
     } else {
-        Cookies.remove('jwt_token');
+        Cookies.remove(key);
     }
 };
