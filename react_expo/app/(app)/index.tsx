@@ -3,21 +3,19 @@ import { View, Text, FlatList } from 'react-native';
 import {useSession} from "@/context/authContext";
 import {fetchSessions} from "@/api/reservationApi";
 import SessionCard from "@/components/SessionCard";
-import {useStorageState} from "@/state/useStorageState";
 import {sortBy} from 'lodash';
 import {Reservation} from "@/model/ReservationInterface";
 
 
 const MoviesScreen = () => {
-    const { user } = useSession();
+    const { signOut } = useSession();
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [loading, setLoading] = useState(true);
-    const token: string|null = useStorageState('jwt_token')[0][1];
 
     useEffect(() => {
         const getSessions = async () => {
             try {
-                const data = await fetchSessions(token);
+                const data = await fetchSessions(signOut);
                 setReservations(sortBy(data, 'movieShowDate'));
             } catch (error) {
                 console.error("Erreur lors de la récupération des séances", error);
@@ -26,11 +24,9 @@ const MoviesScreen = () => {
             }
         };
 
-        if (token) {
-            setLoading(true);
-            getSessions();
-        }
-    }, [user, token]);
+        setLoading(true);
+        getSessions();
+    }, [signOut]);
 
     if (loading) {
         return <Text>Chargement des séances...</Text>;

@@ -1,16 +1,12 @@
-import {API_PATH, HOST_PATH} from "@/api/utils";
 import {Reservation, ReservationMinimal} from "@/model/ReservationInterface";
+import {fetchWithAuth} from "@/api/auth";
 
-export const fetchSessions = async (token: string|null): Promise<Reservation[]> => {
+export const fetchSessions = async (): Promise<Reservation[]> => {
     try {
         const now = new Date().toLocaleDateString('en-CA');
-        const response = await fetch(`${API_PATH}user/reservations?movieShowDate%5Bafter%5D=${now}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await fetchWithAuth(`user/reservations?movieShowDate%5Bafter%5D=${now}`,
+        {method: 'GET',},
+    );
 
         if (!response.ok) {
             throw new Error('Erreur lors de la récupération des réservations');
@@ -24,21 +20,17 @@ export const fetchSessions = async (token: string|null): Promise<Reservation[]> 
     }
 };
 
-export const fetchOneSession = async (token: string|null, id: string): Promise<ReservationMinimal> => {
+export const fetchOneSession = async (id: string): Promise<ReservationMinimal> => {
     try {
-        const response = await fetch(`${API_PATH}reservations/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await fetchWithAuth(`reservations/${id}`,
+            {method: 'GET',},
+        );
 
         if (!response.ok) {
             throw new Error('Erreur lors de la récupération des réservations');
         }
 
-        return await response.json();;
+        return await response.json();
     } catch (error) {
         throw error;
     }

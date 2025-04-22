@@ -50,7 +50,7 @@ const LoginForm = () => {
                 return;
             }
             const tokenResponse = await response.json();
-            signIn(tokenResponse.token);
+            signIn(tokenResponse.token, tokenResponse.refresh_token);
             router.replace('/');
         } catch (error) {
             // @ts-ignore
