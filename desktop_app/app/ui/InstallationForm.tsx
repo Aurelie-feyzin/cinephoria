@@ -20,6 +20,7 @@ import {fetchCinemas, MinimalCinema} from "@/app/api/cinemaApi";
 import InputField from "@/app/ui/form/InputField";
 import {useRouter} from "next/navigation";
 import {Enum} from "@/app/api/apiResponseType";
+import {useUser} from "@/app/context/UserContext";
 
 export interface InstallationInput {
     '@id': string;
@@ -64,14 +65,12 @@ const InstallationForm = ({installation, setMessageKo}:
     const watchMovieTheater = watch("movieTheater");
     const watchInstallation = watch("installation");
     const router = useRouter();
-
+    const { refreshAccessToken } = useUser();
 
     const {data: cinemas, error: errorCinemas, isLoading: isLoadingCinemas} = useQuery<MinimalCinema[], Error>({
         queryKey: ['cinemas'],
         queryFn: () => fetchCinemas()
     });
-
-    console.log(errorCinemas);
 
     const {
         data: movieTheaters,
@@ -102,13 +101,13 @@ const InstallationForm = ({installation, setMessageKo}:
     } = useQuery<InstallationMinimalDescription[], Error>(
         {
             queryKey: ['installations', watchMovieTheater],
-            queryFn: () => fetchGetInstallationByMovieTheater(watchMovieTheater as string),
+            queryFn: () => fetchGetInstallationByMovieTheater(watchMovieTheater as string, refreshAccessToken),
             enabled: !!watchMovieTheater,
         }
     );
 
     const mutation = useMutation({
-        mutationFn: (installationData: InstallationInput) => updateInstallation(watchInstallation, installationData),
+        mutationFn: (installationData: InstallationInput) => updateInstallation(watchInstallation, installationData, refreshAccessToken),
         onSuccess: (response) => {
             const id = response.id;
             router.push(`/installations/${id}`);
@@ -121,8 +120,8 @@ const InstallationForm = ({installation, setMessageKo}:
     const onSubmit: SubmitHandler<InstallationInput> = async (data) => {
         try {
             mutation.mutate(data)
+            // eslint-disable-next-line  @typescript-eslint/no-unused-vars
         } catch (error) {
-            console.log(error);
             setMessageKo('Erreur lors de la modification d\'une installation');
         }
     }

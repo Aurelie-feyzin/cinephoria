@@ -8,14 +8,17 @@ import {useParams} from "next/navigation";
 import PropertyInline from "@/app/ui/PropertyInline";
 import PageLoading from "@/app/ui/PageLoading";
 import ButtonEdit from "@/app/ui/button/ButtonEdit";
+import {useUser} from "@/app/context/UserContext";
 
 
 const CreateOutOfServiceInstallation = () => {
     const {id} = useParams();
+    const { refreshAccessToken } = useUser();
+
 
     const {data, isLoading, error} = useQuery({
             queryKey: ['installation', id],
-            queryFn: () => fetchInstallation(id as string),
+            queryFn: () => fetchInstallation(id as string, refreshAccessToken),
             enabled: !!id && typeof id === 'string',
         }
     )
