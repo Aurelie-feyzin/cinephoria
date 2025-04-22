@@ -1,7 +1,6 @@
 import {useLocalSearchParams} from 'expo-router';
 import {Text ,View} from 'react-native';
 import {fetchOneSession, } from "@/api/reservationApi";
-import {useStorageState} from "@/state/useStorageState";
 import QRCode from "react-native-qrcode-svg";
 import {useEffect, useState} from "react";
 
@@ -17,12 +16,11 @@ const ReservationQrCode = ()=> {
     const { id } = useLocalSearchParams();
     const [reservation, setReservation] = useState<ReservationQrCodeInterface>()
     const [movieName, setMovieName] = useState<string>()
-    const token: string|null = useStorageState('jwt_token')[0][1];
 
     useEffect(() => {
         const getSession = async () => {
             try {
-                const data = await fetchOneSession(token, id as string);
+                const data = await fetchOneSession(id as string);
                 const formatedData = {
                     cinemaName: data.cinemaName,
                     numberOfSeats: data.numberOfSeats,
@@ -37,10 +35,9 @@ const ReservationQrCode = ()=> {
             }
         };
 
-        if (token) {
-            getSession();
-        }
-    }, [id, token]);
+        getSession().then();
+
+    }, [id]);
 
     return (
         <View className="items-center justify-center p-4">

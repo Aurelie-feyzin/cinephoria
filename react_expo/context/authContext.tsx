@@ -1,6 +1,6 @@
 import {useContext, createContext, type PropsWithChildren, useState} from 'react';
-import {setStorageItemAsync} from "@/state/useStorageState";
 import {API_PATH} from "@/api/utils";
+import {setRefreshToken, setToken} from "@/service/storageService";
 
 interface Profile  {
     firstName: string;
@@ -9,7 +9,7 @@ interface Profile  {
 }
 
 const AuthContext = createContext<{
-    signIn: (token: string) => void;
+    signIn: (token: string, refreshToken: string) => void;
     signOut: () => void;
     user: Profile | null;
     isLoading: boolean;
@@ -42,9 +42,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                signIn: (token: string) => {
+                signIn: async (token: string, refreshToken: string) => {
                     setIsLoading(true);
-                    setStorageItemAsync('jwt_token', token).then();
+                    await setToken(token);
+                    await setRefreshToken(refreshToken);
 
                     fetch(`${API_PATH}profile`, {
                         method: 'GET',
@@ -61,16 +62,17 @@ export function SessionProvider({ children }: PropsWithChildren) {
                         .then((data) => {
                             setUser(data);
                             setError(null);
-                            setIsLoading(false);
                         })
                         .catch((err) => {
                             setUser(null);
                             setError(err.message);
-                            setIsLoading(false);
-                        });
+                        })
+                        .finally(() => setIsLoading(false));
                 },
                 signOut: () => {
-                    setStorageItemAsync('jwt_token', null).then();
+                    console.log('sigout');
+                    setToken(null).then();
+                    setRefreshToken( null).then();
                 },
                 user,
                 isLoading,
