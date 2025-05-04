@@ -1,10 +1,10 @@
-interface ProjectionQuality {
+export interface ProjectionQuality {
     '@id': string;
     '@type': string,
     name: string;
 }
 
-interface FullProjectionQuality {
+export interface FullProjectionQuality {
     '@id': string;
     '@type': string,
     name: string;

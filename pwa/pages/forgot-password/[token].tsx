@@ -9,6 +9,7 @@ import PageContainer from "../../components/common/layout/PageContainer";
 import InfoValidatePassword from "../../components/common/form/InfoValidatePassword";
 import {REQUIRED, validatePassword} from "../../components/common/form/validator_tools";
 import ButtonSubmit from "../../components/common/button/ButtonSubmit";
+import {ResetPasswordInput} from "../../model/User";
 
 
 const ResetPassword = () => {

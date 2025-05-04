@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {Cinema} from "../model/Cinema";
 
 export const fetchDashboard = async (): Promise<Cinema[]> => {
     const response = await fetch(`${API_PATH}dashboard/dashboard`, {

@@ -1,5 +1,7 @@
+import {MinimalCinema} from "./Cinema";
+import {FullProjectionQuality} from "./ProjectionQuality";
 
-type MovieTheater = {
+export type MovieTheater = {
     '@id': string;
     '@type': string,
     id: string;
@@ -11,7 +13,7 @@ type MovieTheater = {
     projectionQuality: FullProjectionQuality;
 }
 
-type MovieTheaterInput = {
+export type MovieTheaterInput = {
     '@id': string;
     '@type': string,
     cinema: string;
@@ -20,12 +22,4 @@ type MovieTheaterInput = {
     reducedMobilitySeats: number;
     priceInEuros: number;
     projectionQuality: string;
-}
-
-interface MovieTheaterApiResponse {
-    'hydra:member': MovieTheater[];
-    'hydra:view'?: {
-        'hydra:next'?: string;
-        'hydra:last'?: string;
-    };
 }

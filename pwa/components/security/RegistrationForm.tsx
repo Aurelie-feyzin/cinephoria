@@ -11,6 +11,7 @@ import InfoValidatePassword from "../common/form/InfoValidatePassword";
 import ButtonSubmit from "../common/button/ButtonSubmit";
 import {useMutation} from "react-query";
 import {LOGIN_FORM} from "../../pages/signIn";
+import {UserInput} from "../../model/User";
 
 const RegistrationForm = ({setFormVisible}: { setFormVisible: any }) => {
     const {

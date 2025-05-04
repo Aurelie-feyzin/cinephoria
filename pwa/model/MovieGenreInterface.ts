@@ -1,5 +1,6 @@
+import {Movie} from "./MovieInterface";
 
-interface MovieGenre {
+export interface MovieGenre {
     '@id': string,
     '@type': string,
     name: string,

@@ -1,5 +1,6 @@
 import {API_PATH} from "./utils";
 import Cookies from "js-cookie";
+import {Employee, EmployeeInput, User, UserInput} from "../model/User";
 
 
 export const fetchEmployee = async (id: string): Promise<Employee> => {
@@ -33,7 +34,7 @@ export const fetchEmployees = async (page: number, itemsPerPage: number): Promis
     return await response.json();
 }
 
-export const updateEmployeeById = async (id: string, EmployeeInput: any) => {
+export const updateEmployeeById = async (id: string, EmployeeInput: EmployeeInput) => {
     const response = await fetch(`${API_PATH}employees/${id}`, {
         method: 'PATCH',
         headers: {

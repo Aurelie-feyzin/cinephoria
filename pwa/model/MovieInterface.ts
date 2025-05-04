@@ -1,4 +1,8 @@
-interface Movie {
+import {AgeRestriction} from "./AgeRestriction";
+import {MovieGenre} from "./MovieGenreInterface";
+import {MovieShow} from "./MovieShow";
+
+export interface Movie {
     '@id': string,
     id: string,
     '@type': string,
@@ -14,7 +18,7 @@ interface Movie {
     movieShows: MovieShow[],
 }
 
-interface MinimalMovie {
+export interface MinimalMovie {
     '@id': string,
     id: string,
     '@type': string,
@@ -23,7 +27,7 @@ interface MinimalMovie {
     description?: string,
 }
 
-interface MovieDescription {
+export interface MovieDescription {
     '@id': string,
      id: string,
     '@type': string,
@@ -39,7 +43,7 @@ interface MovieDescription {
     rating: number,
 }
 
-interface MovieDescriptionInput {
+export interface MovieDescriptionInput {
     '@id': string,
     id: string,
     '@type': string,

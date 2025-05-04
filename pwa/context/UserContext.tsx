@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
 import {useRouter} from "next/router";
+import {Profile} from "../model/User";
 
 type ProfileContext = {
     user?: Profile | null;

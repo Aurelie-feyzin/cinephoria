@@ -16,6 +16,9 @@ import {fetchMovieInCinema} from "../request/movie";
 import {fetchMovieShowByMovie} from "../request/movieShow";
 import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
+import {MovieShowReservation, MovieShowReservationApiResponse} from "../model/MovieShow";
+import {ApiResponse} from "../model/ApiResponseType";
+import {MovieDescription} from "../model/MovieInterface";
 
 const Reservation = () => {
     const {user} = useUser();

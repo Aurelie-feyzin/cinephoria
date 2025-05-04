@@ -1,4 +1,4 @@
-interface OpeningHours {
+export interface OpeningHours {
     dayOfWeek: string;
     openingTime: string;
     closingTime: string;

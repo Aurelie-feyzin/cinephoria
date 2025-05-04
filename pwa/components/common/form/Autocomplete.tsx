@@ -1,30 +1,25 @@
 // Generic interface for Suggestion
-import {Control, Controller} from "react-hook-form";
+import {Control, Controller, FieldValues, Path} from "react-hook-form";
 import {useState} from "react";
 import {useQuery} from "react-query";
+import {ApiResponse, WithIdentifiers} from "../../../model/ApiResponseType";
 
 export interface Suggestion<T> {
     "@id": string;
     [key: string]: T | string;
 }
-
 // Props definition for the Autocomplete component
-interface AutocompleteProps<T> {
-    control: Control;
+interface AutocompleteProps<T extends Record<string, any>> {
+    control: Control<any>;
     name: string;
     label: string;
     fetchSuggestions: (query: string) => Promise<ApiResponse<T>>;
-    suggestionField: keyof Suggestion<T>; // The key to access the suggestion's main text (e.g., 'name', 'title')
-    initialSuggestion?: Suggestion<T>
+    suggestionField: keyof WithIdentifiers<T>;
+    initialSuggestion?: Suggestion<T>;
     className?: string;
 }
 
-interface ApiResponse<T> {
-    'hydra:member': Suggestion<T>[]; // La clé contenant les suggestions
-    'hydra:totalItems'?: number; // Si tu as une clé de pagination, ou un nombre total d'items
-}
-
-const Autocomplete = <T extends string>({
+const Autocomplete = <T extends FieldValues = FieldValues>({
                                             control,
                                             name,
                                             label,
@@ -51,7 +46,7 @@ const Autocomplete = <T extends string>({
     const suggestions = data?.['hydra:member'] || [];
 
     // Handle option selection from the dropdown
-    const handleSelectOption = (suggestion: Suggestion<T>, field: any) => {
+    const handleSelectOption = (suggestion: WithIdentifiers<T>, field: any) => {
         setSelectedOption(suggestion); // Update selected option state
         setQuery(suggestion[suggestionField] as string); // Set the input field to the selected option's property (e.g., 'name' or 'title')
         setIsDropdownOpen(false); // Close the dropdown
@@ -69,7 +64,7 @@ const Autocomplete = <T extends string>({
                         <input
                             {...field}
                             type="text"
-                            value={selectedOption ? selectedOption[suggestionField] : field.value} // Display the selected option's dynamic field or the query
+                            value={selectedOption ? String(selectedOption[suggestionField]) : field.value} // Display the selected option's dynamic field or the query
                             onChange={(e) => {
                                 setQuery(e.target.value); // Update the query on user input
                                 field.onChange(e.target.value); // Update react-hook-form value
@@ -94,11 +89,11 @@ const Autocomplete = <T extends string>({
                             <div className="absolute top-full left-0 w-full bg-white border border-gray-300 shadow-lg mt-1">
                                 {suggestions.map((suggestion) => (
                                     <div
-                                        key={suggestion.id}
+                                        key={suggestion["@id"]}
                                         onClick={() => handleSelectOption(suggestion, field)} // Call handleSelectOption with the selected suggestion
                                         className="p-2 cursor-pointer hover:bg-gray-200"
                                     >
-                                        {suggestion[suggestionField]} {/* Dynamically access the field */}
+                                        {typeof suggestion[suggestionField] === 'string' ? suggestion[suggestionField] : ''}
                                     </div>
                                 ))}
                             </div>

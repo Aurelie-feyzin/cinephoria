@@ -8,6 +8,7 @@ import PropertyInline from "../../../components/common/layout/PropertyInline";
 import {fetchMovieShowById} from "../../../request/movieShow";
 import dayjs from "dayjs";
 import ButtonEdit from "../../../components/common/button/ButtonEdit";
+import {FullMovieShow} from "../../../model/MovieShow";
 
 const MoviePage = () => {
     const router = useRouter()

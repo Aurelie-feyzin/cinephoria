@@ -13,6 +13,10 @@ import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
 import {fetchMovieShowByMovie} from "../request/movieShow";
 import {useRouter} from "next/router";
+import {ApiResponse} from "../model/ApiResponseType";
+import {MovieGenre} from "../model/MovieGenreInterface";
+import { MovieDescription } from "../model/MovieInterface";
+import {MovieShowReservation} from "../model/MovieShow";
 
 
 const Movies = () => {

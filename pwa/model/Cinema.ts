@@ -1,4 +1,7 @@
-interface Cinema {
+import {Address} from "./Address";
+import {OpeningHours} from "./OpeningHours";
+
+export interface Cinema {
     '@id': string;
     id: number;
     name: string;
@@ -7,7 +10,7 @@ interface Cinema {
     openingHours: OpeningHours[];
 }
 
-interface MinimalCinema {
+export interface MinimalCinema {
     '@id': string;
     '@type': string,
     name: string;

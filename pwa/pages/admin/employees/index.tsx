@@ -10,6 +10,7 @@ import Table, { Column } from "../../../components/common/Table";
 import Link from "next/link";
 import EditIcon from "../../../components/common/Icon/EditIcon";
 import {orderBy} from "lodash";
+import {Employee} from "../../../model/User";
 
 const EmployeeList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);

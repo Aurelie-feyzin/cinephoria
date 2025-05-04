@@ -11,6 +11,8 @@ import ButtonSubmit from "../../common/button/ButtonSubmit";
 import React, {SetStateAction} from "react";
 import dayjs from "dayjs";
 import {fetchEnums, URL_ENUM} from "../../../request/api";
+import {MovieDescription, MovieDescriptionInput} from "../../../model/MovieInterface";
+import {MovieGenre} from "../../../model/MovieGenreInterface";
 
 
 const MovieForm = ({movieData, mutation, setMessageKo}:

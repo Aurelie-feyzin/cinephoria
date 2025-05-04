@@ -1,4 +1,4 @@
-interface MinimalSeat {
+export interface MinimalSeat {
     '@id': string;
     '@type': string,
     id: string;

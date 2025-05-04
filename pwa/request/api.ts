@@ -1,4 +1,5 @@
 import {API_PATH} from "./utils";
+import {Enum} from "../model/ApiResponseType";
 
 export const URL_ENUM = {
     age_restriction: 'age_restrictions',

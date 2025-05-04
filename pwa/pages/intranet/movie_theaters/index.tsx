@@ -10,6 +10,8 @@ import PageLoading from "../../../components/common/PageLoading";
 import PageError from "../../../components/common/PageError";
 import {fetchMovieTheaters} from "../../../request/movieTheater";
 import Pagination from "../../../components/common/Pagination";
+import {ApiResponse} from "../../../model/ApiResponseType";
+import {MovieTheater} from "../../../model/movieTheater";
 
 
 const MovieTheaterList = () => {

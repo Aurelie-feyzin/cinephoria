@@ -1,5 +1,7 @@
+import {MinimalMovie, Movie} from "./MovieInterface";
+import {MovieTheater} from "./movieTheater";
 
-interface MovieShow {
+export interface MovieShow {
     '@id': string;
     '@type': string,
     date: Date;
@@ -9,7 +11,7 @@ interface MovieShow {
     movieTheater: MovieTheater;
 }
 
-interface FullMovieShow {
+export interface FullMovieShow {
     '@id': string;
     '@type': string,
     'id': string;
@@ -21,7 +23,7 @@ interface FullMovieShow {
     movieTheater: MovieTheater;
 }
 
-interface MovieShowInput {
+export interface MovieShowInput {
     '@id': string;
     '@type': string,
     'id': string;
@@ -34,7 +36,7 @@ interface MovieShowInput {
     cinema:string
 }
 
-interface FullMovieShowApiResponse {
+export interface FullMovieShowApiResponse {
     'hydra:member': FullMovieShow[];
     'hydra:view'?: {
         'hydra:next'?: string;
@@ -42,7 +44,7 @@ interface FullMovieShowApiResponse {
     };
 }
 
-interface MovieShowReservation {
+export interface MovieShowReservation {
     id: string;
     date: Date;
     startTime: string;
@@ -53,7 +55,7 @@ interface MovieShowReservation {
     availableSeats: number;
 }
 
-interface MovieShowReservationApiResponse {
+export interface MovieShowReservationApiResponse {
     'hydra:member': MovieShowReservation[];
     'hydra:view'?: {
         'hydra:next'?: string;

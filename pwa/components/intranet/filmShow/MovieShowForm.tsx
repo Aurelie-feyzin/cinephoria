@@ -13,6 +13,8 @@ import {useCinemas} from "../../../context/CinemaContext";
 import Autocomplete from "../../common/form/Autocomplete";
 import {fetchMovieTheatersByCinema} from "../../../request/movieTheater";
 import InputTimeField from "../../common/form/InputTimeField";
+import {FullMovieShow, MovieShowInput} from "../../../model/MovieShow";
+import {MovieDescription} from "../../../model/MovieInterface";
 
 const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
                        {
@@ -108,7 +110,7 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
                     />
                 </div>
 
-                <Autocomplete
+                <Autocomplete<MovieDescription>
                     control={control}
                     name="movie"
                     label="Film"

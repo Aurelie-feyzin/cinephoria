@@ -9,6 +9,8 @@ import ValidIcon from "../../../components/common/Icon/ValidIcon";
 import RefuseIcon from "../../../components/common/Icon/RefuseIcon";
 import {fetchEnums, URL_ENUM} from "../../../request/api";
 import AlertError from "../../../components/common/alert/AlertError";
+import {ApiResponse} from "../../../model/ApiResponseType";
+import {Review} from "../../../model/Review";
 
 
 const ReviewList = () => {

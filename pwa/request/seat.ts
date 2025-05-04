@@ -1,4 +1,6 @@
 import {API_PATH} from "./utils";
+import {ApiResponse} from "../model/ApiResponseType";
+import {MinimalSeat} from "../model/Seat";
 
 
 export const fetchSeatsByMovieTheater = async (movieTheaterId: string): Promise<ApiResponse<MinimalSeat>> => {

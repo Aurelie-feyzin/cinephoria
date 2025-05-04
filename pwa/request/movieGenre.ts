@@ -1,4 +1,5 @@
 import {API_PATH} from "./utils";
+import {MovieGenre} from "../model/MovieGenreInterface";
 
 export const fetchMovieGenres = async (): Promise<MovieGenre[]> => {
     const response = await fetch(`${API_PATH}movie_genres`, {

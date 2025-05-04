@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 const Popover = ({children, content, title, trigger = "hover", size = 300}:
                      { children: React.ReactNode, content: React.ReactNode, title?: string, trigger?: string, size?: number }) => {
     const [show, setShow] = useState(false);
-    const wrapperRef = useRef(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const handleMouseOver = () => {
         if (trigger === "hover") {
@@ -22,7 +22,9 @@ const Popover = ({children, content, title, trigger = "hover", size = 300}:
 
     useEffect(() => {
         function handleClickOutside(event: Event) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+            if (wrapperRef.current &&
+                event.target instanceof Node &&
+                !wrapperRef.current.contains(event.target)) {
                 setShow(false);
             }
         }

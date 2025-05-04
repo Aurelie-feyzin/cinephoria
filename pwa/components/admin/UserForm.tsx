@@ -3,6 +3,7 @@ import {customMaxLength, REQUIRED} from "../common/form/validator_tools";
 import React, {ReactNode} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import ButtonSubmit from "../common/button/ButtonSubmit";
+import {Employee, EmployeeInput} from "../../model/User";
 
 const EmployeeForm = ({onSubmit, employeeData, children}:
                       {onSubmit:SubmitHandler<EmployeeInput>, employeeData?: Employee, children?: ReactNode }) => {

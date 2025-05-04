@@ -1,4 +1,5 @@
 import React from "react";
+import {ReviewInReservation} from "../../model/Review";
 
 
 const UserReviewStatus = ({review}: { review: ReviewInReservation }) => {

@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {FullMovieShow, FullMovieShowApiResponse, MovieShowReservationApiResponse} from "../model/MovieShow";
 
 export const fetchMovieShowById = async (id: string): Promise<FullMovieShow> => {
     const url = `${API_PATH}movie_shows/${id}`;
