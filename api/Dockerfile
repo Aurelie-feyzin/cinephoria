@@ -71,6 +71,7 @@ RUN set -eux; \
 		xdebug \
 	;
 
+COPY --link frankenphp/conf.d/host.dev /etc/caddy/hosts.caddy
 COPY --link frankenphp/conf.d/app.dev.ini $PHP_INI_DIR/conf.d/
 
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
@@ -83,6 +84,7 @@ ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+COPY --link frankenphp/conf.d/host.prod /etc/caddy/hosts.caddy
 COPY --link frankenphp/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY --link frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 
