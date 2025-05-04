@@ -13,7 +13,15 @@ services:
     build:
       context: ./pwa
       target: prod
+      network: host
+      extra_hosts:
+        - php=127.0.0.1
 
   database:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  mongodb:
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}

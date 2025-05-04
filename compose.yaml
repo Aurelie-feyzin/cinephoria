@@ -55,61 +55,12 @@ services:
 ###< doctrine/doctrine-bundle ###
 
   mongodb:
-    image: mongo:latest
+    image: mongo:8.0.9-noble
     container_name: mongodb
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-
-  mailpit:
-    image: axllent/mailpit
-    container_name: mailpit
-    restart: unless-stopped
-    volumes:
-      - ./data:/data
-    ports:
-      - 8025:8025
-      - 1025:1025
-    environment:
-      MP_MAX_MESSAGES: 5000
-      MP_DATABASE: /data/mailpit.db
-      MP_SMTP_AUTH_ACCEPT_ANY: 1
-      MP_SMTP_AUTH_ALLOW_INSECURE: 1
-
-#  tauri:
-#    container_name: tauri_app
-#    build:
-#      context: ./desktop_app
-#    volumes:
-#      - ./desktop_app:/app
-#    working_dir: /app
-#    environment:
-#      - GTK_IM_MODULE=ibus
-#      - RUST_BACKTRACE=1 tauri dev
-#    command: bash -c "npm install --legacy-peer-deps && npx tauri dev"
-#    ports:
-#      - "4000:4000"  # Choisis un port pour l'application Tauri si nécessaire
-#    depends_on:
-#      - php
-
-
-# Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
-
-#  react_native_app:
-#    build:
-#      context: ./react_expo
-#      dockerfile: Dockerfile
-#    container_name: mobile_app
-#    ports:
-#      - "19000:19000"
-#      - "19001:19001"
-#      - "19002:19002"
-#    volumes:
-#      - ./react_expo:/app
-#    command: ["sh", "-c", "ls -la /app && pnpm install && expo start --tunnel"]
 
 volumes:
   caddy_data:
