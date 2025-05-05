@@ -1,3 +1,5 @@
+'use client';
+
 import PageIntranetContainer from "../../components/intranet/PageIntranetContainer";
 import {useQuery} from "react-query";
 import {fetchMoviesDescription} from "../../request/movie";

@@ -1,3 +1,5 @@
+'use client';
+
 import InputField from "../../components/common/form/InputField";
 import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";

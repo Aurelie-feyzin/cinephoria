@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import PageIntranetContainer from "../../../components/intranet/PageIntranetContainer";
 import {useMutation, useQuery} from "react-query";
@@ -11,8 +13,6 @@ import {fetchEnums, URL_ENUM} from "../../../request/api";
 import AlertError from "../../../components/common/alert/AlertError";
 import {ApiResponse} from "../../../model/ApiResponseType";
 import {Review} from "../../../model/Review";
-
-
 const ReviewList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [published, setPublished] = useState<string>();

@@ -1,3 +1,5 @@
+'use client';
+
 import InputField from "../common/form/InputField";
 import {customMaxLength, REQUIRED} from "../common/form/validator_tools";
 import React, {ReactNode} from "react";

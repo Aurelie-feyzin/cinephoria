@@ -1,3 +1,5 @@
+'use client';
+
 import InputField from "./form/InputField";
 import {customMax, customMin, REQUIRED} from "./form/validator_tools";
 import RadioButtons, {OptionBooleans} from "./form/RadioButtons";

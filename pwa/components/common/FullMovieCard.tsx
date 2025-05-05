@@ -1,3 +1,5 @@
+'use client';
+
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react';
 import Image from "next/image";
 import {useQuery} from "react-query";

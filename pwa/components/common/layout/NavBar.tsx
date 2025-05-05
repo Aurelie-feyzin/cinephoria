@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import Image from "next/image";
 import logo from "../../../public/images/logo_cinephoria.png";

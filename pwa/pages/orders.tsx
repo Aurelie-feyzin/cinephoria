@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect, useState} from "react";
 import PageContainer from "../components/common/layout/PageContainer";
 import {useUser} from "../context/UserContext";

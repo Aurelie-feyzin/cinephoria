@@ -50,7 +50,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, []);
 
     const login = (token: string) => {
-        const isProduction = window.location.protocol === 'https:';
+        const isBrowser = typeof window !== 'undefined';
+        const isProduction = isBrowser && window.location.protocol === 'https:';
         Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
         fetch('/api/profile', {
             method: 'GET',

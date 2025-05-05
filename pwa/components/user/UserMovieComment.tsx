@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect, useState} from "react";
 import EditIcon from "../common/Icon/EditIcon";
 import FormReview from "./FormReview";

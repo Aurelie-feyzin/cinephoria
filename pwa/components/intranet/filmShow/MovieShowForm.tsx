@@ -1,5 +1,6 @@
-import {UseMutationResult, useQuery} from "react-query";
+'use client';
 
+import {UseMutationResult, useQuery} from "react-query";
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../../common/form/InputField";
 import {REQUIRED} from "../../common/form/validator_tools";

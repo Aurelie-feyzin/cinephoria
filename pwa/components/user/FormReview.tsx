@@ -1,3 +1,5 @@
+'use client';
+
 import {SubmitHandler, useForm} from "react-hook-form";
 import TextAreaField from "../common/form/TextAreaField";
 import ButtonSubmit from "../common/button/ButtonSubmit";

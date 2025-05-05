@@ -1,3 +1,5 @@
+'use client';
+
 import PageAdminContainer from "../../../components/admin/PageAdminContainer";
 import ButtonAdd from "../../../components/common/button/ButtonAdd";
 import PageLoading from "../../../components/common/PageLoading";

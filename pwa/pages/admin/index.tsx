@@ -1,3 +1,5 @@
+'use client';
+
 import type {NextPage} from "next";
 import React, {useState} from "react";
 import PageAdminContainer from "../../components/admin/PageAdminContainer";

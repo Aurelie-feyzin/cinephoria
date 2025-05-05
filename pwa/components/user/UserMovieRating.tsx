@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect, useState} from "react";
 import StarIcon from "../common/Icon/StarIcon";
 import {useMutation} from "react-query";

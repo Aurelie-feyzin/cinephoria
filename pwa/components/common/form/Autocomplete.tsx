@@ -1,3 +1,5 @@
+'use client';
+
 // Generic interface for Suggestion
 import {Control, Controller, FieldValues, Path} from "react-hook-form";
 import {useState} from "react";

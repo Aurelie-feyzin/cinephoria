@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 import {fetchUserReservations} from "../../request/reservation";

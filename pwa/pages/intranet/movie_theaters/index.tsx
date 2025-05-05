@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import PageIntranetContainer from "../../../components/intranet/PageIntranetContainer";
 import Link from "next/link";
