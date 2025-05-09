@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\Movie;
+use App\Entity\MovieGenre;
 use App\Enum\AgeRestriction;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -50,7 +51,7 @@ class MovieFixtures extends AbstractTsvImport implements DependentFixtureInterfa
         ;
 
         foreach (explode(',', $element[1]) as $genre) {
-            $movie->addGenre($this->getReference('Genre_'.$genre));
+            $movie->addGenre($this->getReference('Genre_'.$genre, MovieGenre::class));
         }
 
         $manager->persist($movie);

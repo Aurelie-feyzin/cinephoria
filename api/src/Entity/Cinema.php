@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity]
-#[ApiResource(mercure: true)]
+#[ApiResource(mercure: false)]
 class Cinema
 {
     use IdTrait;

@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
-    mercure: true)]
+    mercure: false)]
 #[ApiFilter(SearchFilter::class, properties: ['movieTheater' => 'exact', 'status' => 'exact'])]
 abstract class Installation
 {

@@ -7,6 +7,7 @@ use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\Address;
 use App\Entity\Cinema;
 use App\Entity\MovieTheater;
+use App\Entity\ProjectionQuality;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
@@ -60,7 +61,7 @@ class CinemaFixtures extends AbstractTsvImport implements DependentFixtureInterf
         return (new MovieTheater())
             ->setCinema($cinema)
             ->setTheaterName((string) $numberRoom)
-            ->setProjectionQuality($this->getReference('Projection_quality_'.$faker->numberBetween(1, 5)))
+            ->setProjectionQuality($this->getReference('Projection_quality_'.$faker->numberBetween(1, 5), ProjectionQuality::class))
             ->setNumberOfSeats($faker->numberBetween(100, 200))
             ->setReducedMobilitySeats($faker->numberBetween(2, 5))
         ;
