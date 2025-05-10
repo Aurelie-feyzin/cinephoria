@@ -84,6 +84,8 @@ FROM frankenphp_base AS frankenphp_prod
 
 ENV APP_ENV=prod
 ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
+ENV DATABASE_URL=$DATABASE_URL
+ENV MONGODB_URL=$MONGODB_URL
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 

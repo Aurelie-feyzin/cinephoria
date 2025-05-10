@@ -7,8 +7,8 @@ parameters:
     locale: fr
     rootDirectory: '%kernel.project_dir%'
     cinephoriaUrl: '%env(APP_HOST)%'
-    env(MONGODB_URL): ''
-    env(MONGODB_DB): ''
+    env(MONGODB_URL): '%env(resolve:MONGODB_URL)%'
+    env(MONGODB_DB): '%env(resolve:MONGODB_DB)%'
 
 services:
     # default configuration for services in *this* file
@@ -44,6 +44,12 @@ when@dev:
                 string $rootDirectory: '%rootDirectory%'
 
 when@prod:
+    parameters:
+        locale: fr
+        rootDirectory: '%kernel.project_dir%'
+        cinephoriaUrl: '%env(APP_HOST)%'
+        env(MONGODB_URL): '%env(resolve:MONGODB_URL)%'
+        env(MONGODB_DB): '%env(resolve:MONGODB_DB)%'
     services:
         _defaults:
             autowire: true      # Automatically injects dependencies in your services.
