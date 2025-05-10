@@ -1,0 +1,96 @@
+name: Deploy Cinephoria (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        default: 'production'
+
+env:
+  ENVIRONMENT_NAME: ${{ github.event.inputs.environment }}
+
+jobs:
+  deploy:
+    name: Deploy to Production Server
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://cinephoria.me
+    permissions:
+      contents: read
+      id-token: none
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: deploy-prepare
+
+      - name: Deploy to Remote Server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: 1981
+          script: |
+            echo "==> Pulling latest code"
+            cd /var/www/cinephoria
+            git pull origin main
+
+            echo "==> Exporting environment variables"
+            export SERVER_NAME=${{ secrets.PROD_SERVER_NAME }}
+            export APP_SECRET=${{ secrets.PROD_APP_SECRET }}
+            export POSTGRES_PASSWORD=${{ secrets.PROD_POSTGRES_PASSWORD }}
+            export MONGO_ROOT_PASSWORD=${{ secrets.PROD_MONGO_ROOT_PASSWORD }}
+            export MONGO_ROOT_USERNAME=${{ secrets.PROD_MONGO_ROOT_USERNAME }}
+            export CADDY_MERCURE_JWT_SECRET=${{ secrets.PROD_CADDY_MERCURE_JWT_SECRET }}
+            export MONGODB_URL="mongodb://${{ secrets.PROD_MONGO_ROOT_USERNAME }}:${{ secrets.PROD_MONGO_ROOT_PASSWORD }}@mongodb:27017/?authSource=admin"
+            export DATABASE_URL="postgresql://app:${{ secrets.PROD_POSTGRES_PASSWORD }}@database:5432/app?serverVersion=16&charset=utf8"
+            export JWT_PASSPHRASE=${{ secrets.PROD_JWT_SECRET }}
+            export MAILER_DSN=${{ secrets.PROD_MAILER_DSN }}
+            
+            echo "==> Creating .env file"
+            echo "SERVER_NAME=${{ secrets.PROD_SERVER_NAME }}" > .env
+            echo "APP_SECRET=${{ secrets.PROD_APP_SECRET }}" >> .env
+            echo "POSTGRES_PASSWORD=${{ secrets.PROD_POSTGRES_PASSWORD }}" >> .env
+            echo "MONGO_ROOT_PASSWORD=${{ secrets.PROD_MONGO_ROOT_PASSWORD }}" >> .env
+            echo "MONGO_ROOT_USERNAME=${{ secrets.PROD_MONGO_ROOT_USERNAME }}" >> .env
+            echo "CADDY_MERCURE_JWT_SECRET=${{ secrets.PROD_CADDY_MERCURE_JWT_SECRET }}" >> .env
+            echo "MONGODB_URL=mongodb://${{ secrets.PROD_MONGO_ROOT_USERNAME }}:${{ secrets.PROD_MONGO_ROOT_PASSWORD }}@mongodb:27017/?authSource=admin" >> .env
+            echo "DATABASE_URL=postgresql://app:${{ secrets.PROD_POSTGRES_PASSWORD }}@database:5432/app?serverVersion=16&charset=utf8" >> .env
+            echo "JWT_PASSPHRASE=${{ secrets.PROD_JWT_SECRET }}" >> .env
+            echo "MAILER_DSN=${{ secrets.PROD_MAILER_DSN }}" >> .env
+            echo "CORS_ALLOW_ORIGIN=^https://cinephoria\.me$" >> .env
+            echo "TRUSTED_HOSTS=^(.+\.)?cinephoria\.me$" >> .env
+            
+            echo "==> Copying .env to api/.env.local for Symfony environment detection"
+            cp .env api/.env.local            
+
+            echo "==> Creating pwa/.env.production file"
+            echo "NEXT_PUBLIC_HOST_PATH=https://cinephoria.me/" > /var/www/cinephoria/pwa/.env.production
+            echo "NEXT_PUBLIC_API_PATH=/api/" >> /var/www/cinephoria/pwa/.env.production
+            echo "NEXT_PUBLIC_IS_PRODUCTION=true" >> /var/www/cinephoria/pwa/.env.production
+
+            echo "==> Docker compose up"
+            echo "docker compose -f compose.yaml -f compose.prod.yaml pull"
+            docker compose -f compose.yaml -f compose.prod.yaml build php --no-cache
+            docker compose -f compose.yaml -f compose.prod.yaml up -d --remove-orphans
+            
+            echo "==> Wait for containers to initialize..."
+            sleep 10
+
+            echo "==> Running composer dump-env prod"
+            docker compose exec -T php composer dump-env prod
+
+            echo "==> Running post-install commands"
+            docker compose exec -T php composer run-script --no-dev post-install-cmd
+            
+            echo "==> Post-deploy: Symfony cache & DB"
+            docker compose exec -T php php bin/console cache:clear --env=prod
+            docker compose exec -T php php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+            
+            echo "==> Generating JWT keys"
+            docker compose exec -T php bin/console lexik:jwt:generate-keypair --skip-if-exists
