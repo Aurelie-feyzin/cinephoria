@@ -11,6 +11,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       TRUSTED_HOSTS: '^(.+\.)?cinephoria\.me$'
       CORS_ALLOW_ORIGIN: '^https://cinephoria\.me$'
+      MONGODB_URL: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017?authSource=admin
 
   pwa:
     build:
