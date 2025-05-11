@@ -1,0 +1,49 @@
+name: Deploy Cinephoria (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        default: 'production'
+
+jobs:
+  deploy:
+    name: Deploy to Production Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: deploy-prepare
+
+      - name: Deploy to Remote Server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: 1981
+          script: |
+            echo "==> Pulling latest code"
+            cd cinephoria
+            git pull origin main
+
+            echo "==> Exporting environment variables"
+            export SERVER_NAME=${{ secrets.PROD_SERVER_NAME }}
+            export APP_SECRET=${{ secrets.PROD_APP_SECRET }}
+            export POSTGRES_PASSWORD=${{ secrets.PROD_POSTGRES_PASSWORD }}
+            export MONGO_ROOT_PASSWORD=${{ secrets.PROD_MONGO_ROOT_PASSWORD }}
+            export MONGO_ROOT_USERNAME=${{ secrets.PROD_MONGO_ROOT_USERNAME }}
+            export CADDY_MERCURE_JWT_SECRET=${{ secrets.PROD_CADDY_MERCURE_JWT_SECRET }}
+            export MONGODB_URL="mongodb://${{ secrets.PROD_MONGO_ROOT_USERNAME }}:${{ secrets.PROD_MONGO_ROOT_PASSWORD }}@mongodb:27017/?authSource=admin"
+
+            echo "==> Docker compose up"
+            docker compose -f compose.yaml -f compose.prod.yaml pull
+            docker compose -f compose.yaml -f compose.prod.yaml up -d --build --remove-orphans
+
+            echo "==> Post-deploy: Symfony cache & DB"
+            docker compose exec -T php php bin/console cache:clear --env=prod
+            docker compose exec -T php php bin/console doctrine:migrations:migrate --no-interaction --env=prod

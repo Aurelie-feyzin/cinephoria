@@ -5,11 +5,6 @@ services:
       - database
       - mongodb
     restart: unless-stopped
-    env_file:
-      - path: ./api/.env.local
-        required: true
-      - path: ./api/.env
-        required: true
     environment:
       PWA_UPSTREAM: pwa:3000
       SERVER_NAME: ${SERVER_NAME:-cinephoria.dvp}, php:80
