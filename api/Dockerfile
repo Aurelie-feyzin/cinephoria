@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 	file \
 	gettext \
 	git \
+    libssl-dev \
+    pkg-config \
 	&& rm -rf /var/lib/apt/lists/*
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
@@ -43,10 +45,7 @@ RUN set -eux; \
 RUN set -eux; \
 	install-php-extensions pdo_pgsql
 
-RUN apt-get update && apt-get install -y \
-    libssl-dev \
-    pkg-config && \
-    pecl uninstall mongodb && \
+RUN pecl uninstall mongodb && \
     pecl install mongodb-1.20.0 && \
     docker-php-ext-enable mongodb
 ###< doctrine/doctrine-bundle ###
@@ -84,8 +83,6 @@ FROM frankenphp_base AS frankenphp_prod
 
 ENV APP_ENV=prod
 ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
-ENV DATABASE_URL=$DATABASE_URL
-ENV MONGODB_URL=$MONGODB_URL
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 

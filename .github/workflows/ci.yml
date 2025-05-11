@@ -71,6 +71,7 @@ jobs:
         echo "${{ secrets.JWT_PUBLIC_KEY }}" | docker compose exec -T php tee config/jwt/public-test.pem > /dev/null
         docker compose exec -T php chmod 600 config/jwt/private-test.pem
         docker compose exec -T php chmod 644 config/jwt/public-test.pem
+        docker compose exec -T php bash -c 'echo "JWT_PASSPHRASE=${{ secrets.JWT_PASSPHRASE_TEST }}" > .env.test.local'
       -
         name: Run PHPUnit
         run: docker compose exec --workdir /app -T php bin/phpunit
