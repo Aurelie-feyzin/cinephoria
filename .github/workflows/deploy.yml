@@ -28,18 +28,59 @@ jobs:
         with:
           ref: deploy-prepare
 
+      - name: Build & push Docker image
+        run: |
+          docker build -t app-php:${{ github.sha }} -f api/Dockerfile ./api
+          docker save app-php:${{ github.sha }} | gzip > app-php.tar.gz
+          docker build -t app-pwa:${{ github.sha }} -f pwa/Dockerfile ./pwa
+          docker save app-pwa:${{ github.sha }} | gzip > app-pwa.tar.gz
+
       - name: Deploy to Remote Server via SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
           key: ${{ secrets.PROD_SERVER_SSH_KEY }}
-          port: 1981
+          port: ${{ secrets.PROD_PORT_SSH }}
           script: |
             echo "==> Pulling latest code"
             cd /var/www/cinephoria
             git pull origin main
 
+      - name: Copy Docker PHP image to remote
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT_SSH }}
+          source: "app-php.tar.gz"
+          target: "/opt/cinephoria/build"
+
+      - name: Copy Docker pwa image to remote
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT_SSH }}
+          source: "app-pwa.tar.gz"
+          target: "/opt/cinephoria/build"
+
+      - name: Load Docker image and deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT_SSH }}
+          script: |
+            cd /opt/cinephoria/build
+            
+            echo "==> Load Docker image with SHA"
+            gunzip -c app-php.tar.gz | docker load
+            gunzip -c app-pwa.tar.gz | docker load
+            
             echo "==> Exporting environment variables"
             export SERVER_NAME=${{ secrets.PROD_SERVER_NAME }}
             export APP_SECRET=${{ secrets.PROD_APP_SECRET }}
@@ -53,6 +94,7 @@ jobs:
             export MAILER_DSN=${{ secrets.PROD_MAILER_DSN }}
             
             echo "==> Creating .env file"
+            cd /var/www/cinephoria
             echo "SERVER_NAME=${{ secrets.PROD_SERVER_NAME }}" > .env
             echo "APP_SECRET=${{ secrets.PROD_APP_SECRET }}" >> .env
             echo "POSTGRES_PASSWORD=${{ secrets.PROD_POSTGRES_PASSWORD }}" >> .env
@@ -63,8 +105,11 @@ jobs:
             echo "DATABASE_URL=postgresql://app:${{ secrets.PROD_POSTGRES_PASSWORD }}@database:5432/app?serverVersion=16&charset=utf8" >> .env
             echo "JWT_PASSPHRASE=${{ secrets.PROD_JWT_SECRET }}" >> .env
             echo "MAILER_DSN=${{ secrets.PROD_MAILER_DSN }}" >> .env
-            echo "CORS_ALLOW_ORIGIN=^https://cinephoria\.me$" >> .env
-            echo "TRUSTED_HOSTS=^(.+\.)?cinephoria\.me$" >> .env
+            echo "CORS_ALLOW_ORIGIN=^https://cinephoria.me$" >> .env
+            echo "TRUSTED_HOSTS=^(.+.)?cinephoria.me$" >> .env
+            echo "APP_HOST=cinephoria.me" >> .env
+            echo "IMAGE_TAG=${{ github.sha }}" >> .env
+            echo "IMAGES_PREFIX=" >> .env
             
             echo "==> Copying .env to api/.env.local for Symfony environment detection"
             cp .env api/.env.local            
@@ -74,10 +119,11 @@ jobs:
             echo "NEXT_PUBLIC_API_PATH=/api/" >> /var/www/cinephoria/pwa/.env.production
             echo "NEXT_PUBLIC_IS_PRODUCTION=true" >> /var/www/cinephoria/pwa/.env.production
 
-            echo "==> Docker compose up"
-            echo "docker compose -f compose.yaml -f compose.prod.yaml pull"
-            docker compose -f compose.yaml -f compose.prod.yaml build php --no-cache
-            docker compose -f compose.yaml -f compose.prod.yaml up -d --remove-orphans
+            echo "==> Stopping existing containers"
+            docker compose -f compose.yaml -f compose.prod.yaml down
+
+            echo "==> Starting containers from loaded images"
+            docker compose -f compose.yaml -f compose.prod.yaml up --build -d --remove-orphans
             
             echo "==> Wait for containers to initialize..."
             sleep 10
@@ -94,3 +140,23 @@ jobs:
             
             echo "==> Generating JWT keys"
             docker compose exec -T php bin/console lexik:jwt:generate-keypair --skip-if-exists
+
+      - name: Cleaning up build and old Docker images
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.PROD_SERVER_HOST }}
+          username: ${{ secrets.PROD_SERVER_USER }}
+          key: ${{ secrets.PROD_SERVER_SSH_KEY }}
+          port: ${{ secrets.PROD_PORT_SSH }}
+          script: |
+            echo "==> Cleaning up app-php images (keep 2 latest)"
+            docker images --format '{{.Repository}}:{{.Tag}} {{.ID}} {{.CreatedAt}}' | grep '^app-php:' | \
+            sort -r -k3 | awk 'NR>2 { print $2 }' | xargs -r docker rmi || true           
+            
+            echo "==> Cleaning up app-pwa images (keep 2 latest)"
+            docker images --format '{{.Repository}}:{{.Tag}} {{.ID}} {{.CreatedAt}} ' | grep '^app-pwa:' | \
+            sort -r -k3 | awk 'NR>2 { print $2 }' | xargs -r docker rmi || true
+            
+            echo "==> Cleanup build archives"
+            rm -f /opt/cinephoria/build/app-php.tar.gz
+            rm -f /opt/cinephoria/build/app-pwa.tar.gz
