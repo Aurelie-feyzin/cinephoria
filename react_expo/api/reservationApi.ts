@@ -1,4 +1,4 @@
-import {API_PATH, HOST_PATH} from "@/api/utils";
+import {API_PATH} from "@/api/utils";
 import {Reservation, ReservationMinimal} from "@/model/ReservationInterface";
 
 export const fetchSessions = async (token: string|null): Promise<Reservation[]> => {
