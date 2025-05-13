@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/router'
 import {useQuery} from "react-query";
 import {fetchMovieById} from "../../../request/movie";
@@ -10,6 +12,7 @@ import Link from "next/link";
 import EditIcon from "../../../components/common/Icon/EditIcon";
 import ButtonEdit from "../../../components/common/button/ButtonEdit";
 import PropertyInline from "../../../components/common/layout/PropertyInline";
+import {MovieDescription} from "../../../model/MovieInterface";
 
 const MoviePage = () => {
     const router = useRouter()

@@ -1,4 +1,7 @@
-interface ReviewInReservation {
+import {Enum} from "./ApiResponseType";
+import {ReservationInReview} from "./ReservationInterface";
+
+export interface ReviewInReservation {
     '@id': string;
     '@type': string,
     id: string;
@@ -8,7 +11,7 @@ interface ReviewInReservation {
     updatedAt: Date,
 }
 
-interface Review {
+export interface Review {
     '@id': string;
     '@type': string,
     id: string;
@@ -19,7 +22,7 @@ interface Review {
     reservation: ReservationInReview,
 }
 
-interface ReviewInput {
+export interface ReviewInput {
     '@id': string;
     '@type': string,
     id: string;

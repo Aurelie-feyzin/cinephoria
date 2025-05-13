@@ -1,5 +1,5 @@
 
-interface User {
+export interface User {
     '@id': string;
     '@type': string,
     firstName: string;
@@ -8,14 +8,14 @@ interface User {
     password: string;
 }
 
-type UserInput = {
+export type UserInput = {
     firstName: string;
     lastName: string;
     email: string;
     plainPassword: string;
 }
 
-type Employee = {
+export type Employee = {
     '@id': string;
     '@type': string,
     id : string,
@@ -25,7 +25,7 @@ type Employee = {
     roles: string[];
 }
 
-type EmployeeInput = {
+export type EmployeeInput = {
     firstName: string;
     lastName: string;
     email: string;
@@ -33,22 +33,22 @@ type EmployeeInput = {
     roles: string[];
 }
 
-type Profile = {
+export type Profile = {
     firstName: string;
     lastName: string;
     email: string;
     role?:string;
 }
 
-type LoginInput = {
+export type LoginInput = {
     username: string;
     password: string;
 }
 
-type ResetPasswordInput = {
+export type ResetPasswordInput = {
     password: string;
 }
 
-type ForgotPasswordInput = {
+export type ForgotPasswordInput = {
     email: string;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import PageIntranetContainer from "../../components/intranet/PageIntranetContainer";
 import {useQuery} from "react-query";
 import {fetchMoviesDescription} from "../../request/movie";
@@ -11,6 +13,8 @@ import ButtonAdd from "../../components/common/button/ButtonAdd";
 import Table, {Column} from "../../components/common/Table";
 import dayjs from "dayjs";
 import Pagination from "../../components/common/Pagination";
+import {ApiResponse} from "../../model/ApiResponseType";
+import {MovieDescription} from "../../model/MovieInterface";
 
 
 const MovieList = () => {

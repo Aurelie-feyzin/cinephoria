@@ -1,4 +1,5 @@
 import {API_PATH} from "./utils";
+import {AgeRestriction} from "../model/AgeRestriction";
 
 export const fetchAgeRestrictions = async (): Promise<AgeRestriction[]> => {
     const response = await fetch(`${API_PATH}ageRestrictions`, {

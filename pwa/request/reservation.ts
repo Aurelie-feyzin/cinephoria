@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {ApiResponse} from "../model/ApiResponseType";
+import {Reservation} from "../model/ReservationInterface";
 
 export const fetchUserReservations = async (past: boolean, page: number, itemsPerPage: number): Promise<ApiResponse<Reservation>> => {
     const response = await fetch(`${API_PATH}user/reservations?page=${page}&itemsPerPage=${itemsPerPage}&past=${past}`, {

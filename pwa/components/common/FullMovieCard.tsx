@@ -1,3 +1,5 @@
+'use client';
+
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from 'react';
 import Image from "next/image";
 import {useQuery} from "react-query";
@@ -6,6 +8,9 @@ import StarIcon from "./Icon/StarIcon";
 import Pagination from "./Pagination";
 import AlertInfo from "./alert/AlertInfo";
 import AlertError from "./alert/AlertError";
+import {ApiResponse} from "../../model/ApiResponseType";
+import {Review} from "../../model/Review";
+import {MovieDescription} from "../../model/MovieInterface";
 
 type Props = {
     movie: MovieDescription,

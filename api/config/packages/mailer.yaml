@@ -1,7 +1,7 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: '%env(resolve:MAILER_DSN)%'
         envelope:
-            sender: '%env(MAILER_SENDER)%'
+            sender: '%env(resolve:MAILER_SENDER)%'
         headers:
-            From: '%env(MAILER_FROM)%'
+            From: '%env(resolve:MAILER_FROM)%'

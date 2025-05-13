@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 import dayjs from "dayjs";
@@ -11,6 +13,7 @@ import Link from "next/link";
 import ViewIcon from "../../../components/common/Icon/ViewIcon";
 import EditIcon from "../../../components/common/Icon/EditIcon";
 import Pagination from "../../../components/common/Pagination";
+import {FullMovieShow, FullMovieShowApiResponse} from "../../../model/MovieShow";
 
 
 const FilmShowLists = () => {

@@ -1,5 +1,6 @@
-import {UseMutationResult, useQuery} from "react-query";
+'use client';
 
+import {UseMutationResult, useQuery} from "react-query";
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../../common/form/InputField";
 import {REQUIRED} from "../../common/form/validator_tools";
@@ -13,6 +14,8 @@ import {useCinemas} from "../../../context/CinemaContext";
 import Autocomplete from "../../common/form/Autocomplete";
 import {fetchMovieTheatersByCinema} from "../../../request/movieTheater";
 import InputTimeField from "../../common/form/InputTimeField";
+import {FullMovieShow, MovieShowInput} from "../../../model/MovieShow";
+import {MovieDescription} from "../../../model/MovieInterface";
 
 const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
                        {
@@ -108,7 +111,7 @@ const MovieShowForm = ({movieShowData, mutation, setMessageKo}:
                     />
                 </div>
 
-                <Autocomplete
+                <Autocomplete<MovieDescription>
                     control={control}
                     name="movie"
                     label="Film"

@@ -1,3 +1,5 @@
+'use client';
+
 import InputField from "./form/InputField";
 import {customMax, customMin, REQUIRED} from "./form/validator_tools";
 import RadioButtons, {OptionBooleans} from "./form/RadioButtons";
@@ -15,6 +17,9 @@ import PageLoading from "./PageLoading";
 import dayjs from "dayjs";
 import {useUser} from "../../context/UserContext";
 import {API_PATH} from "../../request/utils";
+import {ApiResponse} from "../../model/ApiResponseType";
+import {MovieShowReservation} from "../../model/MovieShow";
+import {MinimalSeat} from "../../model/Seat";
 
 type ReservationInput = {
     numberOfSeats: number,

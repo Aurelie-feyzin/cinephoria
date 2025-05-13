@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\DataFixtures\abstraction\AbstractTsvImport;
+use App\Entity\Cinema;
 use App\Entity\OpeningHours;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +37,7 @@ class OpeningHoursFixtures extends AbstractTsvImport implements DependentFixture
     public function insertItem(EntityManagerInterface $manager, Generator $faker, array $element): bool
     {
         $openingHours = (new OpeningHours())
-            ->setCinema($this->getReference('Cinema_'.$element[0]))
+            ->setCinema($this->getReference('Cinema_'.$element[0], Cinema::class))
             ->setDayOfWeek($element[1])
             ->setOpeningTime($element[2])
             ->setClosingTime($element[3])

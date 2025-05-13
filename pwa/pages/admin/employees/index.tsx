@@ -1,3 +1,5 @@
+'use client';
+
 import PageAdminContainer from "../../../components/admin/PageAdminContainer";
 import ButtonAdd from "../../../components/common/button/ButtonAdd";
 import PageLoading from "../../../components/common/PageLoading";
@@ -10,6 +12,7 @@ import Table, { Column } from "../../../components/common/Table";
 import Link from "next/link";
 import EditIcon from "../../../components/common/Icon/EditIcon";
 import {orderBy} from "lodash";
+import {Employee} from "../../../model/User";
 
 const EmployeeList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);

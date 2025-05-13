@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../common/form/InputField";
@@ -8,6 +10,7 @@ import AlertInfo from "../common/alert/AlertInfo";
 import LinkLoginForm from "./LinkLoginForm";
 import {customMaxLength, REQUIRED} from "../common/form/validator_tools";
 import ButtonSubmit from "../common/button/ButtonSubmit";
+import {ForgotPasswordInput} from "../../model/User";
 
 const ForgotPasswordForm = ({setFormVisible }: { setFormVisible: any }) => {
     const {

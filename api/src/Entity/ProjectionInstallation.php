@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
-    mercure: true)]
+    mercure: false)]
 class ProjectionInstallation extends Installation
 {
     #[ORM\ManyToOne()]

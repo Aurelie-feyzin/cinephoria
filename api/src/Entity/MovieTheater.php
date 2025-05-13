@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
         new Patch(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
         new Post(security: "is_granted('ROLE_EMPLOYEE')", processor: MovieTheaterStateProcessor::class),
     ],
-    mercure: true)]
+    mercure: false)]
 #[ApiFilter(SearchFilter::class, properties: ['cinema' => 'exact'])]
 class MovieTheater
 {

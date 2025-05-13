@@ -1,4 +1,4 @@
-import {API_PATH} from "./utils";
+import {ContactInput} from "../model/Contact";
 
 
 export const newContact= (data: ContactInput): Promise<Response> => fetch(`/contact`, {

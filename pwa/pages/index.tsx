@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 import PageContainer from "../components/common/layout/PageContainer";
@@ -5,6 +7,7 @@ import MovieCard from "../components/common/MovieCard";
 import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
 import {fetchNewMovies} from "../request/movie";
+import {Movie} from "../model/MovieInterface";
 
 const HomePage = () => {
     const [movies, setMovies] = useState<Movie[]>([]);

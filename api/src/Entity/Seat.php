@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
-    mercure: true)]
+    mercure: false)]
 #[ApiFilter(SearchFilter::class, properties: ['movieTheater' => 'exact'])]
 class Seat extends Installation
 {

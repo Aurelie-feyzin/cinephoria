@@ -1,3 +1,5 @@
+'use client';
+
 import {SubmitHandler, useForm} from "react-hook-form";
 import TextAreaField from "../common/form/TextAreaField";
 import ButtonSubmit from "../common/button/ButtonSubmit";
@@ -6,6 +8,7 @@ import {createReview, updateReviewById} from "../../request/review";
 import {useMutation, useQuery} from "react-query";
 import {fetchEnums, URL_ENUM} from "../../request/api";
 import AlertError from "../common/alert/AlertError";
+import {ReviewInput, ReviewInReservation} from "../../model/Review";
 
 
 const FormReview = ({review, setViewForm}:{review: ReviewInReservation, setViewForm:any}) => {

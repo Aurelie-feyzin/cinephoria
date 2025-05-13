@@ -6,16 +6,16 @@ export type Option = {
     label: string,
 }
 
-export function formatToSelectOption(apiResult: any[], idField: string, labelField: string): Option[] {
-    const options: Option[] = [];
-    apiResult.forEach((item: Object) => {
-        options.push({
-            id: item[idField],
-            value: item[idField],
-            label: upperFirst(item[labelField]),
-        });
-    });
-    return options;
+export function formatToSelectOption(
+    apiResult: Record<string, any>[],
+    idField: string,
+    labelField: string
+): Option[] {
+    return apiResult.map((item) => ({
+        id: item[idField],
+        value: item[idField],
+        label: upperFirst(item[labelField]),
+    }));
 }
 
 export const daysOfWeek = [

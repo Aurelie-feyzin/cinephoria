@@ -1,3 +1,5 @@
+'use client';
+
 import {useRouter} from "next/router";
 import {useMutation, useQuery} from "react-query";
 import React, {useState} from "react";

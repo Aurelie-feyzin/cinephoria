@@ -1,8 +1,11 @@
+'use client';
+
 import React, {useEffect, useState} from "react";
 import StarIcon from "../common/Icon/StarIcon";
 import {useMutation} from "react-query";
 import {createReview, updateReviewById} from "../../request/review";
 import AlertError from "../common/alert/AlertError";
+import {Reservation} from "../../model/ReservationInterface";
 
 
 const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, refetch: any }) => {

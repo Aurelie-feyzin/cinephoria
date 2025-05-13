@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import PageIntranetContainer from "../../../components/intranet/PageIntranetContainer";
 import Link from "next/link";
@@ -10,6 +12,8 @@ import PageLoading from "../../../components/common/PageLoading";
 import PageError from "../../../components/common/PageError";
 import {fetchMovieTheaters} from "../../../request/movieTheater";
 import Pagination from "../../../components/common/Pagination";
+import {ApiResponse} from "../../../model/ApiResponseType";
+import {MovieTheater} from "../../../model/movieTheater";
 
 
 const MovieTheaterList = () => {

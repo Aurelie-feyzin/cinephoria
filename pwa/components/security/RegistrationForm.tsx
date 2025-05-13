@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from 'react';
 import {SubmitHandler, useForm} from "react-hook-form";
 import InputField from "../common/form/InputField";
@@ -11,6 +13,7 @@ import InfoValidatePassword from "../common/form/InfoValidatePassword";
 import ButtonSubmit from "../common/button/ButtonSubmit";
 import {useMutation} from "react-query";
 import {LOGIN_FORM} from "../../pages/signIn";
+import {UserInput} from "../../model/User";
 
 const RegistrationForm = ({setFormVisible}: { setFormVisible: any }) => {
     const {

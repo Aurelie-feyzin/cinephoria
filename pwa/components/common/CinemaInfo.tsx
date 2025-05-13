@@ -2,6 +2,7 @@ import PhoneIcon from "./Icon/PhoneIcon";
 import Popover from "./Popover";
 import ClockIcon from "./Icon/ClockIcon";
 import React from "react";
+import {Cinema} from "../../model/Cinema";
 
 
 const CinemaInfo = ({cinema}: {

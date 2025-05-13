@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['employee:write']],
             security: "is_granted('ROLE_ADMIN')"),
     ],
-    mercure: true
+    mercure: false
 ),
 ]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

@@ -9,6 +9,8 @@ import ButtonSubmit from "../../common/button/ButtonSubmit";
 import React, {SetStateAction} from "react";
 import {useCinemas} from "../../../context/CinemaContext";
 import {fetchProjectionQualities} from "../../../request/projectionQuality";
+import {MovieTheater, MovieTheaterInput} from "../../../model/movieTheater";
+import {ProjectionQuality} from "../../../model/ProjectionQuality";
 
 const MovieShowForm = ({movieTheaterData, mutation, setMessageKo}:
                        {

@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useState} from "react";
 import {useQuery} from "react-query";
 import {fetchUserReservations} from "../../request/reservation";
@@ -9,6 +11,8 @@ import {orderBy} from "lodash";
 import UserMovieRating from "./UserMovieRating";
 import UserMovieComment from "./UserMovieComment";
 import UserReviewStatus from "./UserReviewStatus";
+import {ApiResponse} from "../../model/ApiResponseType";
+import {Reservation} from "../../model/ReservationInterface";
 
 
 const CardReservation = ({past}: { past: boolean }) => {

@@ -1,4 +1,5 @@
 import {API_PATH} from "./utils";
+import {Cinema} from "../model/Cinema";
 
 export const fetchCinemas = async (): Promise<Cinema[]> => {
     const response = await fetch(`${API_PATH}cinemas`, {

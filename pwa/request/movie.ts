@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {ApiResponse} from "../model/ApiResponseType";
+import {Movie, MovieDescription} from "../model/MovieInterface";
 
 export const fetchMovieById = async (id: string): Promise<MovieDescription> => {
     const url = `${API_PATH}movies/${id}`;

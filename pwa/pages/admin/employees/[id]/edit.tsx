@@ -1,3 +1,5 @@
+'use client';
+
 import {useRouter} from "next/router";
 import {useMutation, useQuery} from "react-query";
 import React, {useState} from "react";
@@ -9,6 +11,7 @@ import EmployeeForm from "../../../../components/admin/UserForm";
 import {fetchEmployee, updateEmployeeById} from "../../../../request/user";
 import PageAdminContainer from "../../../../components/admin/PageAdminContainer";
 import {fetchForgotPassword} from "../../../../request/forgot-password";
+import {EmployeeInput} from "../../../../model/User";
 
 const EditMoviePage = () => {
     const router = useRouter();

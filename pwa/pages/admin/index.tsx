@@ -1,11 +1,15 @@
+'use client';
+
 import type {NextPage} from "next";
 import React, {useState} from "react";
 import PageAdminContainer from "../../components/admin/PageAdminContainer";
 import {useQuery} from "react-query";
 import {fetchDashboard} from "../../request/dashboard";
-import ReactApexChart from "react-apexcharts";
 import PageLoading from "../../components/common/PageLoading";
 import PageError from "../../components/common/PageError";
+import dynamic from 'next/dynamic';
+
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const Admin: NextPage = () => {
     const [barChartByMovie, setBarChartByMovie] = useState<any>(null)

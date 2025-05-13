@@ -1,4 +1,5 @@
 import {HOST_PATH} from "./utils";
+import {ForgotPasswordInput, ResetPasswordInput} from "../model/User";
 
 const FORGOT_PASSWORD_PATH = 'forgot-password/'
 export const fetchForgotPassword = async (data: ForgotPasswordInput) =>

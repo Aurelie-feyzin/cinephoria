@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 import ClockIcon from "./Icon/ClockIcon";
+import {Movie} from "../../model/MovieInterface";
 
 type Props = {
     movie: Movie

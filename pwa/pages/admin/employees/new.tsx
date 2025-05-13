@@ -1,3 +1,5 @@
+'use client';
+
 import {useRouter} from "next/router";
 import React, {useState} from "react";
 import AlertError from "../../../components/common/alert/AlertError";
@@ -7,6 +9,7 @@ import EmployeeForm from "../../../components/admin/UserForm";
 import {fetchForgotPassword} from "../../../request/forgot-password";
 import {createEmployee} from "../../../request/user";
 import {SubmitHandler} from "react-hook-form";
+import {EmployeeInput} from "../../../model/User";
 
 function genPassword() {
     let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";

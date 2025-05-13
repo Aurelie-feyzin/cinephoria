@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect, useState} from "react";
 
 import PageContainer from "../components/common/layout/PageContainer";
@@ -16,15 +18,25 @@ import {fetchMovieInCinema} from "../request/movie";
 import {fetchMovieShowByMovie} from "../request/movieShow";
 import PageLoading from "../components/common/PageLoading";
 import PageError from "../components/common/PageError";
+import {MovieShowReservation, MovieShowReservationApiResponse} from "../model/MovieShow";
+import {ApiResponse} from "../model/ApiResponseType";
+import {MovieDescription} from "../model/MovieInterface";
+
+interface ReservationFormValues {
+    cinema: string;
+    'day-filter': string | undefined;
+    movie: string;
+}
 
 const Reservation = () => {
     const {user} = useUser();
+    const [defaults, setDefaults] = useState<ReservationFormValues>({
+        cinema: '',
+        'day-filter': undefined,
+        movie: '',
+    });
     const {register, watch} = useForm<any, Error>({
-        defaultValues: {
-            cinema: localStorage.getItem("selectedCinema") || '',
-            ["day-filter"]: localStorage.getItem("selectedDay") || undefined,
-            movie:localStorage.getItem("selectedMovieId") || '',
-        }
+        defaultValues: defaults,
     });
     const [movies, setMovies] = useState<MovieDescription[]>([]);
     const [movieShows, setMovieShows] = useState<MovieShowReservation[]>([]);
@@ -60,6 +72,14 @@ const Reservation = () => {
         setSelectedMovie(movies.find((movie) => movie['@id'] === id) || null);
         localStorage.setItem("selectedMovieId", id);
     };
+
+    useEffect(() => {
+        setDefaults({
+            cinema: localStorage?.getItem("selectedCinema") || '',
+            'day-filter': localStorage.getItem("selectedDay") || undefined,
+            movie: localStorage.getItem("selectedMovieId") || '',
+        });
+    }, []);
 
     useEffect(() => {
         const savedCinemaId = localStorage.getItem("selectedMovieId");
@@ -119,7 +139,7 @@ const Reservation = () => {
                     }
 
 
-                    <AlertInfo visible={selectedCinema && movies.length === 0} titleMessage="Aucun film trouvé avec les filtres
+                    <AlertInfo visible={!!selectedCinema && movies.length === 0} titleMessage="Aucun film trouvé avec les filtres
                         sélectionnés."/>
                     {selectedMovie && (
                         <FullMovieCard key={selectedMovie['@id']} movie={selectedMovie}/>)

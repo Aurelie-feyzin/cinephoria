@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
 import {useRouter} from "next/router";
+import {Profile} from "../model/User";
 
 type ProfileContext = {
     user?: Profile | null;
@@ -49,7 +50,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, []);
 
     const login = (token: string) => {
-        const isProduction = window.location.protocol === 'https:';
+       // const isBrowser = typeof window !== 'undefined';
+       // const isProduction = isBrowser && window.location.protocol === 'https:';
+        const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
         Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
         fetch('/api/profile', {
             method: 'GET',

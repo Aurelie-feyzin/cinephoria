@@ -1,3 +1,5 @@
+'use client';
+
 import {useRouter} from 'next/router'
 import {useQuery} from "react-query";
 import PageIntranetContainer from "../../../components/intranet/PageIntranetContainer";
@@ -9,6 +11,7 @@ import {fetchMovieShowById} from "../../../request/movieShow";
 import dayjs from "dayjs";
 import ButtonEdit from "../../../components/common/button/ButtonEdit";
 import {fetchMovieTheaterById} from "../../../request/movieTheater";
+import {MovieTheater} from "../../../model/movieTheater";
 
 const MovieTheaterPage = () => {
     const router = useRouter()

@@ -1,6 +1,7 @@
+import {ReviewInReservation} from "./Review";
 
 
-interface Reservation {
+export interface Reservation {
     '@id': string;
     '@type': string,
     id: string;
@@ -22,7 +23,7 @@ interface Reservation {
     review?: ReviewInReservation
 }
 
-interface ReservationInReview {
+export interface ReservationInReview {
     '@id': string;
     '@type': string,
     id: string;

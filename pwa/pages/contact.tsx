@@ -1,3 +1,5 @@
+'use client';
+
 import PageContainer from "../components/common/layout/PageContainer";
 import React, {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
@@ -9,6 +11,7 @@ import {newContact} from "../request/contact";
 import AlertInfo from "../components/common/alert/AlertInfo";
 import ButtonSubmit from "../components/common/button/ButtonSubmit";
 import {customMaxLength, REQUIRED} from "../components/common/form/validator_tools";
+import {ContactInput} from "../model/Contact";
 
 const Contact = () => {
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);

@@ -1,4 +1,5 @@
 import {API_PATH} from "./utils";
+import {ProjectionQuality} from "../model/ProjectionQuality";
 
 export const fetchProjectionQualities = async (): Promise<ProjectionQuality[]> => {
     const url = `${API_PATH}projection_qualities`;

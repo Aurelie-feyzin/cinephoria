@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: "is_granted('ROLE_USER')"),
         new Patch(security: "is_granted('ROLE_USER')"),
     ],
-    mercure: true)]
+    mercure: false)]
 #[ODM\Document(collection: 'reviews')]
 #[ODM\HasLifecycleCallbacks]
 #[ApiFilter(SearchFilter::class, properties: ['status'])]

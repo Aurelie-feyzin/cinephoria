@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {useQuery} from "react-query";
 import {fetchCinemas} from "../request/cinema";
+import {Cinema} from "../model/Cinema";
 
 interface CinemaContextProps {
     cinemas: Cinema[],

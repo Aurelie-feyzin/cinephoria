@@ -27,8 +27,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new GetCollection(),
         new Post(
             controller: CreateMediaObjectActionController::class,
-            deserialize: false,
-            validationContext: ['groups' => ['Default', 'media_object_create']],
             openapi: new Model\Operation(
                 requestBody: new Model\RequestBody(
                     content: new \ArrayObject([
@@ -45,7 +43,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                         ],
                     ])
                 )
-            )
+            ),
+            validationContext: ['groups' => ['Default', 'media_object_create']],
+            deserialize: false
         ),
     ],
     normalizationContext: ['groups' => ['media_object:read']]

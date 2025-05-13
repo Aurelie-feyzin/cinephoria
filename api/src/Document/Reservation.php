@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(uriTemplate: '/user/reservations', security: "is_granted('ROLE_USER')", provider: UserReservationsProvider::class),
     ],
     normalizationContext: ['groups' => ['reservation']],
-    mercure: true)]
+    mercure: false)]
 #[ApiFilter(DateFilter::class, properties: ['movieShowDate'])]
 #[ODM\Document(collection: 'reservations')]
 /**

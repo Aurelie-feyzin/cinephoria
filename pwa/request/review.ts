@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
+import {ApiResponse} from "../model/ApiResponseType";
+import {Review, ReviewInput} from "../model/Review";
 
 
 export const fetchReviews = async (page: number, itemsPerPage: number, status: string): Promise<ApiResponse<Review>> => {
