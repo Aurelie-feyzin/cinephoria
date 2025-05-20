@@ -20,6 +20,7 @@ import {API_PATH} from "../../request/utils";
 import {ApiResponse} from "../../model/ApiResponseType";
 import {MovieShowReservation} from "../../model/MovieShow";
 import {MinimalSeat} from "../../model/Seat";
+import InputNumberField from "./form/InputNumberField";
 
 type ReservationInput = {
     numberOfSeats: number,
@@ -90,9 +91,10 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
             </h3>
             <AlertError visible={!!messageKo} message="Impossible de finaliser la réservation"/>
             <form className="max-w-full mx-auto" onSubmit={handleSubmit(handleReservation)}>
-                <InputField
+                <InputNumberField
                     register={register("numberOfSeats", {...REQUIRED, ...customMin(1), ...customMax(filmShow.availableSeats)})}
-                    type='number'
+                    min={1}
+                    max={filmShow.availableSeats}
                     name='numberOfSeats'
                     label='Nombre de places'
                     error={errors.numberOfSeats?.message}

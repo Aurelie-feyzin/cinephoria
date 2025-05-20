@@ -30,10 +30,10 @@ interface ReservationFormValues {
 
 const Reservation = () => {
     const {user} = useUser();
-    const [defaults, setDefaults] = useState<ReservationFormValues>({
-        cinema: '',
-        'day-filter': undefined,
-        movie: '',
+    const defaults: ReservationFormValues = ({
+        cinema: localStorage?.getItem("selectedCinema") || '',
+        'day-filter': localStorage?.getItem("selectedDay") || undefined,
+        movie: localStorage?.getItem("selectedMovieId") || '',
     });
     const {register, watch} = useForm<any, Error>({
         defaultValues: defaults,
@@ -74,14 +74,6 @@ const Reservation = () => {
     };
 
     useEffect(() => {
-        setDefaults({
-            cinema: localStorage?.getItem("selectedCinema") || '',
-            'day-filter': localStorage.getItem("selectedDay") || undefined,
-            movie: localStorage.getItem("selectedMovieId") || '',
-        });
-    }, []);
-
-    useEffect(() => {
         const savedCinemaId = localStorage.getItem("selectedMovieId");
         setSelectedMovie(movies.find((movie) => movie['@id'] === savedCinemaId) || null)
         const selectedFilmShow = localStorage.getItem("selectedFilmShow");
@@ -98,7 +90,7 @@ const Reservation = () => {
         localStorage.setItem("selectedDay", selectedDay);
     }, [selectedDay]);
 
-    return (<PageContainer title='réservation'>
+    return (<PageContainer title='réservation' titlePage="Réservez une séance">
             <div className="container mx-auto p-6">
                 <form className="flex flex-col md:flex-row md:space-x-4 mb-2">
                     <div className="w-full md:w-1/2 mb-2">
