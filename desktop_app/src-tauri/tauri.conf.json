@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "desktop_app",
+  "productName": "cinephoria_app",
   "version": "0.1.0",
   "identifier": "cinephoria.dev",
   "build": {
