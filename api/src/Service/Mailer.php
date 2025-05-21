@@ -47,7 +47,7 @@ class Mailer
     {
         $email = (new TemplatedEmail())
             ->to($contact->email)
-            ->subject('Nouveau contact à traiter')
+            ->subject('Merci pour votre message')
             ->htmlTemplate('emails/contact_copy_message.html.twig')
             ->context([
                 'contact' => $contact,
@@ -58,8 +58,8 @@ class Mailer
     public function sendContactEmail(ContactDto $contact): void
     {
         $email = (new TemplatedEmail())
-            ->to('contact@cinephoria.fr')
-            ->subject('Merci pour votre message')
+            ->to('contact@cinephoria.me')
+            ->subject('Nouveau contact à traiter')
             ->htmlTemplate('emails/contact_new_message.html.twig')
             ->context([
                 'contact' => $contact,
