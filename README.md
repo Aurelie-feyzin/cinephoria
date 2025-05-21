@@ -49,6 +49,11 @@ Installation Guide: [Tauri Prerequisites](https://tauri.app/start/prerequisites/
 ```
 
 2) Docker Setup:  
+Copy the example .env.dist files and rename them to .env.local to set up your local environment:
+```bash
+cp api/.env.dist api/.env.local
+cp pwa/.env.dist pwa/.env.local
+```
 To set up the backend, databases and web app, use Docker Compose to launch the services:
 ```bash
 docker compose build --no-cache
