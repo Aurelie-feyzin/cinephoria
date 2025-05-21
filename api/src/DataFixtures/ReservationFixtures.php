@@ -30,7 +30,7 @@ class ReservationFixtures implements ODMFixtureInterface
         $allMovieShows = $this->entityManager->getRepository(MovieShow::class)->findAll();
 
         foreach ($basicUsers as $user) {
-            $nbReservations = $faker->numberBetween(0, 10);
+            $nbReservations = 'user@test.fr' === $user->getEmail() ? 8 : $faker->numberBetween(0, 10);
             for ($i = 0; $i < $nbReservations; ++$i) {
                 $movieShow = $this->getRandomMovieShow($allMovieShows, $faker);
                 $movieTheater = $movieShow->getMovieTheater();

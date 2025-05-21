@@ -58,18 +58,17 @@ class GenerateDemoDataCommand extends Command
      */
     private function resetDemoPasswords(SymfonyStyle $commandStyle): void
     {
-        $users = ['admin@test.fr', 'employee@test.fr', 'user@test.fr'];
-        foreach ($users as $email) {
-            $user = $this->manager->getRepository(User::class)->findOneBy(['email' => $email]);
-            if (!$user) {
-                $commandStyle->warning("User with $email not found");
-                continue;
-            }
+        $userTests = ['admin@test.fr', 'employee@test.fr', 'user@test.fr'];
+        $users = $this->manager->getRepository(User::class)->findAll();
+
+        foreach ($users as $user) {
             $suffix = ['&a3R9', '4>P7i', '9@Ki5', '{sQ54', '@uE57', '23b;U', '4Kg7*', 'xX>89', 'Sp6;4', '4h3P*'];
             $index = random_int(0, count($suffix) - 1);
             $password = bin2hex(random_bytes(6)).$suffix[$index];
             $user->setPassword($this->passwordHasher->hashPassword($user, $password));
-            $commandStyle->info("User $email : $password");
+            if (in_array($user->getEmail(), $userTests, true)) {
+                $commandStyle->info("User $user->getEmail() : $password");
+            }
         }
 
         $this->manager->flush();
