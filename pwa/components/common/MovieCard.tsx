@@ -18,25 +18,27 @@ const MovieCard:React.FC<Props>  = ({
 
 
     return (
-        <div className="flex flex-row' bg-black rounded-lg shadow-lg p-4 w-full max-w-2xl">
+        <div className="flex flex-col sm:flex-row bg-black rounded-lg shadow-lg p-2 w-full max-w-2xl">
+            <div className="flex justify-center md:justify-start mb-2 md:mb-0">
             <Image
                 src={`/poster/${movie.posterPath}`}
                 alt={`/poster/${movie.posterPath}`}
                 width={150}
                 height={225}
-                className={`w-[150px] md:w-[300px] object-cover rounded-lg shadow-md mr-4 items-center`}
+                className={`w-[150px] md:w-[300px] object-cover rounded-lg shadow-md mr-0 md:mr-4 mb-4 md:mb-0 items-center`}
             />
-            <div className="flex-1 ml-4 text-white mt-2">
+            </div>
+            <div className="flex-1 sm:ml-4 text-white text-center sm:text-left">
                 <h2 className="text-xl font-bold mb-4 text-secondary text-center hidden sm:block">{movie.title}</h2>
                 <hr className="w-48 h-1 my-8 mx-auto bg-primary border-0 dark:bg-primary hidden sm:block"/>
-                <p className="text-sm text-white mb-3">
-                    <span className="hidden sm:inline-flex">Genres:</span> {movie.genres.map((genre) => genre.name).join(', ')}
+                <p className="text-sm text-white mb-3 text-center sm:text-left">
+                    <span className="hidden sm:inline">Genres:</span> {movie.genres.map((genre) => genre.name).join(', ')}
                 </p>
                 <p className="text-sm text-white mb-3 inline-flex items-center">
                     <ClockIcon /> &nbsp;{movie.duration} min
                 </p>
                 <p className="text-sm text-white mb-3 space-x-1">
-                    <span className="hidden sm:inline-flex">Âge:</span> {movie.ageRestriction?.value || 'N/A'}
+                    <span className="hidden sm:inline">Âge:</span> {movie.ageRestriction?.value || 'N/A'}
                     {movie.warning && (
                         <span className="text-sm text-white mt-3">
                             &nbsp;avec avertissement
