@@ -115,6 +115,7 @@ To initialize the database, run the following command from the root of the proje
 ```bash
 cd ..   # return to root project
 docker compose up -d # Ensure the backend is running before loading fixtures
+make db-migrate # This step is usually done automatically in the container entrypoint, but can be run manually if needed
 make fixtures
 ```
 This will initialize data for **cinemas**, **movies**, **sessions**, **users**, and **reservations** in the database.
