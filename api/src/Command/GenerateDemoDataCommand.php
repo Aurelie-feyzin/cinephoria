@@ -61,13 +61,15 @@ class GenerateDemoDataCommand extends Command
         $userTests = ['admin@test.fr', 'employee@test.fr', 'user@test.fr'];
         $users = $this->manager->getRepository(User::class)->findAll();
 
+        /** @var User $user */
         foreach ($users as $user) {
             $suffix = ['&a3R9', '4>P7i', '9@Ki5', '{sQ54', '@uE57', '23b;U', '4Kg7*', 'xX>89', 'Sp6;4', '4h3P*'];
             $index = random_int(0, count($suffix) - 1);
             $password = bin2hex(random_bytes(6)).$suffix[$index];
             $user->setPassword($this->passwordHasher->hashPassword($user, $password));
-            if (in_array($user->getEmail(), $userTests, true)) {
-                $commandStyle->info("User $user->getEmail() : $password");
+            $email = $user->getEmail();
+            if (in_array($email, $userTests, true)) {
+                $commandStyle->info("User $email : $password");
             }
         }
 
