@@ -30,12 +30,12 @@ interface ReservationFormValues {
 
 const Reservation = () => {
     const {user} = useUser();
-    const defaults: ReservationFormValues = ({
-        cinema: localStorage?.getItem("selectedCinema") || '',
-        'day-filter': localStorage?.getItem("selectedDay") || undefined,
-        movie: localStorage?.getItem("selectedMovieId") || '',
+    const defaults = useState<ReservationFormValues>({
+        cinema: '',
+        'day-filter': undefined,
+        movie: '',
     });
-    const {register, watch} = useForm<any, Error>({
+    const {register, watch, setValue} = useForm<any, Error>({
         defaultValues: defaults,
     });
     const [movies, setMovies] = useState<MovieDescription[]>([]);
@@ -48,6 +48,14 @@ const Reservation = () => {
     const today = now.format('YYYY-MM-DD');
     const [after, setAfter] = useState(today);
     const [before, setBefore] = useState(now.add(6, 'day').format('YYYY-MM-DD'));
+
+    useEffect(() => {
+        if (localStorage) {
+            setValue("cinema", localStorage.getItem("selectedCinema") || '');
+            setValue("day-filter", localStorage.getItem("selectedDay") || undefined);
+            setValue("movie", localStorage.getItem("selectedMovieId") || '');
+        }
+    }, [setValue]);
 
     const {error, isLoading} = useQuery<ApiResponse<MovieDescription>, Error>(
         ["movie_in_cinema", after, before, selectedCinema],
