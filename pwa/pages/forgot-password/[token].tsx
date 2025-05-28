@@ -12,6 +12,7 @@ import InfoValidatePassword from "../../components/common/form/InfoValidatePassw
 import {REQUIRED, validatePassword} from "../../components/common/form/validator_tools";
 import ButtonSubmit from "../../components/common/button/ButtonSubmit";
 import {ResetPasswordInput} from "../../model/User";
+import Link from "next/link";
 
 
 const ResetPassword = () => {
@@ -49,7 +50,14 @@ const ResetPassword = () => {
                 <AlertInfo visible={resetOk}
                            titleMessage='Mot de passe réinitialisé '
                            message="La réinisialiation du mot de passe a été effectuée avec succés."
-                />
+                >
+                    <div className='mt-2'>
+                    <Link href="/signIn?from=forgot-password"
+                          className="px-4 py-2 rounded-md shadow text-white bg-primary hover:bg-secondary">
+                        Se connecter
+                    </Link>
+                    </div>
+                </AlertInfo>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto bg-black p-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4 text-center text-secondary">Nouveau mot de passe</h2>

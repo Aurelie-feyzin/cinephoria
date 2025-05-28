@@ -42,7 +42,7 @@ const HomePage = () => {
                         }
                     </div>
                     {orphanLastMovie &&
-                        <div className="flex flex-col items-center space-y-6" key={movies[movies.length - 1]['@id']}>
+                        <div className="flex flex-col items-center space-y-6 p-6" key={movies[movies.length - 1]?.['@id']}>
                             <MovieCard movie={movies[movies.length - 1]} />
                         </div>}
                 </div>
