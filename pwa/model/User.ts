@@ -1,4 +1,4 @@
-
+export type Role = "employee" | "admin" | undefined;
 export interface User {
     '@id': string;
     '@type': string,
@@ -22,7 +22,7 @@ export type Employee = {
     firstName: string;
     lastName: string;
     email: string;
-    roles: string[];
+    roles: Role[];
 }
 
 export type EmployeeInput = {
@@ -30,14 +30,14 @@ export type EmployeeInput = {
     lastName: string;
     email: string;
     plainPassword: string;
-    roles: string[];
+    roles: Role[];
 }
 
 export type Profile = {
     firstName: string;
     lastName: string;
     email: string;
-    role?:string;
+    role?: Role;
 }
 
 export type LoginInput = {

@@ -18,11 +18,11 @@ const PageContainer: React.FC<PageContainerProps> = ({title, titlePage, children
                 <title>Cinephoria: {title}</title>
             </Head>
             <NavBar/>
-            <div className="bg-primary">
+            <div className="bg-primary flex flex-col min-h-screen">
                 <div className="text-center text-white p-4 text-3xl">
                     <h1>{titlePage}</h1>
                 </div>
-                <div className="md:container md:mx-auto mx-auto pb-4">
+                <div className="md:container md:mx-auto mx-auto pb-4 flex flex-col flex-grow">
                     {children}
                 </div>
                 <Footer />

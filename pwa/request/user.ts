@@ -1,7 +1,21 @@
 import {API_PATH} from "./utils";
 import Cookies from "js-cookie";
-import {Employee, EmployeeInput, User, UserInput} from "../model/User";
+import {Employee, EmployeeInput, Profile, User, UserInput} from "../model/User";
 
+export const getProfileInMiddelware = async(token: string): Promise<Profile> => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}${API_PATH}profile`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Impossible de récupérer le profil de l\'utilisateur');
+    }
+
+    return await response.json();
+}
 
 export const getProfile = async(): Promise<Profile> => {
     const url = `${API_PATH}profile`;
