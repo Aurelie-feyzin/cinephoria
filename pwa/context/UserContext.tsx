@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
 import {useRouter} from "next/router";
 import {Profile} from "../model/User";
+import {getProfile} from "../request/user";
 
 type ProfileContext = {
     user?: Profile | null;
@@ -24,22 +25,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
         const token = Cookies.get('jwt_token');
 
         if (token) {
-            fetch('/api/profile', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Impossible de récupérer le profil de l\'utilisateur');
-                    }
-                    return response.json();
-                })
+                getProfile()
                 .then((data) => {
                     setUser(data);
                     setError(null);
-                    router.back();
                 })
                 .catch((err) => {
                     setError(err.message);
@@ -50,21 +39,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, []);
 
     const login = (token: string) => {
-       // const isBrowser = typeof window !== 'undefined';
-       // const isProduction = isBrowser && window.location.protocol === 'https:';
         const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true";
         Cookies.set('jwt_token', token, {expires: 1 / 24, path: '', secure: isProduction, sameSite: 'Strict'});
-        fetch('/api/profile', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
+            getProfile()
             .then((data) => {
                 setUser(data);
                 setError(null);
-                router.back();
+                const from = router.query.from;
+                console.log('Query param from:', from);
+
+                if (from === 'forgot-password') {
+                    router.push('/');
+                } else {
+                    router.back();
+                }
             })
             .catch(() => {
                 setError('Erreur lors de la récupération du profil après la connexion');

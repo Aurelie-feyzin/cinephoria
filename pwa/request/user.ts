@@ -3,6 +3,21 @@ import Cookies from "js-cookie";
 import {Employee, EmployeeInput, User, UserInput} from "../model/User";
 
 
+export const getProfile = async(): Promise<Profile> => {
+    const url = `${API_PATH}profile`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        }
+    });
+    if (!response.ok) {
+        throw new Error('Impossible de récupérer le profil de l\'utilisateur');
+    }
+
+    return await response.json();
+}
+
 export const fetchEmployee = async (id: string): Promise<Employee> => {
     const url = `${API_PATH}employees/${id}`;
     const response = await fetch(url, {
