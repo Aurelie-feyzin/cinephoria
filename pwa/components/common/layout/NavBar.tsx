@@ -20,7 +20,7 @@ const NavBar = () => {
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex lg:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href="javascript:void(0)">
+                        <a href={'/'}>
                             <Image
                                 alt="logo cinephoria"
                                 src={logo}
@@ -150,9 +150,6 @@ const NavBar = () => {
                                                 <button type="button" disabled  className="block px-4 py-2 disabled:bg-gray-700 rounded-t-md w-full">
                                                     Profil
                                                 </button>
-{/*                                                <Link href="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded-t-md">
-                                                    Profil
-                                                </Link>*/}
                                             </li>
                                             <li>
                                                 <Link href="/orders" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
