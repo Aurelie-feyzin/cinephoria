@@ -1,4 +1,5 @@
 export type Role = "employee" | "admin" | undefined;
+export type RoleSymfony = "ROLE_USER" | "ROLE_EMPLOYEE" | "ROLE_ADMIN" ;
 export interface User {
     '@id': string;
     '@type': string,
@@ -22,7 +23,7 @@ export type Employee = {
     firstName: string;
     lastName: string;
     email: string;
-    roles: Role[];
+    roles: RoleSymfony[];
 }
 
 export type EmployeeInput = {
@@ -30,7 +31,7 @@ export type EmployeeInput = {
     lastName: string;
     email: string;
     plainPassword: string;
-    roles: Role[];
+    roles: RoleSymfony[];
 }
 
 export type Profile = {
