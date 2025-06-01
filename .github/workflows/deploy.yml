@@ -48,7 +48,7 @@ jobs:
             git pull origin main
 
       - name: Copy Docker PHP image to remote
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
@@ -58,7 +58,7 @@ jobs:
           target: "/opt/cinephoria/build"
 
       - name: Copy Docker pwa image to remote
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
