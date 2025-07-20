@@ -34,13 +34,10 @@ const ReservationQrCode = ()=> {
                 setMovieName(data.movieName);
             } catch (error) {
                 console.error("Erreur lors de la récupération des séances", error);
-            } finally {
-               // setLoading(false);
             }
         };
 
         if (token) {
-         //   setLoading(true);
             getSession();
         }
     }, [id, token]);
