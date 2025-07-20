@@ -1,10 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 import logo from "../../../public/images/logo_cinephoria.png";
 import SideBarLink from "../../intranet/Layout/SideBarLink";
+import {useQuery} from "react-query";
+import {ApiResponse} from "../../../model/ApiResponseType";
+import {MinimalSeat} from "../../../model/Seat";
+import {fetchSeatsByMovieTheater} from "../../../request/seat";
+import {addFixtures} from "../../../request/fixture";
 
 
 const Sidebar = () => {
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState<string | null>(null);
+
+    const runFixtures = async () => {
+        setResult(null);
+        setLoading(true);
+            addFixtures()
+                .then((data) =>  setResult(data?.status || 'Terminé'))
+                .catch(() => setResult('Erreur lors de l’exécution'))
+                .finally(() => setLoading(false))
+            ;
+    };
 
     return (
             <aside
@@ -28,7 +45,16 @@ const Sidebar = () => {
                             <ul>
                                 <li key="movies"><SideBarLink href="/admin">Accueil</SideBarLink></li>
                                 <li key="seances"><SideBarLink href="/admin/employees">Employés</SideBarLink></li>
+                                <hr />
+                                <button
+                                    onClick={runFixtures}
+                                    disabled={loading}
+                                    className="w-full bg-primary text-white p-2 rounded hover:bg-secondary flex"
+                                >
+                                    {loading ? 'Chargement...' : 'Exécuter les fixtures'}
+                                </button>
                             </ul>
+                        {result && <pre className="mt-4 bg-gray-100 p-3 rounded">{result}</pre>}
                     </nav>
                 </div>
             </aside>
