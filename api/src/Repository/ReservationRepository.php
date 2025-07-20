@@ -28,7 +28,9 @@ class ReservationRepository extends ServiceDocumentRepository
     }
 
     /**
-     * @return Reservation[]
+     * @return array<int<0, max>, string>
+     *
+     * @throws MongoDBException
      */
     public function findReservedSeatsForMovieShow(string $movieShowUri): array
     {

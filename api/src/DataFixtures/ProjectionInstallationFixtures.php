@@ -34,12 +34,12 @@ class ProjectionInstallationFixtures extends Fixture implements DependentFixture
                 ->setStatus($faker->boolean(90) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
             ;
             $manager->persist($projectionInstallation);
-            if ($projectionInstallation->getStatus() !== InstallationStatus::AVAILABLE ) {
-                $date =  DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
+            if (InstallationStatus::AVAILABLE !== $projectionInstallation->getStatus()) {
+                $date = DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
                 $isLastMaintenanceDate = $faker->boolean();
                 $projectionInstallation->setRepairDetails($faker->realTextBetween())
                     ->setLastMaintenanceDate($isLastMaintenanceDate ? $date : null)
-                    ->setLastRepairDate($isLastMaintenanceDate ? null :  $date);
+                    ->setLastRepairDate($isLastMaintenanceDate ? null : $date);
             }
         }
         $manager->flush();

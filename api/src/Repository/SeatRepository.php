@@ -6,6 +6,9 @@ namespace App\Repository;
 use App\Entity\Seat;
 use App\Enum\InstallationStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ODM\MongoDB\MongoDBException;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,6 +35,8 @@ class SeatRepository extends ServiceEntityRepository
 
     /**
      * @return Seat[]
+     *
+     * @throws MongoDBException
      */
     public function findAvailableSeatsForMovieShow(string $movieShowId): array
     {
@@ -50,6 +55,11 @@ class SeatRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * @throws MongoDBException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function countAvailableSeatsForMovieShow(string $movieShowId): int
     {
         // Get the reserved seats for the specific MovieShow

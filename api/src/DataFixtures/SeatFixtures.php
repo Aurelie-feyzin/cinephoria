@@ -37,12 +37,12 @@ class SeatFixtures extends Fixture implements DependentFixtureInterface
                     ->setName((string) ($i + 1))
                     ->setReducedMobilitySeat($i < $reducedMobilitySeats)
                 ;
-                if ($seat->getStatus() !== InstallationStatus::AVAILABLE ) {
-                    $date =  DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
+                if (InstallationStatus::AVAILABLE !== $seat->getStatus()) {
+                    $date = DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
                     $isLastMaintenanceDate = $faker->boolean();
                     $seat->setRepairDetails($faker->realTextBetween())
                         ->setLastMaintenanceDate($isLastMaintenanceDate ? $date : null)
-                        ->setLastRepairDate($isLastMaintenanceDate ? null :  $date);
+                        ->setLastRepairDate($isLastMaintenanceDate ? null : $date);
                 }
                 $manager->persist($seat);
             }

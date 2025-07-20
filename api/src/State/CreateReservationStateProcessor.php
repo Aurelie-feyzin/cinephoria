@@ -8,6 +8,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Document\Reservation;
 use App\DTO\ReservationDto;
 use App\Entity\MovieShow;
+use App\Entity\Seat;
 use App\Entity\User;
 use App\Exception\SeatQuantityExceededException;
 use App\Repository\SeatRepository;
@@ -21,8 +22,8 @@ readonly class CreateReservationStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private DocumentManager $documentManager,
-        private Security        $security,
-        private SeatRepository  $seatRepository,
+        private Security $security,
+        private SeatRepository $seatRepository,
     ) {
     }
 
@@ -34,56 +35,53 @@ readonly class CreateReservationStateProcessor implements ProcessorInterface
         // @phpstan-ignore-next-line
         if ($data instanceof ReservationDto) {
             $reservation = (new Reservation());
-                /** @var User|null $user */
-                $user = $this->security->getUser();
+            /** @var User|null $user */
+            $user = $this->security->getUser();
 
-                if (!$user instanceof UserInterface) {
-                    throw new UserNotFoundException('User not found');
+            if (!$user instanceof UserInterface) {
+                throw new UserNotFoundException('User not found');
+            }
+            // Transform the DTO into a MongoDB document (Reservation)
+            /** @var MovieShow $movieShow */
+            $movieShow = $data->getMovieShow();
+            $movieTheater = $movieShow->getMovieTheater();
+            $reservation
+                ->setUserId($user->getId())
+                ->setMovieId($movieShow->getMovie()->getId())
+                ->setMovieName($movieShow->getMovie()->getTitle())
+                ->setMovieBackdropPath($movieShow->getMovie()->getBackdropPath())
+                ->setCinemaId($movieTheater->getCinema()->getId())
+                ->setCinemaName($movieTheater->getCinema()->getName())
+                ->setMovieShowId($movieShow->getId())
+                ->setMovieShowDate($movieShow->getDate())
+                ->setMovieShowStartTime($movieShow->getStartTime())
+                ->setMovieShowEndTime($movieShow->getEndTime())
+                ->setMovieTheaterId($movieTheater->getId())
+                ->setMovieTheaterName($movieTheater->getTheaterName())
+                ->setNumberOfSeats((int) $data->getNumberOfSeats());
+
+            $unassignedSeats = (int) $data->getNumberOfSeats();
+
+            $availableSeats = $this->seatRepository->findAvailableSeatsForMovieShow($movieShow->getId());
+
+            if ($unassignedSeats > count($availableSeats)) {
+                throw new SeatQuantityExceededException($unassignedSeats, count($availableSeats));
+            }
+
+            foreach ($data->getSeats() as $iValue) {
+                $seat = $this->seatRepository->find($iValue);
+                if ($seat && in_array($seat, $availableSeats, true)) {
+                    $reservation->addSeatId($seat->getId());
+                    $reservation->addSeatName($seat->getName());
+                    --$unassignedSeats;
                 }
-                // Transform the DTO into a MongoDB document (Reservation)
-                /** @var MovieShow $movieShow */
-                $movieShow = $data->getMovieShow();
-                $movieTheater = $movieShow->getMovieTheater();
-                $reservation
-                    ->setUserId($user->getId())
-                    ->setMovieId($movieShow->getMovie()->getId())
-                    ->setMovieName($movieShow->getMovie()->getTitle())
-                    ->setMovieBackdropPath($movieShow->getMovie()->getBackdropPath())
-                    ->setCinemaId($movieTheater->getCinema()->getId())
-                    ->setCinemaName($movieTheater->getCinema()->getName())
-                    ->setMovieShowId($movieShow->getId())
-                    ->setMovieShowDate($movieShow->getDate())
-                    ->setMovieShowStartTime($movieShow->getStartTime())
-                    ->setMovieShowEndTime($movieShow->getEndTime())
-                    ->setMovieTheaterId($movieTheater->getId())
-                    ->setMovieTheaterName($movieTheater->getTheaterName())
-                    ->setNumberOfSeats((int) $data->getNumberOfSeats());
+            }
 
-                $unassignedSeats = (int) $data->getNumberOfSeats();
+            $this->addUnassignedSeats($unassignedSeats, $reservation, $availableSeats);
 
-                $availableSeats = $this->seatRepository->findAvailableSeatsForMovieShow($movieShow->getId());
+            $this->documentManager->persist($reservation);
 
-                if ($unassignedSeats > count($availableSeats)) {
-                    throw new SeatQuantityExceededException(
-                        $unassignedSeats,
-                        count($availableSeats)
-                    );
-                }
-
-                foreach ($data->getSeats() as $iValue) {
-                    $seat = $this->seatRepository->find($iValue);
-                    if ($seat && in_array($seat, $availableSeats, true)) {
-                        $reservation->addSeatId($seat->getId());
-                        $reservation->addSeatName($seat->getName());
-                        --$unassignedSeats;
-                    }
-                }
-
-                $this->addUnassignedSeats($unassignedSeats, $reservation, $availableSeats);
-
-                $this->documentManager->persist($reservation);
-
-                $this->documentManager->flush();  // Save to MongoDB
+            $this->documentManager->flush();  // Save to MongoDB
 
             // Return the saved document or DTO
             return $reservation;
@@ -92,6 +90,9 @@ readonly class CreateReservationStateProcessor implements ProcessorInterface
         return $data;
     }
 
+    /**
+     * @param Seat[] $availableSeats
+     */
     private function addUnassignedSeats(int $unassignedSeats, Reservation $reservation, array $availableSeats): void
     {
         if ($unassignedSeats > 0) {
