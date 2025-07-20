@@ -23,9 +23,8 @@ class ReservationRepository extends ServiceDocumentRepository
     // Create a MongoDB query to find all reservations for the specified MovieShow
     private function reservedSeatsForMovieShowBuilder(string $movieShowUri): Builder
     {
-        return $this->createQueryBuilder()
-            ->field('r.movieShowId')->equals($movieShowUri)
-            ->field('r.seats')->exists(true);
+        return $this->getDocumentManager()->createQueryBuilder(Reservation::class)
+            ->field('movieShowId')->equals($movieShowUri);
     }
 
     /**
@@ -33,13 +32,13 @@ class ReservationRepository extends ServiceDocumentRepository
      */
     public function findReservedSeatsForMovieShow(string $movieShowUri): array
     {
-        $reservations = $this->reservedSeatsForMovieShowBuilder($movieShowUri)->getQuery()->toArray();
-
+        $reservations = $this->reservedSeatsForMovieShowBuilder($movieShowUri)->getQuery()->execute();
         // Extract the seat IDs from the reservations
         $reservedSeats = [];
+        /** @var Reservation $reservation */
         foreach ($reservations as $reservation) {
-            foreach ($reservation['seats'] as $seat) {
-                $reservedSeats[] = $seat->getId();
+            foreach ($reservation->getSeatIds() as $seatIds) {
+                $reservedSeats[] = $seatIds;
             }
         }
 

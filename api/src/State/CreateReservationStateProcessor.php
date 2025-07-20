@@ -9,6 +9,7 @@ use App\Document\Reservation;
 use App\DTO\ReservationDto;
 use App\Entity\MovieShow;
 use App\Entity\User;
+use App\Exception\SeatQuantityExceededException;
 use App\Repository\SeatRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -16,12 +17,12 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /** @implements ProcessorInterface<Reservation, null> */
-class CreateReservationStateProcessor implements ProcessorInterface
+readonly class CreateReservationStateProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly DocumentManager $documentManager,
-        private readonly Security $security,
-        private readonly SeatRepository $seatRepository,
+        private DocumentManager $documentManager,
+        private Security        $security,
+        private SeatRepository  $seatRepository,
     ) {
     }
 
@@ -33,7 +34,6 @@ class CreateReservationStateProcessor implements ProcessorInterface
         // @phpstan-ignore-next-line
         if ($data instanceof ReservationDto) {
             $reservation = (new Reservation());
-            try {
                 /** @var User|null $user */
                 $user = $this->security->getUser();
 
@@ -61,27 +61,29 @@ class CreateReservationStateProcessor implements ProcessorInterface
 
                 $unassignedSeats = (int) $data->getNumberOfSeats();
 
-                $designedSeats = count($data->getSeats());
-                if ($designedSeats > 0 && $designedSeats > $data->getNumberOfSeats()) {
-                    $designedSeats = $data->getNumberOfSeats();
+                $availableSeats = $this->seatRepository->findAvailableSeatsForMovieShow($movieShow->getId());
+
+                if ($unassignedSeats > count($availableSeats)) {
+                    throw new SeatQuantityExceededException(
+                        $unassignedSeats,
+                        count($availableSeats)
+                    );
                 }
-                for ($i = 0; $i < $designedSeats; ++$i) {
-                    $seat = $this->seatRepository->find($data->getSeats()[$i]);
-                    if ($seat) {
+
+                foreach ($data->getSeats() as $iValue) {
+                    $seat = $this->seatRepository->find($iValue);
+                    if ($seat && in_array($seat, $availableSeats, true)) {
                         $reservation->addSeatId($seat->getId());
                         $reservation->addSeatName($seat->getName());
                         --$unassignedSeats;
                     }
                 }
 
-                $this->addUnassignedSeats($unassignedSeats, $reservation, $movieShow->getId());
+                $this->addUnassignedSeats($unassignedSeats, $reservation, $availableSeats);
 
                 $this->documentManager->persist($reservation);
 
                 $this->documentManager->flush();  // Save to MongoDB
-            } catch (\Exception $e) {
-                dump($e->getMessage());
-            }
 
             // Return the saved document or DTO
             return $reservation;
@@ -90,10 +92,9 @@ class CreateReservationStateProcessor implements ProcessorInterface
         return $data;
     }
 
-    private function addUnassignedSeats(int $unassignedSeats, Reservation $reservation, string $movieShowId): void
+    private function addUnassignedSeats(int $unassignedSeats, Reservation $reservation, array $availableSeats): void
     {
         if ($unassignedSeats > 0) {
-            $availableSeats = $this->seatRepository->findAvailableSeatsForMovieShow($movieShowId);
             $nbAvailableSeats = count($availableSeats);
             for ($i = 0; $i < $unassignedSeats; ++$i) {
                 $reservation->addSeatId($availableSeats[$nbAvailableSeats - 1 - $i]->getId());
