@@ -31,7 +31,7 @@ class Seat extends Installation
     #[Groups(['installationMinimal:read', 'installation:full'])]
     private bool $reducedMobilitySeat = false;
 
-    public function isReducedMobilitySeats(): bool
+    public function isReducedMobilitySeat(): bool
     {
         return $this->reducedMobilitySeat;
     }
