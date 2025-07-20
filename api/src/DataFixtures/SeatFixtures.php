@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 use App\Entity\MovieTheater;
 use App\Entity\Seat;
 use App\Enum\InstallationStatus;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -36,6 +37,13 @@ class SeatFixtures extends Fixture implements DependentFixtureInterface
                     ->setName((string) ($i + 1))
                     ->setReducedMobilitySeat($i < $reducedMobilitySeats)
                 ;
+                if (InstallationStatus::AVAILABLE !== $seat->getStatus()) {
+                    $date = DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
+                    $isLastMaintenanceDate = $faker->boolean();
+                    $seat->setRepairDetails($faker->realTextBetween())
+                        ->setLastMaintenanceDate($isLastMaintenanceDate ? $date : null)
+                        ->setLastRepairDate($isLastMaintenanceDate ? null : $date);
+                }
                 $manager->persist($seat);
             }
             $manager->flush();

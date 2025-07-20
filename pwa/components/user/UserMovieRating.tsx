@@ -54,4 +54,4 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
         </div>);
 }
 
-export default UserMovieRating; //☆
+export default UserMovieRating;

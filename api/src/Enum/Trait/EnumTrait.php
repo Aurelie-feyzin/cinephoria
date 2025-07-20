@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Trait;
+namespace App\Enum\Trait;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Operation;

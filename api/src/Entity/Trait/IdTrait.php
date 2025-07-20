@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Trait;
+namespace App\Entity\Trait;
 
 use ApiPlatform\Metadata\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;

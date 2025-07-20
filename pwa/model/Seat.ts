@@ -3,5 +3,5 @@ export interface MinimalSeat {
     '@type': string,
     id: string;
     name: string;
-    reducedMobilitySeats: boolean;
+    reducedMobilitySeat: boolean;
 }

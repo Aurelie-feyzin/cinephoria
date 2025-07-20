@@ -5,6 +5,17 @@ import {getProfileInMiddelware} from "./request/user";
 export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     const token = request.cookies.get('jwt_token')?.value;
+    const pathname = request.nextUrl.pathname;
+
+    if (
+        pathname.startsWith("/_next") ||
+        pathname.endsWith(".ico") ||
+        pathname.endsWith(".json") ||
+        pathname.endsWith(".js") ||
+        pathname.endsWith(".css")
+    ) {
+        return NextResponse.next();
+    }
 
     if (!token) {
         url.pathname = "/signIn";
@@ -15,7 +26,7 @@ export async function middleware(request: NextRequest) {
         const user = await getProfileInMiddelware(token).then();
         const role = user.role || null;
 
-        const pathname = request.nextUrl.pathname;
+        //    const pathname = request.nextUrl.pathname;
 
         if (pathname.startsWith("/admin") && role != "admin") {
             url.pathname = "/forbidden";
@@ -42,3 +53,4 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: ["/admin/:path*", "/intranet/:path*"],
 };
+

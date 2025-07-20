@@ -19,7 +19,6 @@ const Signin = () => {
                 {formVisible === LOGIN_FORM && <LoginForm setFormVisible={setFormVisible} />}
                 {formVisible === REGISTRATION_FORM && <RegistrationForm setFormVisible={setFormVisible} />}
                 {formVisible === FORGOT_FORM && <ForgotPasswordForm setFormVisible={setFormVisible} />}
-
             </div>
         </PageContainer>
     );

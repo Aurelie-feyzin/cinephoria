@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 use App\Entity\MovieTheater;
 use App\Entity\ProjectionInstallation;
 use App\Enum\InstallationStatus;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -33,6 +34,13 @@ class ProjectionInstallationFixtures extends Fixture implements DependentFixture
                 ->setStatus($faker->boolean(90) ? InstallationStatus::AVAILABLE : $faker->randomElement(InstallationStatus::class))
             ;
             $manager->persist($projectionInstallation);
+            if (InstallationStatus::AVAILABLE !== $projectionInstallation->getStatus()) {
+                $date = DateTimeImmutable::createFromMutable($faker->dateTimeThisDecade());
+                $isLastMaintenanceDate = $faker->boolean();
+                $projectionInstallation->setRepairDetails($faker->realTextBetween())
+                    ->setLastMaintenanceDate($isLastMaintenanceDate ? $date : null)
+                    ->setLastRepairDate($isLastMaintenanceDate ? null : $date);
+            }
         }
         $manager->flush();
     }
