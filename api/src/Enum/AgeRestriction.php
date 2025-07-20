@@ -6,7 +6,7 @@ namespace App\Enum;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Trait\EnumTrait;
+use App\Enum\Trait\EnumTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 /** https://fr.wikipedia.org/wiki/Commission_de_classification_des_%C5%93uvres_cin%C3%A9matographiques

@@ -52,7 +52,6 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
             enabled: !!filmShow?.movieTheater["@id"],
             onSuccess: (data) => {
                 setSeats(data['hydra:member']);
-
             }
         });
 
@@ -61,8 +60,8 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
         onSuccess: () => {
             router.push(`/orders`)
         },
-        onError: () => {
-            setMessageKo("Erreur, la réservation n'a pas été faite");
+        onError: (error: Error) => {
+            setMessageKo(error.message);
         },
     })
 
@@ -80,7 +79,6 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
         }
     }
 
-
     return (
         user &&
         <div className="max-w-full mx-auto bg-black rounded-lg shadow-md gap-4 pt-3">
@@ -89,7 +87,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
                 {`Séance du ${dayjs(filmShow.date).format('DD/MM/YYYY')} de ${filmShow.startTime} à ${filmShow.endTime}
                                      (${filmShow.movieTheater.projectionQuality.name} - ${filmShow.priceInEuros}€)`}
             </h3>
-            <AlertError visible={!!messageKo} message="Impossible de finaliser la réservation"/>
+            <AlertError visible={!!messageKo} message={messageKo} />
             <form className="max-w-full mx-auto" onSubmit={handleSubmit(handleReservation)}>
                 <InputNumberField
                     register={register("numberOfSeats", {...REQUIRED, ...customMin(1), ...customMax(filmShow.availableSeats)})}
@@ -113,7 +111,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
                     <PageLoading message="chargement de la liste des sièges disponibles"/>}
                 {isChooseSeats === 'true' && !isLoading &&
                     <SelectField label="Siéges" name="seats" register={register("seats")}
-                                 options={formatToSelectOption(seats.filter((seat) => isReducedMobility === 'true' ? seat.reducedMobilitySeats : !seat.reducedMobilitySeats) || [], 'id', 'name')}
+                                 options={formatToSelectOption(seats.filter((seat) => isReducedMobility === 'true' ? seat.reducedMobilitySeat : !seat.reducedMobilitySeat) || [], 'id', 'name')}
                                  error={errors.seats?.message || error?.message}
                                  className="w-full"
                                  placeholder="Choisissez les sieges"

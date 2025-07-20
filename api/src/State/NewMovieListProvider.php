@@ -12,9 +12,9 @@ use DateTimeImmutable;
 /**
  * @implements ProviderInterface<Movie>
  */
-class NewMovieListProvider implements ProviderInterface
+readonly class NewMovieListProvider implements ProviderInterface
 {
-    public function __construct(private readonly MovieRepository $movieRepository)
+    public function __construct(private MovieRepository $movieRepository)
     {
     }
 
