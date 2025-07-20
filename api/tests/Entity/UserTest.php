@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-namespace App\Tests\Entity;
-
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

@@ -35,10 +35,10 @@ export const fetchOneSession = async (token: string|null, id: string): Promise<R
         });
 
         if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des réservations');
+            throw new Error('Erreur lors de la récupération de la réservation');
         }
 
-        return await response.json();;
+        return await response.json();
     } catch (error) {
         throw error;
     }

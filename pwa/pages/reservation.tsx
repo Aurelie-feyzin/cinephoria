@@ -82,13 +82,14 @@ const Reservation = () => {
     };
 
     useEffect(() => {
-        const savedCinemaId = localStorage.getItem("selectedMovieId");
-        setSelectedMovie(movies.find((movie) => movie['@id'] === savedCinemaId) || null)
+        setValue("cinema", localStorage.getItem("selectedCinema") || '');
+        const savedMovieId = localStorage.getItem("selectedMovieId");
+        setSelectedMovie(movies.find((movie) => movie['@id'] === savedMovieId) || null)
         const selectedFilmShow = localStorage.getItem("selectedFilmShow");
         if (selectedFilmShow) {
             setSelectedFilmShow(movieShows.find((show) => show.id === selectedFilmShow) || null)
         }
-    }, [movieShows, movies]);
+    }, [movieShows, movies, setValue]);
 
     useEffect(() => {
         localStorage.setItem("selectedCinema", selectedCinema);

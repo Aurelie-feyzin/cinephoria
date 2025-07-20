@@ -28,8 +28,10 @@ export const createReservation = async (reservationData: any) => {
         body: JSON.stringify(reservationData),
     })
     if (!response.ok) {
-        throw new Error('Erreur lors de la création de la réservation')
+        const payload = await response.json();
+        const message = payload?.detail ?? 'Erreur lors de la création de la réservation';
+        throw new Error(message)
     }
 
-    return await response.json()
+    return await response.json();
 }

@@ -5,24 +5,19 @@ import {Movie} from "../../model/MovieInterface";
 
 type Props = {
     movie: Movie
-    mirror?: boolean
 };
 
-const MovieCard:React.FC<Props>  = ({
-                       movie,
-                       mirror = false // Permet de changer la position du poster (gauche/droite)
-                   }) => {
+const MovieCard:React.FC<Props>  = ({movie }) => {
     if (!movie) {
         return;
     }
-
 
     return (
         <div className="flex flex-col sm:flex-row bg-black rounded-lg shadow-lg p-2 w-full max-w-2xl">
             <div className="flex justify-center md:justify-start mb-2 md:mb-0">
             <Image
                 src={`/poster/${movie.posterPath}`}
-                alt={`/poster/${movie.posterPath}`}
+                alt={`Poster de ${movie.title}`}
                 width={150}
                 height={225}
                 className={`w-[150px] md:w-[300px] object-cover rounded-lg shadow-md mr-0 md:mr-4 mb-4 md:mb-0 items-center`}
