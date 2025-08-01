@@ -1,6 +1,5 @@
 import {API_PATH} from "./utils";
 import {LoginInput} from "../model/User";
-export const fetchGetToken = async (data: LoginInput) =>
 import Cookies from "js-cookie";
 export const fetchGetToken = async (data: LoginInput): Promise<Response> =>
 {
