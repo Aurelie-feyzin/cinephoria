@@ -28,7 +28,7 @@ class ApiFixtureController extends AbstractController
 
         $postgresInput = new ArrayInput([
             'command' => 'doctrine:fixtures:load',
-            '--group' => ['MovieShowFixtures'],
+            '--group' => ['MovieShowAdditionFixtures'],
             '--append' => true,
             '--no-interaction' => true,
         ]);

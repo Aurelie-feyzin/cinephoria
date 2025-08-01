@@ -8,9 +8,12 @@ use App\Entity\Trait\IdTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity]
+#[ORM\UniqueConstraint(fields: ['name', 'address'])]
+#[UniqueEntity(['name', 'address'])]
 #[ApiResource(mercure: false)]
 class Cinema
 {

@@ -5,8 +5,11 @@ namespace App\Entity;
 
 use App\Entity\Trait\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
+#[ORM\UniqueConstraint(fields: ['street', 'city'])]
+#[UniqueEntity(['street', 'city'])]
 class Address
 {
     use IdTrait;
