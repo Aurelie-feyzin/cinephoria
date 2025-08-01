@@ -40,7 +40,6 @@ export const fetchInstallationStatus = async (): Promise<Enum[]> => {
 
 export const fetchInstallation = async (id: string, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations/${id}`;
-    const token = await getToken();
     const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
@@ -55,7 +54,6 @@ export const fetchInstallation = async (id: string, refreshAccessToken:  () => P
 
 export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}out_of_service/installations?page=${page}&itemsPerPage=${itemsPerPage}`;
-    const token = await getToken();
     const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
@@ -70,7 +68,6 @@ export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPe
 
 export const fetchGetInstallationByMovieTheater = async (movieTheater: string, refreshAccessToken:  () => Promise<string | null>) => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations?movieTheater=${movieTheater}&itemsPerPage=999`;
-    const token = await getToken();
     const response = await fetchWithAuth(url, {
         method: 'GET',
         headers: {
@@ -86,7 +83,6 @@ export const fetchGetInstallationByMovieTheater = async (movieTheater: string, r
 };
 
 export const updateInstallation = async (id: string, data: InstallationInput, refreshAccessToken:  () => Promise<string | null>) => {
-    const token = await getToken();
     const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_HOST_PATH}${id}`, {
         method: 'PATCH',
         headers: {

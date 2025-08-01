@@ -19,11 +19,10 @@ export const fetchRefreshToken = async () =>
 {
     const refreshToken = await getItem(KEY_REFRESH_TOKEN);
     return   await fetch(`${process.env.NEXT_PUBLIC_API_PATH}token/refresh`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/ld+json',
+            Authorization: `Bearer ${refreshToken}`,
         },
-        body: JSON.stringify({refresh_token: refreshToken})
     })};
 
 export const fetchWithAuth = async (  url: string,
