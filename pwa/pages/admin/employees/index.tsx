@@ -13,16 +13,18 @@ import Link from "next/link";
 import EditIcon from "../../../components/common/Icon/EditIcon";
 import {orderBy} from "lodash";
 import {Employee} from "../../../model/User";
+import {useUser} from "../../../context/UserContext";
 
 const EmployeeList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const itemsPerPage = 30;
+    const {refreshAccessToken} = useUser();
 
     const {
         data: employeesApi,
         error,
         isLoading,
-    } = useQuery<any, Error>(['employees', currentPage], () => fetchEmployees(currentPage, itemsPerPage), {
+    } = useQuery<any, Error>(['employees', currentPage], () => fetchEmployees(currentPage, itemsPerPage, refreshAccessToken), {
         keepPreviousData: true,
     });
 

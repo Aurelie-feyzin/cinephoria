@@ -78,6 +78,9 @@ sh:
 pwa-lint: ## Lints JS coding standarts
 	$(PWA_PNPM_CMD) lint
 
+pwa-type-check: ## Lints JS coding standarts
+	$(PWA_PNPM_CMD) type-check
+
 pwa-audit: ## Checks for known security issues with the installed packages.
 	$(PWA_PNPM_CMD) audit
 
@@ -103,6 +106,7 @@ code-quality: ## Run the tests
 	$(MAKE) phpstan
 	@$(call GREEN, "PWA code quality")
 	$(MAKE) pwa-lint
+	$(MAKE) pwa-type-check
 	@$(call GREEN, "DESKTOP code quality")
 	$(MAKE) tauri-lint
 	@$(call GREEN, "EXPO code quality")

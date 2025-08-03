@@ -9,6 +9,7 @@ import {useMutation, useQuery} from "react-query";
 import {fetchEnums, URL_ENUM} from "../../request/api";
 import AlertError from "../common/alert/AlertError";
 import {ReviewInput, ReviewInReservation} from "../../model/Review";
+import {useUser} from "../../context/UserContext";
 
 
 const FormReview = ({review, setViewForm}:{review: ReviewInReservation, setViewForm:any}) => {
@@ -20,13 +21,14 @@ const FormReview = ({review, setViewForm}:{review: ReviewInReservation, setViewF
         defaultValues: review ? review : {}
     });
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
+    const {refreshAccessToken} = useUser();
 
     const {data: statuses, error: errorStatus, isLoading: isLoadingStatus} = useQuery(
         ['review_statuses'], () => fetchEnums(URL_ENUM.review_status),
     )
 
     const mutation = useMutation({
-        mutationFn: (reviewData: any) => updateReviewById(review['@id'] as string, reviewData),
+        mutationFn: (reviewData: any) => updateReviewById(review['@id'] as string, reviewData, refreshAccessToken),
         onSuccess: () => {
             setViewForm(false);
         },

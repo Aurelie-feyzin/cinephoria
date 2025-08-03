@@ -5,6 +5,11 @@ import {Profile} from "../model/User";
 import {getProfile} from "../request/user";
 import {fetchRefreshToken} from "../request/auth";
 
+type TokenResponse = {
+    token: string;
+    refresh_token: string;
+}
+
 type ProfileContext = {
     user?: Profile | null;
     login: (tokenResponse:TokenResponse) => void

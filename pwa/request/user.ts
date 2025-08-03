@@ -63,7 +63,7 @@ export const fetchEmployees = async (page: number, itemsPerPage: number, refresh
 }
 
 export const updateEmployeeById = async (id: string, EmployeeInput: EmployeeInput, refreshAccessToken: () => Promise<string | null>) => {
-    const response = await fetch(`${API_PATH}employees/${id}`, {
+    const response = await fetchWithAuth(`${API_PATH}employees/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/merge-patch+json',
@@ -76,25 +76,22 @@ export const updateEmployeeById = async (id: string, EmployeeInput: EmployeeInpu
     return response.json()
 }
 
-const postUser = async (data: EmployeeInput | UserInput, includeAuth = false): Promise<User> => {
-    const headers: HeadersInit = {
-        'Content-Type': 'application/ld+json',
+const postUser = async (data: EmployeeInput | UserInput,refreshAccessToken?: () => Promise<string | null>): Promise<User> => {
+    const url: string = `${API_PATH}users`;
+    const request: RequestInit = {
+        method: 'POST',
+        headers:         {
+            'Content-Type': 'application/ld+json',
+        },
+        body: JSON.stringify(data),
     };
 
-    if (includeAuth) {
-        const token = Cookies.get('jwt_token');
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        } else {
-            throw new Error('JWT token not found for authenticated request');
-        }
+    let response= null;
+    if (refreshAccessToken) {
+        response = await fetchWithAuth(url, request, refreshAccessToken);
+    } else {
+        response = await fetch(url, request);
     }
-
-    const response = await fetch(`${API_PATH}users`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(data),
-    });
 
     if (!response.ok) {
         throw new Error('Erreur lors de la création du compte');
@@ -107,6 +104,6 @@ export const createUser = async (data: UserInput): Promise<User> => {
     return postUser(data);
 };
 
-export const createEmployee = async (data: EmployeeInput): Promise<User> => {
-    return postUser(data, true);
+export const createEmployee = async (data: EmployeeInput, refreshAccessToken: () => Promise<string | null>): Promise<User> => {
+    return postUser(data, refreshAccessToken);
 };
