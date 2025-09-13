@@ -1,8 +1,8 @@
 parameters:
     level: 6
+    paths:
+        - tests
     ignoreErrors:
         - '#expects string, null given#'
         - '#expects int, null given#'
         - '#expects int, string given#'
-    paths:
-        - tests

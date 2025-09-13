@@ -1,3 +1,7 @@
 includes:
     - phpstan-src.neon
     - phpstan-tests.neon
+
+parameters:
+    bootstrapFiles:
+        - vendor/autoload.php
