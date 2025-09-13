@@ -6,11 +6,12 @@ namespace App\DataFixtures;
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\Cinema;
 use App\Entity\OpeningHours;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 
-class OpeningHoursFixtures extends AbstractTsvImport implements DependentFixtureInterface
+class OpeningHoursFixtures extends AbstractTsvImport implements DependentFixtureInterface, FixtureGroupInterface
 {
     private const FILENAME = 'opening_hours.tsv';
 
@@ -46,5 +47,10 @@ class OpeningHoursFixtures extends AbstractTsvImport implements DependentFixture
         $manager->persist($openingHours);
 
         return true;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

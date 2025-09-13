@@ -5,11 +5,12 @@ namespace App\DataFixtures;
 
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\User;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends AbstractTsvImport
+class UserFixtures extends AbstractTsvImport implements FixtureGroupInterface
 {
     private const FILENAME = 'user.tsv';
 
@@ -41,5 +42,10 @@ class UserFixtures extends AbstractTsvImport
         $manager->persist($user);
 
         return true;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

@@ -5,9 +5,10 @@ namespace App\DataFixtures;
 
 use App\Entity\MovieGenre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class MovieGenreFixtures extends Fixture
+class MovieGenreFixtures extends Fixture implements FixtureGroupInterface
 {
     /** @var string */
     private const DATA_PATH = 'src/DataFixtures/data/genres.json';
@@ -31,5 +32,10 @@ class MovieGenreFixtures extends Fixture
             $manager->persist($genre);
         }
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

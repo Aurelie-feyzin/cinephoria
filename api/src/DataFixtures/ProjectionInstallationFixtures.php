@@ -8,12 +8,13 @@ use App\Entity\ProjectionInstallation;
 use App\Enum\InstallationStatus;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 /** @SuppressWarnings(PHPMD.StaticAccess) */
-class ProjectionInstallationFixtures extends Fixture implements DependentFixtureInterface
+class ProjectionInstallationFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function getDependencies(): array
     {
@@ -43,5 +44,10 @@ class ProjectionInstallationFixtures extends Fixture implements DependentFixture
             }
         }
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 
 use App\DataFixtures\abstraction\AbstractTsvImport;
 use App\Entity\ProjectionQuality;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 
-class ProjectionQualityFixtures extends AbstractTsvImport
+class ProjectionQualityFixtures extends AbstractTsvImport implements FixtureGroupInterface
 {
     private const FILENAME = 'projection_quality.tsv';
 
@@ -38,5 +39,10 @@ class ProjectionQualityFixtures extends AbstractTsvImport
         $manager->persist($projectionPrice);
 
         return true;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

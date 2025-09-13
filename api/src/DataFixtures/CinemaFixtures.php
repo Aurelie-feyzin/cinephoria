@@ -8,11 +8,12 @@ use App\Entity\Address;
 use App\Entity\Cinema;
 use App\Entity\MovieTheater;
 use App\Entity\ProjectionQuality;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 
-class CinemaFixtures extends AbstractTsvImport implements DependentFixtureInterface
+class CinemaFixtures extends AbstractTsvImport implements DependentFixtureInterface, FixtureGroupInterface
 {
     private const FILENAME = 'cinemas.tsv';
 
@@ -72,5 +73,10 @@ class CinemaFixtures extends AbstractTsvImport implements DependentFixtureInterf
         return [
             ProjectionQualityFixtures::class,
         ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }

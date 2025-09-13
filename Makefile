@@ -45,7 +45,7 @@ db-migrate: ## Migrate the database
 
 fixtures: ## Load the fixtures
 	@$(call GREEN, "Loading fixtures...")
-	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction
+	$(SYMFONY_CONSOLE) doctrine:fixtures:load --no-interaction  --group=initialize
 	$(SYMFONY_CONSOLE) doctrine:mongodb:fixtures:load --no-interaction
 
 cache-clear: ## Clear the cache
