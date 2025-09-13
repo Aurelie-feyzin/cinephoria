@@ -64,8 +64,23 @@ jobs:
         name: PWA Quality
         run: make pwa-quality
       -
+          name: Install pnpm
+          run: npm install -g pnpm
+      -
+        name: Install Tauri dependencies
+        run: |
+          cd desktop_app
+          pnpm install
+          cd ..
+      -
         name: Tauri Quality
         run: make tauri-quality
+      -
+        name: Install Expo dependencies
+        run: |
+          cd react_expo
+          pnpm install
+          cd ..
       -
         name: Expo Quality
         run: make expo-quality
