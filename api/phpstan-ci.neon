@@ -1,0 +1,6 @@
+includes:
+    - phpstan-src.neon
+
+parameters:
+    excludePaths:
+        - tests/*

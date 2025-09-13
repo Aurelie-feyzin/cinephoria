@@ -52,8 +52,14 @@ jobs:
         name: Start services
         run: docker compose up --wait --no-build
       -
-        name: PHP Quality
-        run: make php-quality
+        name: PHP fix coding style
+        run: make fix-cs
+      -
+        name: PHP Mess Detector
+        run: make phpmd
+      -
+        name: PHPStan (CI)
+        run: docker compose exec -T php php vendor/bin/phpstan analyse --configuration=phpstan-ci.neon --memory-limit=-1
       -
         name: PWA Quality
         run: make pwa-quality
