@@ -1,30 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Service;
 
 use App\Entity\Movie;
 use App\Entity\MovieShow;
 use App\Entity\MovieTheater;
 use DateTimeImmutable;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 
 /** @SuppressWarnings(PHPMD.StaticAccess) */
-class MovieShowFixtures extends Fixture implements DependentFixtureInterface
+class MovieShowFixturesHelper
 {
-    public function getDependencies(): array
-    {
-        return [
-            MovieFixtures::class,
-            CinemaFixtures::class,
-            OpeningHoursFixtures::class,
-        ];
-    }
-
     public function load(ObjectManager $manager): void
     {
         ini_set('memory_limit', '-1'); // TODO refactor by batch

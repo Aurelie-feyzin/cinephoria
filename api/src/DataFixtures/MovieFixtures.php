@@ -8,11 +8,12 @@ use App\Entity\Movie;
 use App\Entity\MovieGenre;
 use App\Enum\AgeRestriction;
 use DateTimeImmutable;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Generator;
 
-class MovieFixtures extends AbstractTsvImport implements DependentFixtureInterface
+class MovieFixtures extends AbstractTsvImport implements DependentFixtureInterface, FixtureGroupInterface
 {
     private const FILENAME = 'movies.tsv';
 
@@ -69,5 +70,10 @@ class MovieFixtures extends AbstractTsvImport implements DependentFixtureInterfa
         $date = $faker->valid($evenValidator)->dateTimeBetween('-1 month', $endDate);
 
         return date_create_immutable($date->format('Y-m-d'));
+    }
+
+    public static function getGroups(): array
+    {
+        return ['initialize'];
     }
 }
