@@ -52,8 +52,41 @@ jobs:
         name: Start services
         run: docker compose up --wait --no-build
       -
-        name: Check HTTP reachability
-        run: curl -v --fail-with-body http://localhost
+        name: PHP fix coding style
+        run: make fix-cs
+      -
+        name: PHP Mess Detector
+        run: make phpmd
+      -
+        name: PHPStan (CI)
+        run: docker compose exec -T php php vendor/bin/phpstan analyse --configuration=phpstan-ci.neon --memory-limit=-1
+      -
+        name: PWA Quality
+        run: make pwa-quality
+      -
+          name: Install pnpm
+          run: npm install -g pnpm
+      -
+        name: Install Tauri dependencies
+        run: |
+          cd desktop_app
+          pnpm install
+          cd ..
+      -
+        name: Tauri Quality
+        run: make tauri-quality
+      -
+        name: Install Expo dependencies
+        run: |
+          cd react_expo
+          pnpm install
+          cd ..
+      -
+        name: Expo Quality
+        run: make expo-quality
+      -
+        name: PWA Build
+        run: docker compose exec -T pwa pnpm build
       -
         name: Check API reachability
         run: curl -vk --fail-with-body http://localhost
@@ -81,6 +114,22 @@ jobs:
       -
         name: Check PWA reachability
         run: "curl -vk --fail-with-body -H 'Accept: text/html' http://localhost"
+      -
+        name: Security Checks - API
+        run: make security-checker
+        continue-on-error: true
+      -
+        name: Security Checks - PWA
+        run: make pwa-audit
+        continue-on-error: true
+      -
+        name: Security Checks - Tauri
+        run: make tauri-audit
+        continue-on-error: true
+      -
+        name: Security Checks - React Expo
+        run: make expo-audit
+        continue-on-error: true
   lint:
     name: Docker Lint
     runs-on: ubuntu-latest

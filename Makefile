@@ -77,6 +77,7 @@ sh:
 
 pwa-lint: ## Lints JS coding standarts
 	$(PWA_PNPM_CMD) lint
+	$(PWA_PNPM_CMD) type-check
 
 pwa-audit: ## Checks for known security issues with the installed packages.
 	$(PWA_PNPM_CMD) audit
@@ -84,6 +85,7 @@ pwa-audit: ## Checks for known security issues with the installed packages.
 ## —— DESKTOP APP —————————————————————————————————————————————————————
 tauri-lint: ## Lints JS coding standarts
 	$(DESKTOP_APP_DIR) && pnpm lint
+	$(DESKTOP_APP_DIR) && pnpm type-check
 
 tauri-audit: ## Checks for known security issues with the installed packages.
 	$(DESKTOP_APP_DIR) && pnpm audit
@@ -91,22 +93,31 @@ tauri-audit: ## Checks for known security issues with the installed packages.
 ## —— Expo APP —————————————————————————————————————————————————————
 expo-lint: ## Lints JS coding standarts
 	$(EXPO_APP_DIR) && pnpm lint
+	$(EXPO_APP_DIR) && pnpm type-check
 
 expo-audit: ## Checks for known security issues with the installed packages.
 	$(EXPO_APP_DIR) && pnpm audit
 
 ## —— Quality and security —————————————————————————————————————————————————————
-code-quality: ## Run the tests
+php-quality:
 	@$(call GREEN, "PHP code quality")
 	$(MAKE) fix-cs
 	$(MAKE) phpmd
 	$(MAKE) phpstan
+
+pwa-quality:
 	@$(call GREEN, "PWA code quality")
 	$(MAKE) pwa-lint
+
+tauri-quality:
 	@$(call GREEN, "DESKTOP code quality")
 	$(MAKE) tauri-lint
+
+expo-quality:
 	@$(call GREEN, "EXPO code quality")
 	$(MAKE) expo-lint
+
+code-quality: php-quality pwa-quality tauri-quality expo-quality
 
 security:
 	@$(call GREEN, "PHP security")
