@@ -1,22 +1,32 @@
 // tokenService.ts
 import Cookies from 'js-cookie';
+import {getVersion} from "@tauri-apps/api/app";
+import {LazyStore} from "@tauri-apps/plugin-store";
 
-let store: any = null;
+const store : LazyStore= new LazyStore('settings.json');
+export async function isTauri() {
+    if (typeof window === "undefined") {
+        return false;
+    }
 
-export const isTauri = () => '__TAURI__' in window;
+    if (!(window as any).__TAURI_INTERNALS__) {
+        return false;
+    }
 
-async function loadStore() {
-    if (isTauri() && !store) {
-        const plugin = await import('@tauri-apps/plugin-store');
-        store = await plugin.Store.load('.jwt-store.dat');
+    try {
+        await getVersion();
+        return true;
+    } catch {
+        return false;
     }
 }
 
 export const saveToken = async (token: string) => {
-    if (isTauri()) {
-        await loadStore();
-        await store.set('jwt_token', token);
-        await store.save();
+    const isTauriApp = await isTauri();
+
+    if (isTauriApp) {
+        await store?.set('jwt_token', token);
+        await store?.save();
     } else {
         Cookies.set('jwt_token', token, {
             expires: 1 / 24,
@@ -28,19 +38,19 @@ export const saveToken = async (token: string) => {
 };
 
 export const getToken = async (): Promise<string | undefined> => {
-    if (isTauri()) {
-        await loadStore();
-        return await store.get('jwt_token');
+    const isTauriApp = await isTauri();
+    if (isTauriApp) {
+        return store?.get('jwt_token');
     } else {
         return Cookies.get('jwt_token');
     }
 };
 
 export const removeToken = async () => {
-    if (isTauri()) {
-        await loadStore();
-        await store.delete('jwt_token');
-        await store.save();
+    const isTauriApp = await isTauri();
+    if (isTauriApp) {
+        await store?.delete('jwt_token');
+        await store?.save();
     } else {
         Cookies.remove('jwt_token');
     }
