@@ -49,10 +49,10 @@ const Installations = () => {
             label: 'Actions',
             render: (row) => (
                 <div className="flex">
-                    <Link href={`/installations/${row.id}`} className="hover:bg-secondary">
+                    <Link href={`/installations/show?id=${row.id}`} className="hover:bg-secondary">
                         <ViewIcon/>
                     </Link>
-                    <Link href={`/installations/${row.id}/edit`} className="hover:bg-secondary">
+                    <Link href={`/installations/edit?id=${row.id}`} className="hover:bg-secondary">
                         <EditIcon/>
                     </Link>
                 </div>

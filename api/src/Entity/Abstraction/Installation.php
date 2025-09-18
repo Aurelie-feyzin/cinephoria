@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
     mercure: false)]
-#[ApiFilter(SearchFilter::class, properties: ['movieTheater' => 'exact', 'status' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'movieTheater' => 'exact', 'status' => 'exact'])]
 abstract class Installation
 {
     use IdTrait;

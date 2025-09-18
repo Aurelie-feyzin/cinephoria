@@ -1,22 +1,23 @@
 'use client'
-import React, {useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import InstallationForm from "@/app/ui/InstallationForm";
 import PageContainer from "@/app/ui/PageContainer";
 import AlertError from "@/app/ui/alert/AlertError";
-import {useParams} from "next/navigation";
 import {useQuery} from "@tanstack/react-query";
 import {fetchInstallation} from "@/app/api/installationApi";
 import PageLoading from "@/app/ui/PageLoading";
+import {useSearchParams} from "next/navigation";
 
 
 const EditOutOfServiceInstallation = () => {
-    const {id} = useParams();
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
     const {data, isLoading, error} = useQuery({
             queryKey: ['installation', id],
             queryFn: () => fetchInstallation(id as string),
-            enabled: !!id && typeof id === 'string',
+            enabled: !!id,
         }
     )
 
@@ -27,7 +28,6 @@ const EditOutOfServiceInstallation = () => {
     }, [error]);
 
     return (
-        <PageContainer titlePage='Modifier une installation en panne'>
             <div className="min-w-full">
                 <AlertError visible={!!messageKo}
                             titleMessage="Erreur pendant le traitement"
@@ -37,9 +37,17 @@ const EditOutOfServiceInstallation = () => {
                     <InstallationForm setMessageKo={setMessageKo} installation={data}/>
                 }
             </div>
-        </PageContainer>
     )
 
 }
 
-export default EditOutOfServiceInstallation;
+const EditPage = () => (
+    <PageContainer titlePage='Modifier une installation en panne'>
+        <Suspense fallback={<PageLoading/>}>
+            <EditOutOfServiceInstallation />
+        </Suspense>
+    </PageContainer>
+
+);
+
+export default EditPage;
