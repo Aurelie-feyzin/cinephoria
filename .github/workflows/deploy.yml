@@ -118,6 +118,7 @@ jobs:
             echo "NEXT_PUBLIC_HOST_PATH=https://cinephoria.me/" > /var/www/cinephoria/pwa/.env.production
             echo "NEXT_PUBLIC_API_PATH=/api/" >> /var/www/cinephoria/pwa/.env.production
             echo "NEXT_PUBLIC_IS_PRODUCTION=true" >> /var/www/cinephoria/pwa/.env.production
+            echo "NEXT_PUBLIC_API_URL=https://cinephoria.me" >> /var/www/cinephoria/pwa/.env.production
 
             echo "==> Stopping existing containers"
             docker compose -f compose.yaml -f compose.prod.yaml down

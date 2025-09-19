@@ -26,9 +26,7 @@ export async function middleware(request: NextRequest) {
         const user = await getProfileInMiddelware(token).then();
         const role = user.role || null;
 
-        //    const pathname = request.nextUrl.pathname;
-
-        if (pathname.startsWith("/admin") && role != "admin") {
+        if (pathname.startsWith("/admin") && role?.toLowerCase() != "admin") {
             url.pathname = "/forbidden";
 
             return NextResponse.redirect(url);
