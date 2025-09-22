@@ -4,12 +4,15 @@ permissions:
   pull-requests: write
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'desktop_app/**'
+  workflow_run:
+    workflows: [ "CI Tauri" ]
+    types:
+      - completed
   workflow_dispatch:
+    inputs:
+      ci_run_id:
+        description: 'ID du run CI à utiliser pour télécharger les artifacts'
+        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -33,12 +36,21 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+      - name: Show workflow_run info
+        run: |
+          echo "workflow_run.id       = ${{ github.event.workflow_run.id }}"
+          echo "workflow_run.head_sha = ${{ github.event.workflow_run.head_sha }}"
+          echo "workflow_run.head_branch = ${{ github.event.workflow_run.head_branch }}"
+          echo "run_id (current workflow) = ${{ github.run_id }}"
 
       - name: Download Tauri build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: tauri-binaries-${{ matrix.platform }}
+          pattern: tauri-binaries-${{ matrix.platform }}
           path: desktop_app/src-tauri/target/release/
+          repository: Aurelie-feyzin/cinephoria
+          run-id: ${{ github.event.workflow_run.id || github.event.inputs.ci_run_id  }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List downloaded files
         run: ls -lh desktop_app/src-tauri/target/release
