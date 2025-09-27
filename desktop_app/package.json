@@ -1,9 +1,9 @@
 {
-  "name": "desktop_app",
-  "version": "0.1.0",
+  "name": "cinephoria_desktop",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 4010",
+    "dev": "next dev --turbopack -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -25,6 +25,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@tanstack/eslint-plugin-query": "^5.86.0",
     "@tauri-apps/cli": "^2.8.4",
+    "@tauri-apps/plugin-log": "^2.7.0",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.20",
     "@types/node": "^20.19.14",
@@ -39,7 +40,8 @@
   "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "sharp"
+      "sharp",
+      "unrs-resolver"
     ]
   }
 }

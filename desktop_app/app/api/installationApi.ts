@@ -1,5 +1,5 @@
 import {InstallationInput} from "@/app/ui/InstallationForm";
-import {Enum} from "@/app/api/apiResponseType";
+import {ApiResponse, Enum} from "@/app/api/apiResponseType";
 import {getToken} from "@/app/service/tokenService";
 import { MovieTheater } from '@/app/api/movieTheaterApi';
 export interface InstallationMinimalDescription {
@@ -38,7 +38,7 @@ export const fetchInstallationStatus = async (): Promise<Enum[]> => {
     return data['hydra:member'] || [];
 }
 
-export const fetchInstallation = async (id: string) => {
+export const fetchInstallation = async (id: string): Promise<Installation> => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations/${id}`;
     const token = await getToken();
     const response = await fetch(url, {
@@ -54,7 +54,7 @@ export const fetchInstallation = async (id: string) => {
     return await response.json();
 };
 
-export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number) => {
+export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPerPage: number): Promise<ApiResponse<InstallationMinimalDescription>> => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}out_of_service/installations?page=${page}&itemsPerPage=${itemsPerPage}`;
     const token = await getToken();
     const response = await fetch(url, {
@@ -70,7 +70,7 @@ export const fetchGetInstallationUnderMaintenance = async (page: number, itemsPe
     return await response.json();
 };
 
-export const fetchGetInstallationByMovieTheater = async (movieTheater: string) => {
+export const fetchGetInstallationByMovieTheater = async (movieTheater: string): Promise<InstallationMinimalDescription[]> => {
     const url = `${process.env.NEXT_PUBLIC_API_PATH}installations?movieTheater=${movieTheater}&itemsPerPage=999`;
     const token = await getToken();
     const response = await fetch(url, {
@@ -88,7 +88,7 @@ export const fetchGetInstallationByMovieTheater = async (movieTheater: string) =
     return data['hydra:member'] || [];
 };
 
-export const updateInstallation = async (id: string, data: InstallationInput) => {
+export const updateInstallation = async (id: string, data: InstallationInput): Promise<InstallationMinimalDescription> => {
     const token = await getToken();
     const response = await fetch(`${process.env.NEXT_PUBLIC_HOST_PATH}${id}`, {
         method: 'PATCH',

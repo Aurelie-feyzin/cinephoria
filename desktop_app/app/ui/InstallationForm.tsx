@@ -71,8 +71,6 @@ const InstallationForm = ({installation, setMessageKo}:
         queryFn: () => fetchCinemas()
     });
 
-    console.log(errorCinemas);
-
     const {
         data: movieTheaters,
         error: errorMovieTheaters,

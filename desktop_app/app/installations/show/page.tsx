@@ -1,27 +1,27 @@
 'use client'
-import React from "react";
+import React, {Suspense} from "react";
 import PageContainer from "@/app/ui/PageContainer";
 import AlertError from "@/app/ui/alert/AlertError";
 import {useQuery} from "@tanstack/react-query";
 import {fetchInstallation} from "@/app/api/installationApi";
-import {useParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import PropertyInline from "@/app/ui/PropertyInline";
 import PageLoading from "@/app/ui/PageLoading";
 import ButtonEdit from "@/app/ui/button/ButtonEdit";
 
 
 const CreateOutOfServiceInstallation = () => {
-    const {id} = useParams();
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
 
     const {data, isLoading, error} = useQuery({
             queryKey: ['installation', id],
             queryFn: () => fetchInstallation(id as string),
-            enabled: !!id && typeof id === 'string',
+            enabled: !!id,
         }
     )
 
     return (
-        <PageContainer titlePage='Installation'>
             <div className="min-w-full">
                 <AlertError visible={!!error}
                             titleMessage="Erreur pendant le traitement"
@@ -44,14 +44,22 @@ const CreateOutOfServiceInstallation = () => {
                         <PropertyInline label='Description du problème' value={data?.repairDetails}/>
                         <hr />
                         <div className="flex justify-end">
-                            <ButtonEdit href={`/installations/${id}/edit`} fullWidth={false}/>
+                            <ButtonEdit href={`/installations/edit?id=${id}`} fullWidth={false}/>
                         </div>
                     </div>
                 }
             </div>
-        </PageContainer>
     )
 
 }
 
-export default CreateOutOfServiceInstallation;
+const Page = () => (
+    <PageContainer titlePage='Installation'>
+        <Suspense fallback={<PageLoading/>}>
+            <CreateOutOfServiceInstallation />
+        </Suspense>
+    </PageContainer>
+
+);
+
+export default Page;

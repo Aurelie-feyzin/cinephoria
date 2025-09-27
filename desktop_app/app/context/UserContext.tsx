@@ -26,39 +26,49 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const [error, setError] = useState<string|null>(null);
     const router = useRouter();
 
-
     useEffect(() => {
-        const token = getToken();
+        const getProfile = async () => {
+            try {
+                const token = await getToken();
 
-        if (token) {
-            fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Impossible de récupérer le profil de l\'utilisateur');
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    setUser(data);
-                    setError(null);
-                    router.back();
-                })
-                .catch((err) => {
-                    setError(err.message);
-                });
-        } else {
-            setUser(null);
-            router.push('/');
+                if (token) {
+                    fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Impossible de récupérer le profil de l\'utilisateur');
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            setUser(data);
+                            setError(null);
+                            router.back();
+                        })
+                        .catch((err) => {
+                            setError(err.message);
+                        });
+                } else {
+                    setUser(null);
+                    router.push('/');
+                }
+            }
+            catch (error: any) {
+                setError(error.message);
+            }
         }
+
+        getProfile().then();
+
     }, [router]);
 
     const login = (token: string) => {
-        saveToken(token);
+        setError(null);
+        saveToken(token).then();
         fetch(`${process.env.NEXT_PUBLIC_API_PATH}profile`, {
             method: 'GET',
             headers: {
@@ -68,7 +78,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
             .then((response) => response.json())
             .then((data) => {
                 setUser(data);
-                setError(null);
                 if (data.role === null) {
                     throw new Error('Vous n\'avez pas les droits pour utiliser l\'application', { cause: 'unauthorized' });
                 }
@@ -80,7 +89,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
     };
 
     const logout = () => {
-        removeToken();
+        removeToken().then();
         setUser(null);
         router.push('/');
     };

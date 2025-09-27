@@ -28,6 +28,7 @@ export default function Home() {
     try {
       setMessageKo('');
       setLoginKo(false);
+
       const response = await fetchGetToken(data);
       if (!response.ok) {
         const badResponse = await response.json();
@@ -45,8 +46,7 @@ export default function Home() {
         setLoginKo(true);
         setMessageKo(error);
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setLoginKo(true);
     }
   };
@@ -82,9 +82,6 @@ export default function Home() {
                         label='Mot de passe'
                         error={errors.password?.message}
             />
-{/*
-            <LinkForgotPasswordForm setFormVisible={setFormVisible} />
-*/}
             <ButtonSubmit label="Se connecter" />
           </form>
           </div>
