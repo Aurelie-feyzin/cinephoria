@@ -24,6 +24,7 @@ class ReviewRepository extends ServiceDocumentRepository
         $aggregation = $this->createAggregationBuilder()
             ->match()
             ->field('movieId')->equals($movieId)
+            ->field('status')->notEqual(ReviewStatus::REJECTED)
             ->group()
             ->field('_id')->expression('$movieId')
             ->field('averageRating')->avg('$rating')
@@ -31,7 +32,7 @@ class ReviewRepository extends ServiceDocumentRepository
 
         $result = $aggregation->execute()->toArray();
 
-        return empty($result) ? 0 : $result[0]['averageRating'];
+        return empty($result) ? 0 : round($result[0]['averageRating'], 1);
     }
 
     public function getReviewsByMovie(string $movieId, int $itemsPerPage = 5, int $page = 1): TraversablePaginator
