@@ -45,7 +45,7 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
         # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
         # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
 
@@ -63,6 +63,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
         working-directory: desktop_app
+
+      - name: Set environment variables
+        run: |
+          echo "NEXT_PUBLIC_HOST_PATH=${{ secrets.NEXT_PUBLIC_HOST_PATH }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_API_PATH=${{ secrets.NEXT_PUBLIC_API_PATH }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_NODE_ENV=production" >> $GITHUB_ENV
 
       - uses: tauri-apps/tauri-action@v0
         env:
