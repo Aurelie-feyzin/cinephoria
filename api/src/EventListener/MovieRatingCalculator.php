@@ -14,10 +14,10 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsDocumentListener(event: Events::postUpdate)]
 #[AsDocumentListener(event: Events::postPersist)]
 #[AsDocumentListener(event: Events::postRemove)]
-class MovieRatingCalculator
+readonly class MovieRatingCalculator
 {
-    public function __construct(private readonly EntityManagerInterface $manager,
-        private readonly ReviewRepository $reviewRepository)
+    public function __construct(private EntityManagerInterface $manager,
+        private ReviewRepository $reviewRepository)
     {
     }
 

@@ -13,7 +13,7 @@ use App\Repository\UserRepository;
  */
 class EmployeeListProvider implements ProviderInterface
 {
-    public function __construct(readonly private UserRepository $userRepository)
+    public function __construct(private readonly UserRepository $userRepository)
     {
     }
 
