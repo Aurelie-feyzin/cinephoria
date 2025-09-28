@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use App\Service\FixtureRunner;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -16,12 +15,9 @@ class ApiFixtureController extends AbstractController
 {
     #[Route('api/complete-fixtures', name: 'complete_fixtures', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function runFixtures(KernelInterface $kernel): JsonResponse
+    public function runFixtures(FixtureRunner $fixtureRunner): JsonResponse
     {
         set_time_limit(300);
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
         $originalErrorReporting = error_reporting();
 
         error_reporting($originalErrorReporting & ~E_USER_DEPRECATED);
@@ -33,7 +29,7 @@ class ApiFixtureController extends AbstractController
             '--no-interaction' => true,
         ]);
         $output = new BufferedOutput();
-        $exitCode = $application->doRun($postgresInput, $output);
+        $exitCode = $fixtureRunner->run($postgresInput, $output);
 
         if (0 !== $exitCode) {
             return new JsonResponse([
@@ -51,7 +47,7 @@ class ApiFixtureController extends AbstractController
         $mongoInput->setInteractive(false);
 
         $output = new BufferedOutput();
-        $exitCode = $application->doRun($mongoInput, $output);
+        $exitCode = $fixtureRunner->run($mongoInput, $output);
 
         return new JsonResponse([
             'status' => 0 === $exitCode ? 'Terminé' : 'Erreur',
