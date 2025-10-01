@@ -12,9 +12,9 @@ use App\Repository\ReviewRepository;
 /**
  * @implements ProviderInterface<Review>
  */
-class ReviewsByMovieProvider implements ProviderInterface
+readonly class ReviewsByMovieProvider implements ProviderInterface
 {
-    public function __construct(private readonly ReviewRepository $reviewRepository)
+    public function __construct(private ReviewRepository $reviewRepository)
     {
     }
 
