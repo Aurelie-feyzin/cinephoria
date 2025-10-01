@@ -18,7 +18,7 @@ class ReservationDto
 {
     private MovieShow $movieShow;
 
-    private string $numberOfSeats;
+    private int $numberOfSeats;
 
     private string $mobilityReduced;
 
@@ -39,12 +39,12 @@ class ReservationDto
         return $this;
     }
 
-    public function getNumberOfSeats(): string
+    public function getNumberOfSeats(): int
     {
         return $this->numberOfSeats;
     }
 
-    public function setNumberOfSeats(string $numberOfSeats): ReservationDto
+    public function setNumberOfSeats(int $numberOfSeats): ReservationDto
     {
         $this->numberOfSeats = $numberOfSeats;
 
