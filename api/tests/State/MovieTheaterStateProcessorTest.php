@@ -10,13 +10,19 @@ use App\Entity\Seat;
 use App\Exception\MovieTheaterValidationException;
 use App\State\MovieTheaterStateProcessor;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class MovieTheaterStateProcessorTest extends TestCase
 {
-    private EntityManagerInterface $entityManager;
-    private ProcessorInterface $innerProcessor;
+    private EntityManagerInterface&MockObject $entityManager;
+
+    /**
+     * @var ProcessorInterface<object, object|null>&MockObject
+     */
+    private ProcessorInterface&MockObject $innerProcessor;
     private MovieTheaterStateProcessor $processor;
+    private Operation&MockObject $operation;
 
     protected function setUp(): void
     {
