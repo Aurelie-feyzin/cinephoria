@@ -22,7 +22,7 @@ import {MovieShowReservation} from "../../model/MovieShow";
 import {MinimalSeat} from "../../model/Seat";
 import InputNumberField from "./form/InputNumberField";
 
-type ReservationInput = {
+export type ReservationInput = {
     numberOfSeats: number,
     isSelectSeat: string,
     isReducedMobility: string,
@@ -56,7 +56,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
         });
 
     const mutation = useMutation({
-        mutationFn: (reservationData: any) => createReservation(reservationData),
+        mutationFn: (reservationData: ReservationInput) => createReservation(reservationData),
         onSuccess: () => {
             router.push(`/orders`)
         },
@@ -90,7 +90,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
             <AlertError visible={!!messageKo} message={messageKo} />
             <form className="max-w-full mx-auto" onSubmit={handleSubmit(handleReservation)}>
                 <InputNumberField
-                    register={register("numberOfSeats", {...REQUIRED, ...customMin(1), ...customMax(filmShow.availableSeats)})}
+                    register={register("numberOfSeats", {valueAsNumber: true, ...REQUIRED, ...customMin(1), ...customMax(filmShow.availableSeats)})}
                     min={1}
                     max={filmShow.availableSeats}
                     name='numberOfSeats'
@@ -98,7 +98,7 @@ const ReservationForm = ({filmShow}: { filmShow: MovieShowReservation }) => {
                     error={errors.numberOfSeats?.message}
                     className="w-full"
                 />
-                <p className="w-full text-white mb-4">Total = {filmShow.priceInEuros * numberOfSeats}€</p>
+                <p className="w-full text-white mb-4">Total = {filmShow.priceInEuros * numberOfSeats || 0}€</p>
                 <RadioButtons legend="Choisir le(s) siége(s)" name='isSelectSeat'
                               options={OptionBooleans}
                               register={register("isSelectSeat")}

@@ -5,6 +5,7 @@ namespace App\Serializer;
 
 use App\Entity\MovieShow;
 use App\Repository\SeatRepository;
+use ArrayObject;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -22,7 +23,7 @@ class MovieShowAttributeNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = []): array|ArrayObject
     {
         $context[self::ALREADY_CALLED] = true;
 

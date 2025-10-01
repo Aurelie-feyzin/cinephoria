@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import {API_PATH} from "./utils";
 import {ApiResponse} from "../model/ApiResponseType";
 import {Reservation} from "../model/ReservationInterface";
+import {ReservationInput} from "../components/common/ReservationForm";
 
 export const fetchUserReservations = async (past: boolean, page: number, itemsPerPage: number): Promise<ApiResponse<Reservation>> => {
     const response = await fetch(`${API_PATH}user/reservations?page=${page}&itemsPerPage=${itemsPerPage}&past=${past}`, {
@@ -18,7 +19,7 @@ export const fetchUserReservations = async (past: boolean, page: number, itemsPe
     return await response.json();
 }
 
-export const createReservation = async (reservationData: any) => {
+export const createReservation = async (reservationData: ReservationInput) => {
     const response = await fetch(`${API_PATH}reservation_dtos`, {
         method: 'POST',
         headers: {
