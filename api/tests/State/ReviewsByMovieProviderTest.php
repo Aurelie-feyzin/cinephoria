@@ -8,12 +8,13 @@ use ApiPlatform\State\Pagination\TraversablePaginator;
 use App\Repository\ReviewRepository;
 use App\State\ReviewsByMovieProvider;
 use ArrayIterator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReviewsByMovieProviderTest extends TestCase
 {
     private ReviewsByMovieProvider $provider;
-    private ReviewRepository $reviewRepository;
+    private ReviewRepository&MockObject $reviewRepository;
 
     protected function setUp(): void
     {
@@ -62,6 +63,9 @@ class ReviewsByMovieProviderTest extends TestCase
         $this->assertSame($expectedPaginator, $result);
     }
 
+    /**
+     * @return array<string, array{string, ?int, ?int, int}>
+     */
     public function providePaginationData(): array
     {
         return [
