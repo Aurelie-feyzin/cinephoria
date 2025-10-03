@@ -27,7 +27,7 @@ class Mailer
         $email = (new Email())
             ->to($user->getEmail())
             ->subject('Inscription sur Cinephoria')
-            ->text("Nous sommes heureux de vous accueillr dans la communauté de Cinéphoria {$user->getFirstName()}! ❤️");
+            ->text("Nous sommes heureux de vous accueillir dans la communauté de Cinéphoria {$user->getFirstName()}! ❤️");
         $this->mailer->send($email);
     }
 

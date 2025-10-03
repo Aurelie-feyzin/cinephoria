@@ -11,9 +11,9 @@ use App\Repository\UserRepository;
 /**
  * @implements ProviderInterface<Movie>
  */
-class EmployeeListProvider implements ProviderInterface
+readonly class EmployeeListProvider implements ProviderInterface
 {
-    public function __construct(readonly private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
     }
 
@@ -29,6 +29,6 @@ class EmployeeListProvider implements ProviderInterface
         $employee = $this->userRepository->findByRole('ROLE_EMPLOYEE');
         $admin = $this->userRepository->findByRole('ROLE_ADMIN');
 
-        return [...$employee, ...$admin];
+        return array_unique([...$employee, ...$admin], SORT_REGULAR);
     }
 }

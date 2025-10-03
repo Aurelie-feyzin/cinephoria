@@ -103,8 +103,8 @@ class ReservationRepository extends ServiceDocumentRepository
     public function findFuturReservationForUser(string $userId, $date): array
     {
         return $this->createQueryBuilder()
-            ->field('r.userId')->equals($userId)
-            ->field('r.movieShowDate')->gte($date)
+            ->field('userId')->equals($userId)
+            ->field('movieShowDate')->gte($date)
             ->getQuery()
         ->toArray();
     }

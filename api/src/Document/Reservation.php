@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Repository\ReservationRepository;
 use App\State\UserReservationsProvider;
 use DateTimeImmutable;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['reservation']],
     mercure: false)]
 #[ApiFilter(DateFilter::class, properties: ['movieShowDate'])]
-#[ODM\Document(collection: 'reservations')]
+#[ODM\Document(collection: 'reservations', repositoryClass: ReservationRepository::class)]
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  */

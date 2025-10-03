@@ -22,7 +22,7 @@ class InstallationProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Installation
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?Installation
     {
         $id = $uriVariables['id'];
 

@@ -68,7 +68,6 @@ class UserReservationsProvider implements ProviderInterface
     {
         $reservations = [];
 
-        /** @var Reservation $reservation */
         foreach ($allReservation as $reservation) {
             if (false === $past && $reservation->getMovieShowDate()->format('Y-m-d') >= $filterDateString) {
                 $reservations[] = $reservation;

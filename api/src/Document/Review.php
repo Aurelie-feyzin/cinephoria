@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Enum\ReviewStatus;
+use App\Repository\ReviewRepository;
 use App\State\ReviewsByMovieProvider;
 use App\State\UserReservationsProvider;
 use DateTimeImmutable;
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(security: "is_granted('ROLE_USER')"),
     ],
     mercure: false)]
-#[ODM\Document(collection: 'reviews')]
+#[ODM\Document(collection: 'reviews', repositoryClass: ReviewRepository::class)]
 #[ODM\HasLifecycleCallbacks]
 #[ApiFilter(SearchFilter::class, properties: ['status'])]
 class Review
