@@ -6,17 +6,18 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Document\Reservation;
-use App\Entity\MovieShow;
+use App\DTO\ReservationDto;
 use App\Entity\Seat;
 use App\Entity\User;
 use App\Exception\SeatQuantityExceededException;
 use App\Repository\SeatRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/** @implements ProcessorInterface<Reservation, null> */
+/** @implements ProcessorInterface<ReservationDto, Reservation> */
 readonly class CreateReservationStateProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -27,7 +28,12 @@ readonly class CreateReservationStateProcessor implements ProcessorInterface
     }
 
     /**
+     * @param ReservationDto $data
+     *
      * {@inheritdoc}
+     *
+     * @throws MongoDBException
+     * @throws \Throwable
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?Reservation
     {
@@ -39,7 +45,6 @@ readonly class CreateReservationStateProcessor implements ProcessorInterface
             throw new UserNotFoundException('User not found');
         }
         // Transform the DTO into a MongoDB document (Reservation)
-        /** @var MovieShow $movieShow */
         $movieShow = $data->getMovieShow();
         $movieTheater = $movieShow->getMovieTheater();
         $reservation
