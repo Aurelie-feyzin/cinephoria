@@ -158,4 +158,12 @@ class MovieShowTest extends ApiTestCase
         yield 'startTime malformed' => ['bad', '20:00', 90];
         yield 'endTime malformed' => ['18:00', 'wrong', 90];
     }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        // doing this is recommended to avoid memory leaks
+        $this->entityManager->close();
+        $this->entityManager = null;
+    }
 }
