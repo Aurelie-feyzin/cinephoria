@@ -2,7 +2,7 @@
 
 import PageIntranetContainer from "../../components/intranet/PageIntranetContainer";
 import {useQuery} from "react-query";
-import {fetchMoviesDescription} from "../../request/movie";
+import {deleteMovie, fetchMoviesDescription} from "../../request/movie";
 import PageLoading from "../../components/common/PageLoading";
 import PageError from "../../components/common/PageError";
 import React, {useState} from "react";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import Pagination from "../../components/common/Pagination";
 import {ApiResponse} from "../../model/ApiResponseType";
 import {MovieDescription} from "../../model/MovieInterface";
+import TrashIcon from "../../components/common/Icon/TrashIcon";
 
 
 const MovieList = () => {
@@ -25,12 +26,26 @@ const MovieList = () => {
         data: moviesData,
         error,
         isLoading,
+        refetch
     } = useQuery<ApiResponse<MovieDescription>, Error>(['movies_description', currentPage], () => fetchMoviesDescription(currentPage, itemsPerPage), {
         keepPreviousData: true,
     });
 
     const movies = moviesData?.['hydra:member'] || [];
     const nextPageUrl = moviesData?.['hydra:view']?.['hydra:next'];
+
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Voulez-vous vraiment supprimer ce film ?')) {
+            return
+        }
+        try {
+            await deleteMovie(id)
+            refetch();
+        } catch (error) {
+            alert("Erreur lors de la suppression du film")
+        }
+    }
 
     const columns: Column<MovieDescription>[] = [
         {key: 'title', label: 'Titre'},
@@ -73,6 +88,14 @@ const MovieList = () => {
                     <Link href={`/intranet/movies/${row.id}/edit`} className="hover:bg-secondary">
                         <EditIcon/>
                     </Link>
+                    <button
+                        onClick={() => handleDelete(row.id)}
+                        className="hover:bg-secondary disabled:bg-gray-500"
+                        title={row.deletable ? 'Supprimer' : 'Pas supprimable'}
+                        disabled={!row.deletable}
+                    >
+                        <TrashIcon />
+                    </button>
                 </div>
             ),
         },

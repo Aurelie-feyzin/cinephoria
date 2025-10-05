@@ -19,7 +19,7 @@ const RadioButtons = ({register, error, legend, name, options } : {register: any
                     type="radio"
                     name={name}
                     value={String(option.value)}
-                    className="w-4 h-4 border-primary focus:ring-2 focus:bg-secondary"
+                    className="w-4 h-4 border-primary focus:ring-secondary focus:bg-secondary bg-white text-secondary"
                 />
                 <label
                     htmlFor={option.id}
