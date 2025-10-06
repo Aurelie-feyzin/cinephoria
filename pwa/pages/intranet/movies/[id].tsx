@@ -13,6 +13,7 @@ import EditIcon from "../../../components/common/Icon/EditIcon";
 import PropertyInline from "../../../components/common/layout/PropertyInline";
 import {MovieDescription} from "../../../model/MovieInterface";
 import TrashIcon from "../../../components/common/Icon/TrashIcon";
+import Image from "next/image";
 
 const MoviePage = () => {
     const router = useRouter()
@@ -73,6 +74,25 @@ const MoviePage = () => {
                         <TrashIcon />
                         <span>Supprimer</span>
                     </button>
+                </div>
+                <hr className="w-full border-t-2 mb-4 border-secondary"/>
+                <div className="flex justify-center mb-4">
+                    <div className="flex justify-center items-center">
+                        <Image
+                            src={`/poster/${movie.posterPath}`}
+                            alt={`Poster de ${movie.title}`}
+                            width={150}
+                            height={150}
+                            className="w-auto h-[450px] object-cover rounded-lg shadow-md mr-4"
+                        />
+                        <Image
+                            src={`/backdrop/${movie.backdropPath}`}
+                            alt={`Fond d'écran de ${movie.title}`}
+                            width={450}
+                            height={150}
+                            className="w-auto h-[450px] object-cover rounded-lg shadow-md"
+                        />
+                    </div>
                 </div>
             </div>}
         </PageIntranetContainer>

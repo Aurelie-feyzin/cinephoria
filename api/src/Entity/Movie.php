@@ -52,6 +52,7 @@ class Movie
     private ?string $posterPath = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['movie:description'])]
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]

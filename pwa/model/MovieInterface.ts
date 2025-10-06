@@ -33,6 +33,7 @@ export interface MovieDescription {
     '@type': string,
     title: string,
     posterPath?: string,
+    backdropPath?: string,
     duration?: number,
     description?: string,
     genres: MovieGenre[],

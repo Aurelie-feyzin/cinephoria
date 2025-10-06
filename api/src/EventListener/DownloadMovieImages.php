@@ -34,7 +34,7 @@ class DownloadMovieImages
             $this->downloader->download(
                 self::TMDB_IMAGE_PATH.$movie->getBackdropPath(),
                 $movie->getBackdropPath(),
-                $this->posterDir
+                $this->backdropDir
             );
         }
 
@@ -42,7 +42,7 @@ class DownloadMovieImages
             $this->downloader->download(
                 self::TMDB_IMAGE_PATH.$movie->getPosterPath(),
                 $movie->getPosterPath(),
-                $this->backdropDir
+                $this->posterDir
             );
         }
     }
