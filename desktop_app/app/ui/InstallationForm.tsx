@@ -109,7 +109,7 @@ const InstallationForm = ({installation, setMessageKo}:
         mutationFn: (installationData: InstallationInput) => updateInstallation(watchInstallation, installationData),
         onSuccess: (response) => {
             const id = response.id;
-            router.push(`/installations/${id}`);
+            router.push(`/installations/show?id=${id}`);
         },
         onError: () => {
             setMessageKo('Erreur lors de la modification d\'une installation');
