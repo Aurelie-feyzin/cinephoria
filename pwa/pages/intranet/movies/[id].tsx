@@ -67,7 +67,7 @@ const MoviePage = () => {
                     </button>
                     <button
                         onClick={() => handleDelete()}
-                        className="px-6 py-2 flex items-center text-black  space-x-2  bg-red-500 hover:bg-secondary rounded-lg shadow-md transition duration-200"
+                        className="px-6 py-2 flex items-center text-black disabled:bg-gray-400 space-x-2  bg-red-500 hover:bg-secondary rounded-lg shadow-md transition duration-200"
                         title="Supprimer"
                         disabled={!movie.deletable}
                     >
