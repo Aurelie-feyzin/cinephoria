@@ -8,6 +8,7 @@ use App\DTO\TmdbMovieDto;
 use App\Factory\TmdbMovieFactory;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -19,6 +20,7 @@ class TmdbApiService
 {
     public function __construct(private readonly HttpClientInterface $client,
         private readonly TmdbMovieFactory $tmdbMovieFactory,
+        #[Autowire(env: 'TMDB_ACCESS_TOKEN')]
         private readonly string $tmdbAccessToken)
     {
     }
