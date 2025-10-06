@@ -20,6 +20,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - ./api:/app
+      - ./pwa/public:/shared/public
     ports:
       # HTTP
       - target: 80
@@ -33,6 +34,9 @@ services:
       - target: 443
         published: ${HTTP3_PORT:-443}
         protocol: udp
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - appnet
 
@@ -40,6 +44,8 @@ services:
     image: ${IMAGES_PREFIX:-}app-pwa:${IMAGE_TAG:-latest}
     environment:
       NEXT_PUBLIC_ENTRYPOINT: http://php
+    volumes:
+      - ./pwa/public:/app/public
     networks:
       - appnet
 

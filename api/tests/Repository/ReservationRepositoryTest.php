@@ -88,6 +88,43 @@ class ReservationRepositoryTest extends KernelTestCase
         $this->assertSame(['user1' => 2, 'user2' => 1], $result);
     }
 
+    public function testGetReservationsGroupedByDate(): void
+    {
+        $reservation1 = new Reservation();
+        $reservation1->setMovieShowDate(new DateTimeImmutable('2025-10-10 20:00'));
+        $this->documentManager->persist($reservation1);
+
+        $reservation2 = new Reservation();
+        $reservation2->setMovieShowDate(new DateTimeImmutable('2025-10-10 21:00'));
+        $this->documentManager->persist($reservation2);
+
+        $reservation3 = new Reservation();
+        $reservation3->setMovieShowDate(new DateTimeImmutable('2025-10-12 18:00'));
+        $this->documentManager->persist($reservation3);
+
+        $reservation4 = new Reservation();
+        $reservation4->setMovieShowDate(new DateTimeImmutable('2025-10-12 20:00'));
+        $this->documentManager->persist($reservation4);
+
+        $reservation5 = new Reservation();
+        $reservation5->setMovieShowDate(new DateTimeImmutable('2025-10-12 22:00'));
+        $this->documentManager->persist($reservation5);
+
+        $this->documentManager->flush();
+
+        $startDate = new DateTimeImmutable('2025-10-01');
+        $endDate = new DateTimeImmutable('2025-10-31');
+
+        $result = $this->repository->getReservationsGroupedByDate($startDate, $endDate);
+
+        $expected = [
+            '2025-10-10' => 2,
+            '2025-10-12' => 3,
+        ];
+
+        $this->assertSame($expected, $result);
+    }
+
     public function testFindFuturReservationForUser(): void
     {
         $userId = 'user123';

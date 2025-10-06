@@ -92,6 +92,7 @@ jobs:
             export DATABASE_URL="postgresql://app:${{ secrets.PROD_POSTGRES_PASSWORD }}@database:5432/app?serverVersion=16&charset=utf8"
             export JWT_PASSPHRASE=${{ secrets.PROD_JWT_SECRET }}
             export MAILER_DSN=${{ secrets.PROD_MAILER_DSN }}
+            export TMDB_ACCESS_TOKEN=${{ secrets.TMDB_ACCESS_TOKEN }}
             
             echo "==> Creating .env file"
             cd /var/www/cinephoria
@@ -108,6 +109,7 @@ jobs:
             echo "CORS_ALLOW_ORIGIN=^https://cinephoria.me$" >> .env
             echo "TRUSTED_HOSTS=^(.+.)?cinephoria.me$" >> .env
             echo "APP_HOST=cinephoria.me" >> .env
+            echo "TMDB_ACCESS_TOKEN=${{ secrets.TMDB_ACCESS_TOKEN }}" >> .env
             echo "IMAGE_TAG=${{ github.sha }}" >> .env
             echo "IMAGES_PREFIX=" >> .env
             

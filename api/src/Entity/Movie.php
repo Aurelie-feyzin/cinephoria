@@ -6,8 +6,8 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
@@ -30,6 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(uriTemplate: '/new_list/movies', normalizationContext: ['groups' => ['movie:description']], provider: NewMovieListProvider::class),
         new Patch(security: "is_granted('ROLE_EMPLOYEE')"),
         new Post(security: "is_granted('ROLE_EMPLOYEE')"),
+        new Delete(security: "is_granted('ROLE_EMPLOYEE')"),
     ],
     mercure: false
 ),
@@ -50,12 +51,8 @@ class Movie
     #[Groups(['movie:read', 'movie:description', 'movie:light', 'movieShow:full'])]
     private ?string $posterPath = null;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    #[ApiProperty(types: ['https://schema.org/image'])]
-    public ?MediaObject $backdrop = null;
-
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['movie:description'])]
     private ?string $backdropPath = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
@@ -126,18 +123,6 @@ class Movie
     public function setPosterPath(?string $posterPath): static
     {
         $this->posterPath = $posterPath;
-
-        return $this;
-    }
-
-    public function getBackdrop(): ?MediaObject
-    {
-        return $this->backdrop;
-    }
-
-    public function setBackdrop(?MediaObject $backdrop): Movie
-    {
-        $this->backdrop = $backdrop;
 
         return $this;
     }
@@ -284,5 +269,11 @@ class Movie
         $this->movieShows->removeElement($movieShow);
 
         return $this;
+    }
+
+    #[Groups(['movie:description'])]
+    public function isDeletable(): bool
+    {
+        return 0 === $this->movieShows->count();
     }
 }

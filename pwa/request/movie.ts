@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
-import {API_PATH} from "./utils";
+import {API_PATH, HOST_PATH} from "./utils";
 import {ApiResponse} from "../model/ApiResponseType";
-import {Movie, MovieDescription} from "../model/MovieInterface";
+import {Movie, MovieDescription, MovieTmdb} from "../model/MovieInterface";
 
 export const fetchMovieById = async (id: string): Promise<MovieDescription> => {
     const url = `${API_PATH}movies/${id}`;
@@ -10,6 +10,55 @@ export const fetchMovieById = async (id: string): Promise<MovieDescription> => {
         headers: {
             'Content-Type': 'application/ld+json',
         }
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du film')
+    }
+
+    return await response.json();
+}
+
+export const fetchUpcomingMovies = async (): Promise<ApiResponse<MovieTmdb[]>> => {
+    const url = `${API_PATH}movies/tmdb/upcoming`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/ld+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des films bientôt disponible')
+    }
+
+    return await response.json();
+}
+
+export const searchTmdbMovies = async (title: string): Promise<any> => {
+    const url = `${HOST_PATH}movies/tmdb/search`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/ld+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
+        body: JSON.stringify({title}),
+    });
+    if (!response.ok) {
+        throw new Error('Erreur lors de la recherche')
+    }
+
+    return await response.json();
+}
+
+export const fetchTmdbDetailMovie = async (tmdbId: number): Promise<any> => {
+    const url = `${API_PATH}movies/tmdb/${tmdbId}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/ld+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
     });
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération du film')
@@ -124,4 +173,18 @@ export const createMovie = async (movieData: any) => {
     }
 
     return await response.json()
+}
+
+export const deleteMovie = async (id: string) => {
+    const response = await fetch(`${API_PATH}movies/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/ld+json',
+            'Authorization': `Bearer ${Cookies.get('jwt_token')}`,
+        },
+    })
+    if (!response.ok) {
+        console.log(response);
+        throw new Error('Erreur lors de la suppression du film')
+    }
 }

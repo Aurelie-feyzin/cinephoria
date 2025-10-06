@@ -21,7 +21,7 @@ const TextAreaField = ({
             {...register}
             id={name}
             rows={4}
-            className="mt-1 block w-full border text-primary border-gray-300 p-2 rounded"
+            className="mt-1 block w-full border text-primary border-gray-300 p-2 rounded focus:ring-secondary focus:border-secondary"
             placeholder={placeholder}></textarea>
         <p role="alert" className="block text-white text-sm">{error}</p>
     </div>

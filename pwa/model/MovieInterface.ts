@@ -33,6 +33,7 @@ export interface MovieDescription {
     '@type': string,
     title: string,
     posterPath?: string,
+    backdropPath?: string,
     duration?: number,
     description?: string,
     genres: MovieGenre[],
@@ -41,6 +42,22 @@ export interface MovieDescription {
     favorite: boolean,
     releaseDate: Date,
     rating: number,
+    deletable: boolean,
+}
+
+export interface MovieTmdb {
+    '@id': string,
+    idTmdb: number,
+    '@type': string,
+    title: string,
+    posterPath?: string,
+    duration?: number,
+    description?: string,
+    genres: MovieGenre[],
+    ageRestriction?: AgeRestriction,
+    warning?: string,
+    releaseDate: Date,
+    favorite?: boolean,
 }
 
 export interface MovieDescriptionInput {
