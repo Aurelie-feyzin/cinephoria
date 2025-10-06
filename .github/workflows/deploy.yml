@@ -125,6 +125,9 @@ jobs:
             echo "==> Stopping existing containers"
             docker compose -f compose.yaml -f compose.prod.yaml down
 
+            echo "==> Purging old cache before rebuild"
+            docker compose run --rm php sh -c "rm -rf var/cache/* var/log/*"
+
             echo "==> Starting containers from loaded images"
             docker compose -f compose.yaml -f compose.prod.yaml up --build -d --remove-orphans
             
