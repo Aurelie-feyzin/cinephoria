@@ -1,11 +1,11 @@
 [package]
 name = "cinephoria_app"
-version = "1.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-edition = "2021"
+version = "1.0.1"
+description = ""Desktop application for Cinéphoria employees to report and manage incidents related to the facilities"
+authors = ["Aurélie Gramusset"]
+license = "MIT"
+repository = "https://github.com/Aurelie-feyzin/cinephoria"
+edition = "2025"
 rust-version = "1.77.2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
