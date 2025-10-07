@@ -92,7 +92,9 @@ const Reservation = () => {
     }, [movieShows, movies, setValue]);
 
     useEffect(() => {
-        localStorage.setItem("selectedCinema", selectedCinema);
+        if (selectedCinema) {
+            localStorage.setItem("selectedCinema", selectedCinema);
+        }
     }, [selectedCinema]);
 
     useEffect(() => {
