@@ -9,8 +9,7 @@ import {Reservation} from "../../model/ReservationInterface";
 
 
 const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, refetch: any }) => {
-    const [emptyStar, setEmptyStar] = useState(5);
-    const [fillStar, setFillStar] = useState(5);
+    const [fillStar, setFillStar] = useState(0);
     const [review, setReview] = useState(reservation?.review);
     const [messageKo, setMessageKo] = useState<string | undefined>(undefined);
 
@@ -29,26 +28,28 @@ const UserMovieRating = ({reservation, refetch}: { reservation?: Reservation, re
     })
 
     useEffect(() => {
-        const review = reservation?.review;
-        setEmptyStar(review?.rating ? 5 - review.rating : 5);
-        setFillStar(review?.rating ? review.rating : 0);
-        setReview(review);
+        const rating = reservation?.review?.rating ?? 0;
+        setFillStar(rating);
+        setReview(reservation?.review);
     }, [reservation]);
 
     const onClick = (rating: number) =>  {
         setFillStar(rating);
-        setEmptyStar(5 - rating);
         mutation.mutate({rating})
     }
 
     return (
         <div className="flex font-bold">
             <span>Votre note: </span>
-            {Array(fillStar).fill(<StarIcon color='secondary' />).map((star, index) =>
-                <span key={index} onClick={() => onClick(index+1)}>{star}</span>
-            )}
-            {Array(emptyStar).fill(<StarIcon color='white' />).map((star, index) => (
-                <span key={index} onClick={() => onClick(fillStar + index +1)} >{star}</span>
+            {[...Array(fillStar)].map((_, index) => (
+                <span key={`fill-${index}`} onClick={() => onClick(index + 1)}>
+                    <StarIcon color="secondary" />
+                </span>
+            ))}
+            {[...Array(5-fillStar)].map((_, index) => (
+                <span key={`empty-${index}`} onClick={() => onClick(fillStar + index + 1)}>
+                    <StarIcon color="white" />
+                 </span>
             ))}
             {!!messageKo && <AlertError visible={!!messageKo} message={messageKo} />}
         </div>);
