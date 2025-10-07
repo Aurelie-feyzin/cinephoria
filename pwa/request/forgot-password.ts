@@ -4,7 +4,7 @@ import {ForgotPasswordInput, ResetPasswordInput} from "../model/User";
 const FORGOT_PASSWORD_PATH = 'forgot-password/'
 export const fetchForgotPassword = async (data: ForgotPasswordInput) =>
 {
-    return   await fetch(`${FORGOT_PASSWORD_PATH}`, {
+    return   await fetch(`${HOST_PATH}${FORGOT_PASSWORD_PATH}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/ld+json',
