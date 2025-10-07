@@ -46,7 +46,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}
                 setUser(data);
                 setError(null);
                 const from = router.query.from;
-                console.log('Query param from:', from);
 
                 if (from === 'forgot-password') {
                     router.push('/');
