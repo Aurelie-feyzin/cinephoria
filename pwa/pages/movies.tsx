@@ -121,8 +121,14 @@ const Movies = () => {
                 )}
             </div>
             {selectedMovie && (
+                <>
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={() => setSelectedMovie(null)}
+                    ></div>
                 <div
-                    className="fixed inset-x-0 bottom-0 bg-white p-4 shadow-lg md:inset-y-0 md:right-0 md:top-0 md:w-1/3">
+                    className="fixed z-50 inset-x-0 bottom-0 md:inset-y-0 md:right-0 md:top-0 bg-white rounded-t-2xl md:rounded-none p-4 shadow-lg
+                 w-full md:w-1/3 max-h-[90vh] overflow-y-auto transition-transform">
                     <button onClick={() => setSelectedMovie(null)} className="text-gray-500">
                         Fermer
                     </button>
@@ -149,6 +155,7 @@ const Movies = () => {
                             </div>
                         ))}
                 </div>
+                </>
             )}
         </div>
     </PageContainer>

@@ -29,7 +29,7 @@ const FullMovieCard: React.FC<Props> = ({
     const [totalItems, setTotalItems] = useState<number>(0);
     const [nextPageUrl, setNextPageUrl] = useState<string>();
     const [reviews, setReviews] = useState<Review[]>([]);
-    const itemsPerPage = 5;
+    const [itemsPerPage, setItemsPerPage] = useState<number>(5);
 
     const {
         error,
@@ -48,8 +48,17 @@ const FullMovieCard: React.FC<Props> = ({
     // This function is triggered on window resize to adjust the maximum lines of text shown
     useEffect(() => {
         const handleResize = () => {
-            const newMaxLines = window.innerWidth >= 1024 ? 7 : 3;
-            setMaxLines(newMaxLines);
+            const width = window.innerWidth;
+            if (width < 640) {
+                setMaxLines(3);
+                setItemsPerPage(1);
+            } else if (width < 1024) {
+                setMaxLines(5);
+                setItemsPerPage(3);
+            } else {
+                setMaxLines(7);
+                setItemsPerPage(5);
+            }
         };
 
         handleResize();
@@ -98,7 +107,7 @@ const FullMovieCard: React.FC<Props> = ({
 
                     {isTruncated && (
                         <button
-                            onClick={() => setShowFullSynopsis(!showFullSynopsis)}
+                            onClick={(event) => { event.stopPropagation(); setShowFullSynopsis(!showFullSynopsis);}}
                             className="text-blue-500 hover:underline mt-2"
                         >
                             {showFullSynopsis ? 'Voir moins' : 'Voir plus'}
