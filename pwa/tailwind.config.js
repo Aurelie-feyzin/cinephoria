@@ -30,7 +30,7 @@ module.exports = {
         black: "#1d1e1c",
         white: "#F8F6F0", // ##ffffff
         primary: "#2E4D34",
-        primary_light: "#A3B89C",
+        primary_light: "#7E9276",
         secondary: "#C9A85C",
         custom_brown: "#7A5A3C",
         transparent: "transparent",

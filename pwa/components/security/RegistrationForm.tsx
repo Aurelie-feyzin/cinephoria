@@ -65,7 +65,6 @@ const RegistrationForm = ({setFormVisible}: { setFormVisible: any }) => {
                 />
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto bg-black p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4 text-center text-secondary">Créer un compte</h2>
                 <InputField register={register("firstName", {...REQUIRED, ...customMaxLength(255)})}
                             name='firstName'
                             label='Prénom'

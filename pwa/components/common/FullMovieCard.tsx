@@ -108,7 +108,7 @@ const FullMovieCard: React.FC<Props> = ({
                     {isTruncated && (
                         <button
                             onClick={(event) => { event.stopPropagation(); setShowFullSynopsis(!showFullSynopsis);}}
-                            className="text-blue-500 hover:underline mt-2"
+                            className="text-gray-400 hover:underline mt-2 underline"
                         >
                             {showFullSynopsis ? 'Voir moins' : 'Voir plus'}
                         </button>

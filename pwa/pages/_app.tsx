@@ -6,10 +6,15 @@ import type {AppProps} from "next/app"
 import {DehydratedState, QueryClient, QueryClientProvider} from "react-query"
 import {CinemasProvider} from "../context/CinemaContext";
 import {UserProvider} from "../context/UserContext";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function MyApp({Component, pageProps}: AppProps<{ dehydratedState: DehydratedState }>) {
     const [queryClient] = useState(() => new QueryClient());
+
+    useEffect(() => {
+        document.documentElement.lang = 'fr';
+    }, []);
+
     return (
         <QueryClientProvider client={queryClient}>
             <UserProvider>

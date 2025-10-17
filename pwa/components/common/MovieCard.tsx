@@ -30,7 +30,7 @@ const MovieCard:React.FC<Props>  = ({movie }) => {
                     <span className="hidden sm:inline">Genres:</span> {movie.genres.map((genre) => genre.name).join(', ')}
                 </p>
                 <p className="text-sm text-white mb-3 inline-flex items-center">
-                    <ClockIcon /> &nbsp;{movie.duration} min
+                    <ClockIcon ariaLabel="Durée du film"/> &nbsp;{movie.duration} min
                 </p>
                 <p className="text-sm text-white mb-3 space-x-1">
                     <span className="hidden sm:inline">Âge:</span> {movie.ageRestriction?.value || 'N/A'}
