@@ -46,7 +46,11 @@ const Contact = () => {
         }
     };
 
-    return (<PageContainer title='contact' titlePage="Contactez-nous">
+    return (<PageContainer
+            title='contact'
+            titlePage="Contactez-nous"
+            metaDescription="Contactez Cinephoria pour toute question, réservation ou information sur nos cinémas et séances."
+        >
             <div className="container mx-auto p-6">
                 <div className="mb-4">
                     <AlertError visible={!!messageKo}

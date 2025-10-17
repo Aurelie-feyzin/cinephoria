@@ -78,7 +78,11 @@ const Movies = () => {
         router.push('/reservation');
     };
 
-    return <PageContainer title='les films' titlePage="Actuellement en salle">
+    return <PageContainer
+        title='les films'
+        titlePage="Actuellement en salle"
+        metaDescription="Consultez la liste complète des films à l’affiche dans nos cinémas Cinephoria avec synopsis, horaires et informations pratiques."
+    >
         <div className="container mx-auto p-6">
             {isLoading && <PageLoading/>}
             {error && <PageError message="Erreur lors de la récupération des films"/>}
