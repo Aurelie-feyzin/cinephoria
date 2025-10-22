@@ -38,11 +38,17 @@ const CardReservation = ({past}: { past: boolean }) => {
             <AlertError visible={!!userReservationError}
                         titleMessage="Erreur pendant la récupération de vos réservations"
             />
-            {reservations.map((reservation) => (
+            {reservations.map((reservation) => {
+                const path = reservation.movieBackdropPath?.replace(/\.[^/.]+$/, "");
+                const blurData = require(`../../public/backdrop-optimized/${path}-blur.json`);
+
+                return (
                 <div key={reservation.id}>
                 <div key={reservation.id} className="bg-black p-4 rounded-lg shadow-lg flex flex-col md:flex-row items-center md:items-start">
                     <Image
-                        src={`/backdrop/${reservation.movieBackdropPath}`}
+                        placeholder="blur"
+                        blurDataURL={blurData.blurDataURL}
+                        src={`/backdrop-optimized/${path}-medium.webp`}
                         alt={reservation.movieName}
                         width={300}
                         height={150}
@@ -78,7 +84,7 @@ const CardReservation = ({past}: { past: boolean }) => {
                 {reservation.review && <UserReviewStatus review={reservation.review} />}
             </div>}
                 </div>
-            ))}
+            )})}
             {hasPagination && <Pagination nextPageUrl={nextPageUrl} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
         </>
     );

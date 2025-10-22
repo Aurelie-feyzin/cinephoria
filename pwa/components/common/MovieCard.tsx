@@ -12,11 +12,16 @@ const MovieCard:React.FC<Props>  = ({movie }) => {
         return;
     }
 
+    const posterPath = movie.posterPath?.replace(/\.[^/.]+$/, "");
+    const blurData = require(`../../public/poster-optimized/${posterPath}-blur.json`);
+
     return (
         <div className="flex flex-col sm:flex-row bg-black rounded-lg shadow-lg p-2 w-full max-w-2xl">
             <div className="flex justify-center md:justify-start mb-2 md:mb-0">
             <Image
-                src={`/poster/${movie.posterPath}`}
+                placeholder="blur"
+                blurDataURL={blurData.blurDataURL}
+                src={`/poster-optimized/${posterPath}-small.webp`}
                 alt={`Poster de ${movie.title}`}
                 width={150}
                 height={225}
