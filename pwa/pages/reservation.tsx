@@ -101,8 +101,12 @@ const Reservation = () => {
         localStorage.setItem("selectedDay", selectedDay);
     }, [selectedDay]);
 
-    return (<PageContainer title='réservation' titlePage="Réservez une séance">
-            <div className="container mx-auto p-6">
+    return (<PageContainer
+            title='réservation'
+            titlePage="Réservez une séance"
+            metaDescription="Réservez vos séances facilement sur Cinephoria. Choisissez votre cinéma, film et horaire en quelques clics."
+        >
+            <div className="container mx-auto p-6 bg-black rounded-lg shadow-md">
                 <form className="flex flex-col md:flex-row md:space-x-4 mb-2">
                     <div className="w-full md:w-1/2 mb-2">
                         <SelectCinema forceSelect={true} register={register}/>

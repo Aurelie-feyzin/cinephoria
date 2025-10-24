@@ -78,11 +78,15 @@ const Movies = () => {
         router.push('/reservation');
     };
 
-    return <PageContainer title='les films' titlePage="Actuellement en salle">
+    return <PageContainer
+        title='les films'
+        titlePage="Actuellement en salle"
+        metaDescription="Consultez la liste complète des films à l’affiche dans nos cinémas Cinephoria avec synopsis, horaires et informations pratiques."
+    >
         <div className="container mx-auto p-6">
             {isLoading && <PageLoading/>}
             {error && <PageError message="Erreur lors de la récupération des films"/>}
-            <form className="flex flex-col md:flex-row md:space-x-4 mb-6">
+            <form className="flex flex-col md:flex-row md:space-x-4 pb-6 bg-black rounded-lg shadow-md ">
                 <div className="w-full md:w-1/3">
                     <SelectCinema forceSelect={false} register={register}/>
                 </div>
@@ -116,7 +120,7 @@ const Movies = () => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-gray-700 col-span-full text-center">Aucun film trouvé avec les filtres
+                    <p className="text-white col-span-full text-center">Aucun film trouvé avec les filtres
                         sélectionnés.</p>
                 )}
             </div>

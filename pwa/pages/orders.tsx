@@ -33,10 +33,16 @@ const Orders = () => {
                                 <button
                                     className={`flex items-center justify-center w-full px-4 py-3 text-sm font-medium transition-all 
                             border-b-2 border-transparent 
-                            ${activeTab === tab ? "border-white text-white" : "text-gray-300 hover:text-white hover:border-gray-400"}`}
+                            ${activeTab === tab ? "bg-white text-black border-white" : "text-black hover:text-white hover:border-gray-400"}`}
                                     onClick={() => setActiveTab(tab)}
                                 >
                                     {tab === "futur" ? "A venir" : "Passée"}
+                                    {activeTab === tab && (
+                                        <>
+                                            <span className="ml-2 text-xs" aria-hidden="true">✔</span>
+                                            <span className="sr-only">(onglet actif)</span>
+                                        </>
+                                    )}
                                 </button>
                             </li>
                         ))}

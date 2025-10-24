@@ -20,7 +20,7 @@ const NavBar = () => {
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex lg:px-8">
                 <div>
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href={'/'}>
+                        <a href={'/'} aria-label='Accueil'>
                             <Image
                                 alt="logo cinephoria"
                                 src={logo}
@@ -32,6 +32,7 @@ const NavBar = () => {
                             <button
                                 className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
                                 onClick={() => setNavbar(!navbar)}
+                                aria-label='bouton navbar'
                             >
                                 {navbar ? (
                                     <svg

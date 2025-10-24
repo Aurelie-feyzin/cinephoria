@@ -45,11 +45,14 @@ const Popover = ({children, content, title, trigger = "hover", size = 300}:
             onMouseEnter={handleMouseOver}
             onMouseLeave={handleMouseLeft}
             className="w-fit h-fit relative flex justify-center">
-            <div
+            <button
                 onClick={() => setShow(!show)}
+                aria-haspopup="dialog"
+                aria-expanded={show}
+                className="focus:outline-none"
             >
                 {children}
-            </div>
+            </button>
             <div
                 hidden={!show}
                 className={`min-w-fit h-fit absolute right-[100%] bottom-[100%] z-50 transition-all`}

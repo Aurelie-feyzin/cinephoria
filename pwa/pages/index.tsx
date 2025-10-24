@@ -25,6 +25,7 @@ const HomePage = () => {
         <PageContainer
             title='les nouveautés'
             titlePage='Nos nouveautés de la semaine'
+            metaDescription="Découvrez les nouveautés de la semaine dans les cinémas Cinephoria."
         >
             <>
                 {isLoading && <PageLoading message="En cours de chargement" />}

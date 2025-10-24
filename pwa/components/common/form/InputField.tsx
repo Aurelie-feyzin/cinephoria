@@ -7,6 +7,7 @@ const InputField = ({type = 'text', name, label, register, error, className, dis
         <label className="block text-white" htmlFor={name}>{label}</label>
         <input
             {...register}
+            id={name}
             type={type}
             disabled={disabled}
             className="mt-1 block w-full border text-primary focus:ring-secondary focus:border-secondary border-gray-300 p-2 rounded disabled:bg-gray-400"

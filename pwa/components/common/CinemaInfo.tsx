@@ -10,7 +10,7 @@ const CinemaInfo = ({cinema}: {
 }) => (
     <div className="flex items-center justify-between p-4 ">
         <div className="flex-grow">
-            <h4 className="text-lg font-semibold text-secondary">{cinema.name}</h4>
+            <p className="text-base md:text-lg font-semibold text-secondary">{cinema.name}</p>
             <div className="text-sm sm:inline-flex items-baseline">
                 {cinema.address.street},
             </div>
@@ -23,7 +23,7 @@ const CinemaInfo = ({cinema}: {
                 </span>
             </div>
         </div>
-        <div className="grow-0 items-center mx-auto justify-between">
+        <div className="grow-0 items-center mx-auto justify-between focus:outline-none">
                 <Popover
                     title="Horaires"
                     content={
@@ -36,10 +36,10 @@ const CinemaInfo = ({cinema}: {
                         </ul>
                     }
                 >
-                    <ClockIcon/>
+                    <ClockIcon ariaLabel='Horaires du cinéma'/>
                 </Popover>
         </div>
     </div>
         )
 
-        export default CinemaInfo;
+export default CinemaInfo;

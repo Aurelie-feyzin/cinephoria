@@ -80,17 +80,21 @@ const FullMovieCard: React.FC<Props> = ({
     if (!movie) {
         return;
     }
+    const posterPath = movie.posterPath?.replace(/\.[^/.]+$/, "");
+    const blurData = require(`../../public/poster-optimized/${posterPath}-blur.json`);
 
     return (
         <div className="bg-black text-white rounded-lg shadow-md overflow-hidden m-4">
             <div className="flex flex-col md:flex-row" onClick={() => setSelectedMovie ? setSelectedMovie(movie) : null}>
                 <div className="self-center min-w-[150px] md:min-w-[200px] p-2">
                     <Image
-                        src={`/poster/${movie.posterPath}`}
+                        src={`/poster-optimized/${posterPath}-small.webp`}
                         alt={`affiche de ${movie.title}`}
                         width={150}
                         height={225}
                         className={`w-[150px] md:w-[200px] object-cover rounded-lg shadow-md mr-4`}
+                        placeholder="blur"
+                        blurDataURL={blurData.blurDataURL}
                     />
                 </div>
                 <div className="p-6 flex flex-col">
@@ -108,7 +112,7 @@ const FullMovieCard: React.FC<Props> = ({
                     {isTruncated && (
                         <button
                             onClick={(event) => { event.stopPropagation(); setShowFullSynopsis(!showFullSynopsis);}}
-                            className="text-blue-500 hover:underline mt-2"
+                            className="text-gray-400 hover:underline mt-2 underline"
                         >
                             {showFullSynopsis ? 'Voir moins' : 'Voir plus'}
                         </button>

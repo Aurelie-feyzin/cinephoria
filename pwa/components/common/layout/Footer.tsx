@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
                     <CinemaInfo cinema={cinema} key={cinema.id}/>
                 ))}
             </div>
-            <div className="w-full p-4 text-center text-primary">
+            <div className="w-full p-4 text-center">
                 © 2024 Copyright for ECF Bachelor CDA Symfony
             </div>
         </footer>
