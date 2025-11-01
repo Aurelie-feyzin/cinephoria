@@ -106,7 +106,7 @@ jobs:
             echo "Waiting for PWA..."
             sleep 2
           done
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
@@ -138,7 +138,7 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
@@ -212,7 +212,7 @@ jobs:
         run: make security-checker
       - name: Security Checks - PWA
         run: make pwa-audit
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
       - uses: pnpm/action-setup@v4
