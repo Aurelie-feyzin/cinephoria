@@ -86,7 +86,7 @@ jobs:
           args: ${{ matrix.args }}
 
       - name: Upload Tauri build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: tauri-binaries-${{ matrix.platform }}
           path: desktop_app/src-tauri/target/release/*
